@@ -1,0 +1,245 @@
+{% liquid
+  assign gst = settings
+  assign show_wishlist = gst.show_wishlist
+  assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src'
+  assign min = 10
+  assign max = 100
+  assign diff = max | minus: min
+  assign product_qty = 0
+  assign prod = product.variants
+
+  for variant in prod
+    assign product_qty = product_qty | plus: variant.inventory_quantity
+  endfor
+%}
+<div class="tp-quick-view tp-main-prd container">
+  <div class="tp-quick-view__wrapper tp-grid tp-grid--2-col-desktop tp-grid--1-col-tablets tp-grid--1-col-mobile product--parent ">
+    <div class="tp-quick-view__left tp-grid__item">
+      {% render 'product-media-gallery'
+        , variant_images: variant_images
+        , is_quick_view: true %}
+    </div>
+
+    <div class="tp-quick-view__right tp-grid__item">
+      <div class="card__content">
+        <div
+          class="tpproduct__viewing-left flex items-center font-normal color-primary mb-10"
+          data-min="{{ min }}"
+          data-max="{{ max }}"
+          data-time="{{ time_random }}">
+          <span class="animate-pulse mr-2.5">
+            {% render 'icon'
+              , icon_name: 'icon-eye' %}
+          </span>
+
+          {% assign randomNumber = 'now' | date: '%N' | modulo: diff | plus: min %}
+          <span class="number-view">{{ randomNumber }}</span>&nbsp;{{ 'product_items.fake_view' | t }}</div>
+        <div class="product__title mb-12">
+          <h2 class="mb-0">
+            <a href="{{ product.url }}">
+              {{ product.title | escape }}
+            </a>
+          </h2>
+        </div>
+        <div
+          class="no-js-hidden mb-12"
+          id="price-{{ section.id }}-{{ product.id }}"
+          role="status">
+          {%- render 'price'
+            , product: product
+            , use_variant: true
+            , price_class: 'price--large' -%}
+          <div {{ block.shopify_attributes }}>
+            {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
+            {%- form 'product'
+              , product
+              , id: product_form_installment_id
+              , class: 'installment caption-large' -%}
+              <input
+                type="hidden"
+                name="id"
+                value="{{ product.selected_or_first_available_variant.id }}">
+              {{ form | payment_terms }}
+            {%- endform -%}
+          </div>
+        </div>
+        {%- if product.description != blank -%}
+          <p class="product__description mb-24 " {{ block.shopify_attributes }}>
+            {{ product.description | strip_html | truncatewords: 60, '...' }}
+          </p>
+        {%- endif -%}
+        <div class="mb-16">
+          {% render 'product-variant-picker'
+            , product: product
+            , variant_type: 'swatches_variant'
+            , form_label: true
+            , product_form_id: product_form_id
+          %}
+        </div>
+        <div class="qv-prd-form flex gap-10 mb-30">
+          <div
+            id="Quantity-Form-{{ section.id }}"
+            class="quantity-Form-{{ section.id }} product-form__input product-form__quantity"
+            {{ block.shopify_attributes }}>
+            {%- assign cart_qty = cart | item_count_for_variant: product.selected_or_first_available_variant.id -%}
+            <div class="product-form__input product-form__quantity h-full">
+              <quantity-input class="tp-item__quantity quantity">
+                <button
+                  class="tp-item__qty-minus quantity__button no-js-hidden"
+                  name="minus"
+                  type="button">
+                  <svg
+                    class="pointer-events-none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 16 16"
+                    fill="none">
+                    <path
+                      d="M4 8H12"
+                      stroke="#333C45"
+                      stroke-linecap="round" />
+                  </svg>
+                </button>
+                <input
+                  class="quantity__input tp-item__qty-input"
+                  type="number"
+                  name="quantity"
+                  id="Quantity-{{ section.id }}"
+                  data-cart-quantity="{{ cart_qty }}"
+                  data-inventory="{{ product.selected_or_first_available_variant.inventory_quantity }}"
+                  data-min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+                  min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+                  max="null"            
+                  step="{{ product.selected_or_first_available_variant.quantity_rule.increment }}"
+                  value="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+                  form="{{ product_form_id }}">
+                <button
+                  class="tp-item__qty-plus quantity__button no-js-hidden"
+                  name="plus"
+                  type="button">
+                  <svg
+                    class="pointer-events-none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 16 16"
+                    fill="none">
+                    <path
+                      d="M3.99805 8.00016H11.9993M7.9987 12.0008V8.00016L7.9987 3.99951"
+                      stroke="#333C45"
+                      stroke-linecap="round" />
+                  </svg>
+                </button>
+              </quantity-input>
+            </div>
+            <div class="quantity__rules caption no-js-hidden">
+              {%- if product.selected_or_first_available_variant.quantity_rule.increment > 1 -%}
+                <span class="divider">
+                  {{- 'products.product.quantity.multiples_of' | t: quantity: product.selected_or_first_available_variant.quantity_rule.increment -}}
+                </span>
+              {%- endif -%}
+              {%- if product.selected_or_first_available_variant.quantity_rule.min > 1 -%}
+                <span class="divider">
+                  {{- 'products.product.quantity.minimum_of' | t: quantity: product.selected_or_first_available_variant.quantity_rule.min -}}
+                </span>
+              {%- endif -%}
+              {%- if product.selected_or_first_available_variant.quantity_rule.max != null -%}
+                <span class="divider">
+                  {{- 'products.product.quantity.maximum_of' | t: quantity: product.selected_or_first_available_variant.quantity_rule.max -}}
+                </span>
+              {%- endif -%}
+            </div>
+          </div>
+          <div class="quick-view-action flex items-center gap-8 flex-1">
+            {%- render 'buy-buttons'
+              , product: product
+              , product_form_id: product_form_id
+              , section_id: section.id
+              , show_pickup_availability: false
+              , input_quantity: true
+            -%}
+            <div
+              flow="up"
+              tooltip="{{ 'product_items.wishlist' | t }}"
+              class="tp-prd-form__wishlist">
+              {%- render 'button-wishlist'
+                , product: product -%}
+            </div>
+          </div>
+        </div>
+
+        <div class="tp-product-stock-countdow mb-30">
+          <div class="product_progress_countdow">
+            {%- assign count = '<span class="tp-count">{{ product_qty }}</span>' -%}
+            {% assign message = 'Hurry Up! Only [count] items left in stock!' %}
+            <p class="mb-10">
+              {{ message | replace: '[count]', '<span class="primary-color">product_qty</span>' | replace: 'product_qty', product_qty }}
+            </p>
+            <div class="progressbar">
+              <div class="progressbar-stock" style="{% if product.selected_or_first_available_variant.inventory_quantity < 1 %} width: 0%; {% else %} width: 15%;{% endif %}"></div>
+            </div>
+          </div>
+        </div>
+        <div class="tp-box-wrapper flex mb-30">
+          <ul class="flex items-center justify-center gap-8 list-none">
+            <li
+              class="list-social__item"
+              flow="up"
+              tooltip="Pinterest">
+              <a class="flex items-center justify-center flex-col" href="//pinterest.com/share?url={{ shop.url | append: product.url }}">
+                <span class="tsp__icon">
+                  {% render 'icon'
+                    , icon_name: 'icon-pinterest' %}
+                </span>
+              </a>
+            </li>
+            <li
+              class="list-social__item"
+              flow="up"
+              tooltip="Instagram">
+              <a class="flex items-center justify-center flex-col" href="//instagram.com/share?url={{ shop.url | append: product.url }}">
+                <span class="tsp__icon">
+                  {% render 'icon'
+                    , icon_name: 'icon-instagram' %}
+                </span>
+              </a>
+            </li>
+            <li
+              class="list-social__item"
+              flow="up"
+              tooltip="Facebook">
+              <a class="flex items-center justify-center flex-col" href="//www.facebook.com/sharer.php?u={{ shop.url | append: product.url }}">
+                <span class="tsp__icon">
+                  {% render 'icon'
+                    , icon_name: 'icon-facebook' %}
+                </span>
+              </a>
+            </li>
+            <li
+              class="list-social__item"
+              flow="up"
+              tooltip="Twitter">
+              <a class="flex items-center justify-center flex-col" href="//twitter.com/share?url={{ shop.url | append: product.url }}">
+                <span class="tsp__icon">
+                  {% render 'icon'
+                    , icon_name: 'icon-twitter' %}
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="tp-btn tp-btn__underline">
+          <a href="{{ product.url }}">{{ 'products.product.view_full_details' | t }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="tp-quick-view__close fw-secondary flex items-center tp-icon-close absolute top-20 right-20" type="button">
+    {% render 'icon'
+      , icon_name: 'close'
+      , width: 15
+      , height: 15 %}
+    {{ 'product_items.close' | t }}
+  </button>
+</div>

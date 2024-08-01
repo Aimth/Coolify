@@ -1,0 +1,111 @@
+{% comment %}Tool demos{% endcomment %}
+{% assign domains = 'coma-demo.myshopify.com' %}
+{%- liquid
+    assign gst = settings
+    assign img_logo = gst.logo
+-%}
+{% if domains contains shop.domain %}
+    <script src="{{ 'demos.js' | asset_url }}" defer="defer"></script>
+    {{ 'demos.css' | asset_url | stylesheet_tag: preload: true }}
+    <div class="tools fixed right-[15px] top-1/4 z-[400]">
+        <div class="tools__demos mb-5 w-[64px] h-[64px] rounded-md overflow-hidden shadow-tool">
+            <div class="tools__click cursor-pointer w-full h-full">
+                <div class="tools__open select-none block flex flex-col items-center justify-center w-full h-full text-[12px] bg-white">
+                    <svg class="mb-5" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 17 18" fill="none">
+                        <path d="M8.18444 9.18698C7.73785 9.18698 7.28299 9.10428 6.92737 8.94714L2.04796 6.78036C0.807432 6.22625 0.625488 5.48194 0.625488 5.0767C0.625488 4.67146 0.807432 3.92715 2.04796 3.37304L6.92737 1.20626C7.64688 0.883721 8.73027 0.883721 9.44977 1.20626L14.3374 3.37304C15.5697 3.91888 15.7599 4.67146 15.7599 5.0767C15.7599 5.48194 15.578 6.22625 14.3374 6.78036L9.44977 8.94714C9.08589 9.11255 8.6393 9.18698 8.18444 9.18698ZM8.18444 2.20695C7.90325 2.20695 7.63034 2.2483 7.43185 2.33927L2.55244 4.50606C2.04796 4.73762 1.86601 4.96919 1.86601 5.0767C1.86601 5.18421 2.04796 5.42405 2.54417 5.64734L7.42358 7.81413C7.82055 7.9878 8.54006 7.9878 8.93702 7.81413L13.8247 5.64734C14.3292 5.42405 14.5111 5.18421 14.5111 5.0767C14.5111 4.96919 14.3292 4.72935 13.8247 4.50606L8.94529 2.33927C8.74681 2.25657 8.46562 2.20695 8.18444 2.20695Z" fill="#4D36AB"/>
+                        <path d="M8.35785 13.4957C8.04359 13.4957 7.72932 13.4295 7.43159 13.2972L1.81615 10.7996C0.964318 10.4274 0.294434 9.39366 0.294434 8.45913C0.294434 8.12005 0.57562 7.83887 0.914697 7.83887C1.25377 7.83887 1.53496 8.12005 1.53496 8.45913C1.53496 8.91399 1.90712 9.48463 2.32063 9.67485L7.93607 12.1724C8.20072 12.2882 8.50672 12.2882 8.77963 12.1724L14.3951 9.67485C14.8086 9.4929 15.1807 8.91399 15.1807 8.45913C15.1807 8.12005 15.4619 7.83887 15.801 7.83887C16.1401 7.83887 16.4213 8.12005 16.4213 8.45913C16.4213 9.39366 15.7514 10.4274 14.8996 10.8079L9.28411 13.3055C8.98639 13.4295 8.67212 13.4957 8.35785 13.4957Z" fill="#4D36AB"/>
+                        <path d="M8.35785 17.6309C8.04359 17.6309 7.72932 17.5647 7.43159 17.4324L1.81615 14.9348C0.889886 14.5213 0.294434 13.6033 0.294434 12.5861C0.294434 12.247 0.57562 11.9658 0.914697 11.9658C1.25377 11.9658 1.53496 12.2553 1.53496 12.5944C1.53496 13.1154 1.84096 13.595 2.32063 13.8101L7.93607 16.3077C8.20072 16.4234 8.50672 16.4234 8.77963 16.3077L14.3951 13.8101C14.8748 13.595 15.1807 13.1236 15.1807 12.5944C15.1807 12.2553 15.4619 11.9741 15.801 11.9741C16.1401 11.9741 16.4213 12.2553 16.4213 12.5944C16.4213 13.6116 15.8258 14.5296 14.8996 14.9431L9.28411 17.4407C8.98639 17.5647 8.67212 17.6309 8.35785 17.6309Z" fill="#4D36AB"/>
+                    </svg>
+                    <span class="hidden md:block">DEMOS</span> 
+                </div>
+            </div>
+        </div>
+        <div class="tools__buynow rounded-md overflow-hidden shadow-tool">
+            <a target="_blank" href="https://1.envato.market/XYjG03" class="n-hvr bg-primary text-white text-[12px] w-[64px] h-[64px] flex flex-col items-center justify-center">
+                <svg class="mb-5" xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none">
+                    <path d="M5.66651 8.6665L5.99984 8.99984C7.6567 10.6567 10.343 10.6567 11.9998 8.99984L12.3332 8.6665M12.3332 4.56874V4.49984C12.3332 2.65889 10.8408 1.1665 8.99984 1.1665C7.1589 1.1665 5.66651 2.65889 5.66651 4.49984V4.56874M12.3332 4.56874C11.6776 4.49984 10.8422 4.49984 9.67659 4.49984H8.3231C7.15753 4.49984 6.32211 4.49984 5.66651 4.56874M12.3332 4.56874C12.8349 4.62147 13.2313 4.71455 13.5897 4.87886C14.3183 5.21286 14.9351 5.7499 15.3661 6.42561C15.8553 7.19241 15.9968 8.2114 16.2799 10.2494C16.6434 12.8664 16.8251 14.1749 16.4255 15.1912C16.0747 16.0834 15.4269 16.8273 14.5915 17.2976C13.6398 17.8332 12.3188 17.8332 9.67659 17.8332H8.3231C5.68094 17.8332 4.35985 17.8332 3.40821 17.2976C2.57276 16.8273 1.92502 16.0834 1.57421 15.1912C1.1746 14.1749 1.35634 12.8664 1.71982 10.2494C2.00287 8.2114 2.1444 7.19241 2.63356 6.42561C3.06461 5.7499 3.6814 5.21286 4.40998 4.87886C4.76841 4.71455 5.1648 4.62147 5.66651 4.56874" stroke="#fff" stroke-width="1.5" stroke-linecap="round"></path>
+                </svg>
+               <span class="hidden md:block">BUY NOW</span> 
+            </a>
+        </div>
+    </div>
+
+    <div class="tp-modal-demos fixed top-0 left-0 w-full h-full flex flex-row items-center justify-center">
+        <div class="tools__popup hidden max-h-full md:w-[1200px] w-full md:h-3/4 h-full relative">
+            <button class="tools__close absolute top-0 right-[2px] p-12">
+                <svg class="pointer-events-none" width="15" height="15" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8.91788 8.47292L15.8102 1.51213C15.9318 1.38884 16 1.22196 15.9999 1.04803C15.9997 0.874104 15.9313 0.707312 15.8096 0.584187C15.5659 0.339537 15.1366 0.338301 14.8905 0.585423L8.00001 7.54622L1.10709 0.583569C0.862164 0.339537 0.432926 0.340772 0.189222 0.584805C0.128732 0.645593 0.0808472 0.717927 0.0483617 0.797588C0.0158762 0.877248 -0.000559128 0.962638 1.45145e-05 1.04878C1.45145e-05 1.22423 0.06737 1.38857 0.189222 1.51027L7.08152 8.4723L0.189834 15.435C0.0682183 15.5584 0.0001119 15.7255 0.000456277 15.8996C0.000800655 16.0737 0.0695678 16.2405 0.191672 16.3635C0.30985 16.4815 0.477014 16.5495 0.649688 16.5495H0.653362C0.82665 16.5489 0.993814 16.4803 1.10954 16.361L8.00001 9.40025L14.8929 16.3629C15.0148 16.4852 15.1777 16.5532 15.3503 16.5532C15.4357 16.5534 15.5203 16.5366 15.5992 16.5038C15.6782 16.4709 15.7499 16.4226 15.8103 16.3617C15.8706 16.3008 15.9185 16.2285 15.951 16.1488C15.9836 16.0692 16.0002 15.9838 16 15.8977C16 15.7228 15.9326 15.5579 15.8102 15.4362L8.91788 8.47292Z" stroke="#444" fill="#444"></path>
+                </svg>
+            </button>
+            <div class="flex md:flex-row flex-col tools_wrap md:overflow-y-hidden md:h-full bg-white shadow">
+                <div class="tools__menu md:w-1/4 w-full">
+                    <div class="tools__logo mb-30">
+                        {%- render 'logo', img_logo: img_logo, check_index: false -%}
+                    </div>
+                    <div class="w-full flex-col justify-start items-start gap-5 inline-flex mb-30">
+                        {% comment %} <div class="tools__item self-stretch p-10 rounded-md justify-start items-center gap-2 inline-flex cursor-pointer active"
+                             data-tab="all-demos">
+                            <div class="justify-start items-center gap-2 flex">
+                                <div class="text-neutral-900 text-base font-medium leading-tight">All Demos</div>
+                            </div>
+                        </div> {% endcomment %}
+                        {% comment %} <div class="tools__item self-stretch p-10 rounded-md justify-start items-center gap-2 inline-flex cursor-pointer"
+                             data-tab="new">
+                            <div class="justify-start items-center gap-2 flex">
+                                <div class="text-neutral-900 text-base font-medium leading-tight">New</div>
+                            </div>
+                        </div>
+                        <div class="tools__item self-stretch p-10 rounded-md justify-start items-center gap-2 inline-flex cursor-pointer"
+                             data-tab="clothing">
+                            <div class="justify-start items-center gap-2 flex">
+                                <div class="text-neutral-900 text-base font-medium leading-tight">Clothing & Fashion
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tools__item self-stretch p-10 rounded-md justify-start items-center gap-2 inline-flex cursor-pointer"
+                             data-tab="healthy">
+                            <div class="justify-start items-center gap-2 flex">
+                                <div class="text-neutral-900 text-base font-medium leading-tight">Healthy & Beauty</div>
+                            </div>
+                        </div>
+                        <div class="tools__item self-stretch p-10 rounded-md justify-start items-center gap-2 inline-flex cursor-pointer"
+                             data-tab="technology">
+                            <div class="justify-start items-center gap-2 flex">
+                                <div class="text-neutral-900 text-base font-medium leading-tight">Technology</div>
+                            </div>
+                        </div>
+                        <div class="tools__item self-stretch p-10 rounded-md justify-start items-center gap-2 inline-flex cursor-pointer"
+                             data-tab="food">
+                            <div class="justify-start items-center gap-2 flex">
+                                <div class="text-neutral-900 text-base font-medium leading-tight">Food & Beverage</div>
+                            </div>
+                        </div>
+                        <div class="tools__item self-stretch p-10 rounded-md justify-start items-center gap-2 inline-flex cursor-pointer"
+                             data-tab="furnite">
+                            <div class="justify-start items-center gap-2 flex">
+                                <div class="text-neutral-900 text-base font-medium leading-tight">Furnite</div>
+                            </div>
+                        </div> {% endcomment %}
+                        <p class="mb-0">
+                                COMA is a Shopify theme with impressive UI/UX design, ease of use, and exceptional flexibility. Specifically optimized for mobile experience, it emphasizes customer comfort while boosting conversion rates.
+                            </p>
+                    </div>
+                    <div class="tools__buybutton">
+                        <div class="w-full justify-center items-center inline-flex">
+                            <a href="https://1.envato.market/XYjG03" title="BUY STOREPIFY NOW" target="_blank"
+                               class="text-center n-hvr w-full py-15 bg-primary text-white text-[14px] font-semibold capitalize leading-tight">
+                                BUY COMA NOW
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="tools__content md:w-3/4 w-full h-full">
+                    {% section "tools-demos" %}
+                    {% comment %} {% section "tools-pages" %}
+                    {% section "tools-productdetails" %}
+                    {% section "tools-shoppages" %} {% endcomment %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

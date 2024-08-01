@@ -1,0 +1,244 @@
+{% liquid
+assign gst = settings
+assign sst = section.settings
+assign container = sst.container
+assign collection = collections[sst.collection]
+%}
+{%- capture style -%}
+--section-padding-top: {{ sst.padding_top }}px; --section-padding-bottom: {{ sst.padding_bottom }}px;
+{%- endcapture -%}
+{% capture classGrid %}
+tp-grid tp-grid--{{ sst.columns_mobile }}-col-mobile tp-grid--{{ sst.columns_tablets }}-col-tablets tp-grid--{{ sst.columns_desktop }}-col-desktop 
+{% endcapture %}
+{%- if product.metafields.custom.upsell_bundle -%}
+  <script src="{{ 'upsell-product-bundle.js' | asset_url }}" defer="defer"></script>
+  {{ 'upsell-product-bundle.css' | asset_url | stylesheet_tag }}
+ 
+<div class="tp-upsell color-{{ sst.color_scheme }} gradient section-py section-mb" style="{{ style | strip | strip_newlines }}">
+  <div class="{{ container }}">
+    {% render 'section-header', sst: sst %}
+    <product-bundel>
+      {%- assign product_form_id = 'product-form-' | append: section.id -%}
+      {%- form 'product',
+        product,
+        id: product_form_id,
+        class: 'form',
+        novalidate: 'novalidate',
+        data-type: 'add-to-cart-form'
+      -%}
+      
+      <div class="tp-upsell__content flex lg:flex-row flex-col items-start lg:items-center gap-30">
+        <div class="content-wrapper w-full swiper tp-upsell__slider hover__show-nav"
+          data-section-id="{{ section.id }}"
+          data-autoplay="false"
+          data-loop="false"
+          data-mobile="2"
+          data-tablet="3"
+          data-desktop="{{ sst.sliders_perview }}"
+          data-space-between="{{ gst.spacing_grid_horizontal }}">
+          <div class="swiper-wrapper">
+            {%- for product in collection.products limit: sst.limit_products -%}
+              {%- liquid
+                assign current_variant = product.selected_or_first_available_variant
+                assign price = current_variant.price | plus: price
+                assign compare_at_price = current_variant.compare_at_price | default: current_variant.price | plus: compare_at_price
+              -%}
+              <div class="swiper-slide">
+                {% render 'product-item-upsell-bundle', card_product: product %}
+              </div>
+            {%- endfor -%}
+          </div>
+          {% render 'swiper-control', class: 'upsell', show_bullet: false, show_arrow: true %}
+        </div>
+        <div class="total-product lg:w-1/5">
+          <p>{{ 'upsell_bundle.total' | t }}
+            <b class="tp-upsell__price" data-total="">
+              {% if settings.currency_code_enabled %}
+                {{ price | money_with_currency }}
+              {% else %}
+                {{ price | money }}
+              {% endif %}
+            </b>
+          </p>
+          <div
+            class="pform-error-wrap errors"
+            role="alert"
+            hidden="">
+            <svg
+              class="at-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512">
+              <path d="M256 40c118.621 0 216 96.075 216 216 0 119.291-96.61 216-216 216-119.244 0-216-96.562-216-216 0-119.203 96.602-216 216-216m0-32C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm-36 344h12V232h-12c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12h48c6.627 0 12 5.373 12 12v140h12c6.627 0 12 5.373 12 12v8c0 6.627-5.373 12-12 12h-72c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12zm36-240c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32z"></path>
+            </svg>
+            <span class="ml5 pform-error-msg"></span>
+          </div>
+          <p>
+            <button
+              id="fptsubmit"
+              type="submit"
+              name="add"
+              class="product-form__submit w-full tp-btn tp-btn__primary"
+              {% if product.selected_or_first_available_variant.available == false or quantity_rule_soldout %}
+              disabled
+              {% endif %}>
+              <span class="product-form-btn-text pointer-events-none">
+                {{ 'upsell_bundle.btn' | t }}
+              </span>
+              <span class="tp-loading opacity-0 pointer-events-none" loader>
+                {% render 'icon'
+                  , icon_name: 'icon-loading'
+                  , color: 'var(--color-white)' %}
+              </span>
+            </button>
+          </p>
+          <div>{{ sst.description_discount }}</div>
+        </div>
+      </div>
+    {%- endform -%}
+    </product-bundel>
+  </div>
+</div>
+{% endif %}
+{% schema %}
+{
+  "name": "Upsell Product Bundle",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section header"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_heading_header",
+      "label": "Show \"Section header\"",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently Bought Together"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p></p>"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "default": "text-left",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-center",
+          "label": "Center"
+        },
+        {
+          "value": "text-right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "----------------------------------------"
+    },
+    {
+      "type": "header",
+      "content": "General"
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "label": "Layout",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "Default"
+        },
+        {
+          "value": "container-fluid",
+          "label": "Fluid container"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "richtext",
+      "id": "description_discount",
+      "label": "Description discount",
+      "default": "<p></p>"
+    },
+    {
+      "type": "range",
+      "id": "limit_products",
+      "label": "Products to show",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "select",
+      "id": "sliders_perview",
+      "label": "Sliders perview (desktop)",
+      "options": [
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "default": 0,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "default": 0,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px"
+    }
+  ]
+}{% endschema %}

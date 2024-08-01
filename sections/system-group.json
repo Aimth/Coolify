@@ -1,0 +1,179 @@
+{
+  "name": "System Group",
+  "type": "custom.system",
+  "sections": {
+    "back_top_pdYRgw": {
+      "type": "back_top",
+      "settings": {
+        "enable_hidden_mobile": false,
+        "enable_progress_bar": true,
+        "border_cl": "#f5f5f5",
+        "border_cl_active": "#000000"
+      }
+    },
+    "mobile_stickybar_qLU4CC": {
+      "type": "mobile-stickybar",
+      "settings": {
+        "enable_mobile_stickybar": true,
+        "show_home": true,
+        "show_cart": true,
+        "show_products_all": true,
+        "show_account": true
+      }
+    },
+    "custom_colors_HqhBBe": {
+      "type": "custom-colors",
+      "blocks": {
+        "color_E78nbK": {
+          "type": "color",
+          "settings": {
+            "heading": "Light Blue",
+            "color_code": "#70b9e9"
+          }
+        },
+        "color_N3FDLa": {
+          "type": "color",
+          "settings": {
+            "heading": "Light Yellow",
+            "color_code": "#f5f5c1"
+          }
+        },
+        "color_XEfttM": {
+          "type": "color",
+          "settings": {
+            "heading": "Image",
+            "color_code": ""
+          }
+        }
+      },
+      "block_order": [
+        "color_E78nbK",
+        "color_N3FDLa",
+        "color_XEfttM"
+      ],
+      "settings": {
+      }
+    },
+    "someone_purchased_dKTkWC": {
+      "type": "someone-purchased",
+      "blocks": {
+        "image_YNcTej": {
+          "type": "image",
+          "settings": {
+            "product": "100-cashmere-scarf",
+            "from_ago": "Blackburn, UK",
+            "time_ago": "20"
+          }
+        },
+        "image_y6PEHR": {
+          "type": "image",
+          "settings": {
+            "product": "100-linen-suit-blazer",
+            "from_ago": "Blackburn, UK",
+            "time_ago": "20"
+          }
+        },
+        "image_wgwBpM": {
+          "type": "image",
+          "settings": {
+            "product": "amuseable-banana-bag-29cm",
+            "from_ago": "Blackburn, UK",
+            "time_ago": "20"
+          }
+        }
+      },
+      "block_order": [
+        "image_YNcTej",
+        "image_y6PEHR",
+        "image_wgwBpM"
+      ],
+      "settings": {
+        "display_someone-purchased_mb": true,
+        "show_someone-purchased": "left",
+        "someone_speed": "7",
+        "text": "Someone recently bought a",
+        "time_location_text": "[time] minutes ago, from [location]"
+      }
+    },
+    "exit_popup_yMPKRA": {
+      "type": "exit-popup",
+      "blocks": {
+        "text_bYdcMe": {
+          "type": "text",
+          "settings": {
+            "text": "WAIT! BEFORE YOU LEAVE",
+            "font-size-text": 20,
+            "font-weight-text": 400,
+            "margin_bottom": "10"
+          }
+        },
+        "text_PH3WjJ": {
+          "type": "text",
+          "settings": {
+            "text": "Get 20% off for first order",
+            "font-size-text": 30,
+            "font-weight-text": 400,
+            "margin_bottom": "20"
+          }
+        },
+        "discount_PaydrC": {
+          "type": "discount",
+          "settings": {
+            "discount": "COMA2024"
+          }
+        },
+        "text_NgzQ33": {
+          "type": "text",
+          "settings": {
+            "text": "Use above code",
+            "font-size-text": 16,
+            "font-weight-text": 400,
+            "margin_bottom": "20"
+          }
+        },
+        "button_cGzPXt": {
+          "type": "button",
+          "settings": {
+            "btn_label": "Grap the discount",
+            "btn_link": "shopify:\/\/collections",
+            "target": true,
+            "type_button": "underline"
+          }
+        }
+      },
+      "block_order": [
+        "text_bYdcMe",
+        "text_PH3WjJ",
+        "discount_PaydrC",
+        "text_NgzQ33",
+        "button_cGzPXt"
+      ],
+      "disabled": true,
+      "settings": {
+        "expu_popup": "enable",
+        "expu_popup_delay": 10,
+        "expu_popup_expires": 7,
+        "color_scheme": "background-2",
+        "heading": "Recommended Products",
+        "image": "shopify:\/\/shop_images\/exit-popup.png",
+        "image_ratio": "original",
+        "custom_ratio": "21:9",
+        "color_scheme_prd_list": "background-1",
+        "product_list": [
+          "be-mine-hearts-on-champion-unisex-powerblend-sweatshirt",
+          "chest-pocket-cotton-overshirt",
+          "cotton-knit-polo-shirt-with-zipper",
+          "designer-baby-clothes"
+        ],
+        "limit_product": 5
+      }
+    }
+  },
+  "order": [
+    "back_top_pdYRgw",
+    "mobile_stickybar_qLU4CC",
+    "custom_colors_HqhBBe",
+    "someone_purchased_dKTkWC",
+    "exit_popup_yMPKRA"
+  ]
+}

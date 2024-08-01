@@ -1,0 +1,20 @@
+{% comment %} 
+      Renders header logo for header section 
+      Usage: 
+      {% render 'header-logo', type: 'menu-left' %}
+{% endcomment %}
+{%- if shop.customer_accounts_enabled -%}
+  <a
+    {% unless settings.show_popup_login_customer %}
+    href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+    {% else %}
+    {% if template contains 'customers' %}
+    href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+    {% endif %}
+    {% endunless %}
+    class="menu-drawer__account hidden md:block link focus-inset marker:{% if settings.show_popup_login_customer %} account-button{% endif %}"
+    href="#">
+    {% render 'icon'
+      , icon_name: 'account' %}
+  </a>
+{%- endif -%}

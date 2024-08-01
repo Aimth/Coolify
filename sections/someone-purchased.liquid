@@ -1,0 +1,291 @@
+{{ 'someone-purchased.css' | asset_url | stylesheet_tag: preload: true }}
+
+{% liquid
+  assign st = section.settings
+  assign positionNoti = 'notifi-left'
+  if st['show_someone-purchased'] == 'right'
+    assign positionNoti = 'notifi-right'
+  endif
+%}
+
+{% if section.blocks.size > 0 %}
+  <div class="footbar-fixed someone-purchased-fixed">
+    <div class="product-notification {{ positionNoti }}" data-time="{{ section.settings.someone_speed | times: 1000 }}">
+      <div class="product-notification__wrapper">
+        <button class="close close-notifi flex items-center tp-icon-close absolute top-8 right-8">
+          {% render 'icon'
+            , icon_name: 'close'
+            , width: 12
+            , height: 12 %}
+        </button>
+        <div class="product-suggest">
+          <a class="product-image" href="/collections/all">
+            <img
+              src=""
+              alt=""
+              loading="lazy"
+              width="80"
+              height="107">
+          </a>
+          <div class="column-right">
+            <p class="color-other">{{ section.settings.text }}</p>
+            <a class="product-name" href="/collections/all"></a>
+            <div class="info-ago">
+              <span class="time-text"></span>
+            </div>
+          </div>
+        </div>
+        <div class="hide" style="display: none;">
+          <span class="time-ago-text">{{ section.settings.time_location_text }}</span>
+          {% for block in section.blocks %}
+            {%- assign product = all_products[block.settings.product] -%}
+            {% if block.settings.product != blank %}
+              <div
+                class="data-product"
+                data-id="{{ block.id }}"
+                data-image="{{ product.featured_image.src | product_img_url: 'compact' }}"
+                data-url="{{ product.url | within: collection }}"
+                data-title="{{ product.title | truncatewords: 5 }}"
+                data-alt="{{ product.title }}"
+                data-local="{{ block.settings.from_ago }}"
+                data-time="{{ block.settings.time_ago }}"></div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <span class="loading-notification"></span>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+<style>
+  .product-notification .loading-notification {
+    background: var(--secondary-color);
+    width: 100%;
+    height: 3px;
+    display: block;
+    animation: {{ section.settings.someone_speed }}
+    s in-out-prd ease;
+    animation-iteration-count: infinite;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  @keyframes in-out-prd {
+    0% {
+      width: 100%;
+    }
+
+    100% {
+      width: 0;
+    }
+  }
+</style>
+
+{% schema %}
+  {
+    "name": "Fake Order",
+    "max_blocks": 10,
+    "limit": 1,
+    "enabled_on": {
+      "groups": ["custom.system"]
+    },
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "display_someone-purchased_mb",
+        "label": "Show mobile",
+        "default": true
+      },
+      {
+        "type": "radio",
+        "id": "show_someone-purchased",
+        "label": "Position",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          }, {
+            "value": "right",
+            "label": "Right"
+          }
+        ],
+        "default": "left",
+        "info": "Only Desktop"
+      },
+      {
+        "type": "select",
+        "id": "someone_speed",
+        "label": "Change slides every",
+        "options": [
+          {
+            "value": "5",
+            "label": "5 seconds"
+          },
+          {
+            "value": "6",
+            "label": "6 seconds"
+          },
+          {
+            "value": "7",
+            "label": "7 seconds"
+          },
+          {
+            "value": "8",
+            "label": "8 seconds"
+          }, {
+            "value": "9",
+            "label": "9 seconds"
+          }, {
+            "value": "10",
+            "label": "10 seconds"
+          }, {
+            "value": "60",
+            "label": "1 minutes"
+          }, {
+            "value": "180",
+            "label": "3 minutes"
+          }
+        ],
+        "default": "7"
+      },
+      {
+        "type": "textarea",
+        "id": "text",
+        "label": "Text Someone recently bought",
+        "default": "Someone recently bought a"
+      }, {
+        "type": "textarea",
+        "id": "time_location_text",
+        "default": "[time] minutes ago, from [location]",
+        "label": "Time and Location Text"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "image",
+        "name": "Product",
+        "settings": [
+          {
+            "type": "product",
+            "id": "product",
+            "label": "Select Product"
+          }, {
+            "type": "text",
+            "id": "from_ago",
+            "default": "Blackburn, UK",
+            "label": "Purchase Location"
+          }, {
+            "type": "text",
+            "id": "time_ago",
+            "default": "20",
+            "label": "Purchase Time"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Fake Order"
+      }
+    ]
+  }
+{% endschema %}
+
+{% if section.blocks.size > 0 %}
+  <script type="text/javascript">
+    function SomeonePurchased() {
+      const productNotification = document.querySelector('.product-notification');
+      if (productNotification) {
+        function getCookie(cname) {
+          let name = cname + '=';
+          let decodedCookie = decodeURIComponent(document.cookie);
+          let ca = decodedCookie.split(';');
+          for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+              c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+              return c.substring(name.length, c.length);
+            }
+          }
+          return '';
+        }
+        function setCookie(cname, cvalue, exdays) {
+          const d = new Date();
+          d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+          let expires = 'expires=' + d.toUTCString();
+          document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
+        }
+    
+        let prNotification = getCookie('pr_notification');
+        if (prNotification == 'closed') {
+          productNotification.remove();
+        }
+    
+        const buttonClose = productNotification.querySelector('.close');
+        buttonClose.addEventListener('click', function () {
+          productNotification.remove();
+          setCookie('pr_notification', 'closed', 30);
+        });
+        document.addEventListener('keydown', function(e){
+        if (e.key === 'Escape') {
+          productNotification.remove();
+          setCookie('pr_notification', 'closed', 30);
+        }
+      })
+        var timeText = productNotification.querySelector('.time-text'),
+          stringTimeBase =
+            document.querySelector('.time-ago-text') && document.querySelector('.time-ago-text').textContent;
+        timeHide = productNotification.getAttributeNode('data-time-hide');
+    
+        function toggleSomething() {
+          if (productNotification.classList.contains('active')) {
+            productNotification.classList.remove('active');
+          } else {
+            var number = document.querySelectorAll('.data-product');
+            if (number.length > 0) {
+              var i = Math.floor(Math.random() * number.length);
+              var productRandomResult = number[i];
+              var images = productRandomResult.getAttribute('data-image'),
+                title = productRandomResult.getAttribute('data-title'),
+                url = productRandomResult.getAttribute('data-url'),
+                local = productRandomResult.getAttribute('data-local'),
+                times = productRandomResult.getAttribute('data-time');
+    
+              productNotification.classList.add('active');
+              productNotification.querySelector('.product-image img').setAttribute('src', images);
+              productNotification.querySelector('.product-name').setAttribute('href', url);
+              productNotification.querySelector('.product-name').textContent = title;
+              productNotification.querySelector('.product-image').setAttribute('href', url);
+    
+              let timeTextNew = stringTimeBase.replace('[time]', times);
+              timeTextNew = timeTextNew.replace('[location]', local);
+              timeText.innerHTML = timeTextNew;
+            }
+          }
+        }
+    
+        // toggleSomething()
+        var time = productNotification.getAttribute('data-time');
+        var timer = setInterval(toggleSomething, parseInt(time));
+      }
+    }
+    
+    SomeonePurchased();
+    document.addEventListener('shopify:section:load', SomeonePurchased);
+    document.addEventListener('shopify:section:unload', SomeonePurchased);
+  </script>
+{% endif %}
+
+{% unless section.settings['display_someone-purchased_mb'] %}
+  <style>
+    @media (max-width: 767px) {
+      .product-notification {
+        display: none;
+      }
+    }
+  </style>
+{% endunless %}

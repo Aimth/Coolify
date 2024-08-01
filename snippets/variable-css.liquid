@@ -1,0 +1,103 @@
+{%- liquid
+  assign g_st = settings
+-%}
+{% style %}
+  :root  {
+    --tp-transition: all 0.5s;
+    --tp-scale: scale(1.08);
+    --fz-14: 1.4rem;
+    --fz-16: 1.6rem;
+    --fz-18: 1.8rem;
+    --fz-20: 2.0rem;
+    --fz-24: 2.4rem;
+    --fz-26: 2.6rem;
+    --fz-32: 3.2rem;
+    --fz-48: 4.8rem;
+
+    --letter-spacing-base: 0;
+    --line-height-base: {{ g_st.bd_line_height }};
+    --line-height-heading: {{ g_st.heading_line_height }};
+    --full-width-padding: 3rem;
+    /* --border-radius: 1rem; */
+    --color-white: #ffffff;
+    --color-black: #272829;
+    --color-grey: #E4E4E4;
+    --color-gray: #999;
+    --color-light-gray: #e3e3e3;
+    --color-dark-gray: #4444;
+    --color-cream: #EFEFEF;
+    --color-orange: #F53715;
+    --color-green: #00D084;
+    --color-red: #DF2525;
+    --color-success: #428445;
+    --color--empty: #907341;
+    --background-empty: #faf0df;
+  }
+  /* variable theme g_st */
+  :root {
+    /*General*/
+    /*Option Layout */
+    --body-custom-width-container: {%- if g_st.general_layout == 'default' %}1470px{% elsif g_st.general_layout == 'fluid_container' %}{{ g_st.container-fluil-max-width }}px{% elsif g_st.general_layout == 'full_width' %}100%{% else %}{{ g_st.custom_width_bd }}px{%- endif -%};
+  --tp-container-fluid-width: {{ g_st.container-fluil-max-width }}px;
+  --spacing-sections-desktop: {{ g_st.spacing_sections }}px;
+  --spacing-sections-tablet: {{ g_st.spacing_tablet_sections }}px;
+  --spacing-sections-mobile: {{ g_st.spacing_mobile_sections }}px;
+  /*End Option Layout */
+
+  /*BUTTON*/
+  {% if g_st.uppercase_btn %}
+    --uppercase-btn: uppercase;
+  {% endif %}
+  --font-size-btn: {{ g_st.font_size_btn }}px;
+  --letter-spacing-btn: {{ g_st.letter_spacing_btn }}px;
+  --border-radius-btn: {{ g_st.border_radius_btn }}px;
+  --border-width-btn: {{ g_st.border_width_btn }}px;
+  --line-height-btn: {{ g_st.line_height_btn }}px;
+  --font-weight-btn: {{ g_st.font_weight_btn }};
+
+
+  /*INPUT*/
+  --inputs-border-width: {{ g_st.inputs_border_thickness }}px;
+  --font-size-input: {{ g_st.font_size_input }}px;
+  --border-radius-input: {{ g_st.border_radius_input }}px;
+  --line-height-input: {{ g_st.line_height_input }}px;
+  --font-weight-input: {{ g_st.font_weight_input }};
+
+  --product-card-image-padding: {{ g_st.card_image_padding | divided_by: 10.0 }}rem;
+  --product-card-corner-radius: {{ g_st.card_corner_radius | divided_by: 10.0 }}rem;
+  --product-card-text-alignment: {{ g_st.card_text_alignment }};
+  --product-card-border-width: {{ g_st.card_border_thickness | divided_by: 10.0 }}rem;
+  --product-card-border-opacity: {{ g_st.card_border_opacity | divided_by: 100.0 }};
+  --product-card-shadow-opacity: {{ g_st.card_shadow_opacity | divided_by: 100.0 }};
+  --product-card-shadow-visible: {% if g_st.card_shadow_opacity > 0 %}1{% else %}0{% endif %};
+  --product-card-shadow-horizontal-offset: {{ g_st.card_shadow_horizontal_offset | divided_by: 10.0 }}rem;
+  --product-card-shadow-vertical-offset: {{ g_st.card_shadow_vertical_offset | divided_by: 10.0 }}rem;
+  --product-card-shadow-blur-radius: {{ g_st.card_shadow_blur | divided_by: 10.0 }}rem;
+
+  --badge-corner-radius: {{ g_st.badge_corner_radius | divided_by: 10.0 }}rem;
+
+  --grid-desktop-vertical-spacing: {{ g_st.spacing_grid_vertical }}px;
+  --grid-desktop-horizontal-spacing: {{ g_st.spacing_grid_horizontal }}px;
+  --grid-mobile-vertical-spacing: {{ g_st.spacing_grid_vertical | divided_by: 2 }}px;
+  --grid-mobile-horizontal-spacing: {{ g_st.spacing_grid_horizontal | divided_by: 2 }}px;
+  --border-radius: {{ g_st.border_radius }}px;
+
+}
+@media (max-width: 767px) {
+;
+
+
+/*
+
+   :root{ 
+   --fz-14: 1.2rem; 
+   --fz-16: 1.4rem; 
+   --fz-18: 1.6rem; 
+   --fz-20: 1.8rem; 
+   --fz-24: 2.0rem; 
+   --fz-32: 2.4rem; 
+   --fz-48: 3.2rem; 
+   } 
+*/
+}
+{% endstyle %}

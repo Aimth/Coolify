@@ -1,0 +1,389 @@
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {
+        "container": "container",
+        "color_scheme": "inverse",
+        "show_background_grid": true,
+        "text_alignment": "text-left",
+        "position_content": "row",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "ba616973-d50c-4a41-bf32-be6082527ac7": {
+          "type": "viewing",
+          "settings": {
+            "display_form": "display_row",
+            "change_text_view": "people are viewing the right now",
+            "change_text_sold": "sold in last",
+            "show_viewing": true,
+            "show_sold": false,
+            "fv_min": 20,
+            "fv_max": 100,
+            "time_random": 10000,
+            "fv_sold": 6,
+            "fv_hour": 24
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {
+          }
+        },
+        "69cca0aa-05ca-4662-96f2-83fc0862fba1": {
+          "type": "shopify:\/\/apps\/air-product-reviews\/blocks\/app-summary-block\/c4e1e9ca-4d46-4e76-bc39-7e42417cb327",
+          "settings": {
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+          }
+        },
+        "bb0e61cf-bc6f-48d4-9c9b-56ff606a4f27": {
+          "type": "countdown_timer",
+          "settings": {
+            "show_countdown_timer": true
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "swatches_variant"
+          }
+        },
+        "498b1b0b-3e5f-438a-bf31-96b57520a4ad": {
+          "type": "shopify:\/\/apps\/maxsale\/blocks\/sizechart\/52b34ca6-4ef1-49e8-b9d8-a5be1ccf3dfc",
+          "settings": {
+            "title": "Size chart",
+            "text_color": "#000000",
+            "fontsize": 17,
+            "icon": "area",
+            "icon_color": "#000000"
+          }
+        },
+        "e941e332-baff-4652-9625-d45a740935b2": {
+          "type": "product_form",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": false,
+            "confirm_terms": false,
+            "text_agree_terms_conditions": "<p>I agree with the terms and conditions<\/p>",
+            "background_btn_buy_it_now": "#b2010e"
+          }
+        },
+        "c930202e-6839-45e2-bb9d-fef42010699d": {
+          "type": "stock_countdown",
+          "settings": {
+            "message": "Hurry Up! Only [count] items left in stock!",
+            "qty": 100
+          }
+        },
+        "0d615ceb-1034-4564-8caf-4b8b0691adb2": {
+          "type": "wishlist_compare",
+          "settings": {
+            "use_dt_wishlist": false,
+            "use_dt_compare": false,
+            "use_dt_share": true,
+            "show_ask_a_question": true,
+            "show_pinterest": true,
+            "show_instagram": true,
+            "show_facebook": true,
+            "show_twitter": true,
+            "show_copy": true
+          }
+        },
+        "85cf5197-a971-4df2-a708-f94a5a01c5e2": {
+          "type": "border",
+          "settings": {
+          }
+        },
+        "9d4c08c6-8a5b-49a1-baff-2b6e2c264f29": {
+          "type": "short_description",
+          "settings": {
+          }
+        },
+        "a9c0a848-e5b4-4c20-86eb-6de73c72c10e": {
+          "type": "product_meta",
+          "settings": {
+            "show_vendor": true,
+            "show_sku": true,
+            "show_availability": true,
+            "show_categories": true,
+            "category_text": "Category:",
+            "category_type": "first"
+          }
+        },
+        "734c2a45-9f88-40f4-acc8-f410a818bfe2": {
+          "type": "border",
+          "disabled": true,
+          "settings": {
+          }
+        },
+        "description": {
+          "type": "description",
+          "disabled": true,
+          "settings": {
+          }
+        },
+        "f1ab33f1-48ca-45dc-bed1-8090c34a67db": {
+          "type": "icon-with-text",
+          "settings": {
+            "layout": "vertical",
+            "icon_1": "truck",
+            "heading_1": "Free Shipping & Returns: On all orders over $200",
+            "icon_2": "lipstick",
+            "heading_2": "Estimated Delivery: Jul 23 - Jul 29",
+            "icon_3": "truck",
+            "heading_3": ""
+          }
+        },
+        "a10de87f-c73f-4af0-9a13-c2c0428ffdac": {
+          "type": "trust_badge",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Frame_2224_1.png",
+            "image_width": 550
+          }
+        },
+        "758a2b6a-8383-4291-825f-083f0f49354a": {
+          "type": "shopify:\/\/apps\/air-product-reviews\/blocks\/app-block-review-list\/c4e1e9ca-4d46-4e76-bc39-7e42417cb327",
+          "disabled": true,
+          "settings": {
+            "air_blockreviews_summaryHeading": "Review",
+            "air_blockreviews_layout": "list",
+            "air_blockreviews_singleStarColor": "#16a086",
+            "air_blockreviews_primaryColor": "#121212",
+            "air_blockreviews_buttonBackgroundColor": "#ededed",
+            "air_blockreviews_buttonTextColor": "#121212"
+          }
+        }
+      },
+      "block_order": [
+        "ba616973-d50c-4a41-bf32-be6082527ac7",
+        "title",
+        "69cca0aa-05ca-4662-96f2-83fc0862fba1",
+        "price",
+        "bb0e61cf-bc6f-48d4-9c9b-56ff606a4f27",
+        "variant_picker",
+        "498b1b0b-3e5f-438a-bf31-96b57520a4ad",
+        "e941e332-baff-4652-9625-d45a740935b2",
+        "c930202e-6839-45e2-bb9d-fef42010699d",
+        "0d615ceb-1034-4564-8caf-4b8b0691adb2",
+        "85cf5197-a971-4df2-a708-f94a5a01c5e2",
+        "9d4c08c6-8a5b-49a1-baff-2b6e2c264f29",
+        "a9c0a848-e5b4-4c20-86eb-6de73c72c10e",
+        "734c2a45-9f88-40f4-acc8-f410a818bfe2",
+        "description",
+        "f1ab33f1-48ca-45dc-bed1-8090c34a67db",
+        "a10de87f-c73f-4af0-9a13-c2c0428ffdac",
+        "758a2b6a-8383-4291-825f-083f0f49354a"
+      ],
+      "settings": {
+        "container": "container",
+        "color_scheme": "",
+        "enable_sticky_info": true,
+        "gallery_layout": "thumbnails_left",
+        "image_zoom": "lightbox",
+        "border_radius_media": true,
+        "enable_video_looping": true,
+        "sticky": true,
+        "padding_top": 60,
+        "padding_bottom": 0
+      }
+    },
+    "upsell-productt-bundle": {
+      "type": "upsell-productt-bundle",
+      "disabled": true,
+      "settings": {
+        "show_heading_header": false,
+        "heading": "Frequently Bought Together",
+        "description": "",
+        "text_alignment": "text-left",
+        "container": "container",
+        "color_scheme": "",
+        "collection": "",
+        "description_discount": "<p>Get 20% discount on buying this product together.<\/p>",
+        "limit_products": 6,
+        "sliders_perview": "3",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "product-information-tabs": {
+      "type": "product-information-tabs",
+      "blocks": {
+        "b2b3bcb7-f4e2-4e73-8ecb-b546620eaa9d": {
+          "type": "description",
+          "settings": {
+            "title": "Description"
+          }
+        },
+        "c3244bbb-dfb6-4c83-8fff-13f1657651a4": {
+          "type": "custom_tab",
+          "settings": {
+            "title": "Custom Tab",
+            "tab_content": "content",
+            "content": "<p>It's a loose fit blouse. You could choose a size down it you prefer to get a more fitness blouse.<br\/>Please take our customers reviews as reference to help you make an informed purchase decision<\/p>",
+            "page": ""
+          }
+        },
+        "b38719ec-a726-49d0-a593-f029155f22c7": {
+          "type": "custom_tab",
+          "settings": {
+            "title": "Shipping & Return",
+            "tab_content": "content",
+            "content": "<p>For all orders exceeding a value of 100USD shipping is offered for free.<\/p><p>Returns will be accepted for up to 10 days of Customer’s receipt or tracking number on unworn items. You, as a Customer, are obliged to inform us via email before you return the item.<\/p><p>Otherwise, standard shipping charges apply. Check out our delivery <a href=\"https:\/\/umino-demo.myshopify.com\/pages\/privacy-policy\" target=\"_blank\" title=\"Privacy Policy\">Terms & Conditions <\/a>for more details.<\/p>",
+            "page": "shipping-returns"
+          }
+        },
+        "5b9d14bd-2a8e-4bc4-b700-4ce697a52032": {
+          "type": "review",
+          "settings": {
+            "title": "Review"
+          }
+        },
+        "36e2fc9f-46c0-4cb0-b0aa-54edb4899c60": {
+          "type": "short_description",
+          "disabled": true,
+          "settings": {
+            "title": "Short Description"
+          }
+        }
+      },
+      "block_order": [
+        "b2b3bcb7-f4e2-4e73-8ecb-b546620eaa9d",
+        "c3244bbb-dfb6-4c83-8fff-13f1657651a4",
+        "b38719ec-a726-49d0-a593-f029155f22c7",
+        "5b9d14bd-2a8e-4bc4-b700-4ce697a52032",
+        "36e2fc9f-46c0-4cb0-b0aa-54edb4899c60"
+      ],
+      "settings": {
+        "container": "container",
+        "color_scheme": "",
+        "design": "tab",
+        "reset_spacing": false,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "show_heading_header": true,
+        "heading": "You may also like",
+        "description": "",
+        "text_alignment": "text-left",
+        "container": "container",
+        "color_scheme": "background-1",
+        "products_to_show": 8,
+        "sliders_perview": "4",
+        "column_gap": 30,
+        "autoplay": false,
+        "loop": true,
+        "show_arrows": true,
+        "show_bullets": false,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "recently-products": {
+      "type": "main-recently",
+      "settings": {
+        "show_heading_header": true,
+        "heading": "Recently Product",
+        "description": "",
+        "text_alignment": "text-left",
+        "container": "container",
+        "color_scheme": "",
+        "sliders_perview": "4",
+        "autoplay": false,
+        "loop": true,
+        "show_arrows": true,
+        "show_bullets": false,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "7c66114a-5a15-42f0-a956-024eda27ed97": {
+      "type": "border",
+      "settings": {
+        "container": "container",
+        "color_scheme": "",
+        "height_border": 1,
+        "reset_spacing": true,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "service": {
+      "type": "service",
+      "blocks": {
+        "template--14765639467107__17b84436-6629-48d2-8994-1964371f02a3-service_item-1": {
+          "type": "service_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Icon_16.png",
+            "title": "Free shipping",
+            "content": "<p>Free Shipping for orders over £130<\/p>"
+          }
+        },
+        "template--14765639467107__17b84436-6629-48d2-8994-1964371f02a3-service_item-2": {
+          "type": "service_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Icon_19.png",
+            "title": "Returns & exchanges",
+            "content": "<p>Purchase within 30 days of receipt.<\/p>"
+          }
+        },
+        "template--14765639467107__17b84436-6629-48d2-8994-1964371f02a3-service_item-3": {
+          "type": "service_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Icon_17.png",
+            "title": "Online Support",
+            "content": "<p>24 hours a day, 7 days a week.<\/p>"
+          }
+        },
+        "template--14765639467107__17b84436-6629-48d2-8994-1964371f02a3-service_item-4": {
+          "type": "service_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Icon_18.png",
+            "title": "Flexible payment",
+            "content": "<p>Pay with Multiple Credit Cards<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "template--14765639467107__17b84436-6629-48d2-8994-1964371f02a3-service_item-1",
+        "template--14765639467107__17b84436-6629-48d2-8994-1964371f02a3-service_item-2",
+        "template--14765639467107__17b84436-6629-48d2-8994-1964371f02a3-service_item-3",
+        "template--14765639467107__17b84436-6629-48d2-8994-1964371f02a3-service_item-4"
+      ],
+      "settings": {
+        "container": "container",
+        "color_scheme": "background-1",
+        "show_background_grid": true,
+        "type_layout": "layout_1",
+        "columns_desktop": "4",
+        "columns_tablets": "2",
+        "columns_mobile": "1",
+        "padding_top": 70,
+        "padding_bottom": 70,
+        "reset_spacing": true
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "main",
+    "upsell-productt-bundle",
+    "product-information-tabs",
+    "related-products",
+    "recently-products",
+    "7c66114a-5a15-42f0-a956-024eda27ed97",
+    "service"
+  ]
+}

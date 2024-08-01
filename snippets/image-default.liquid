@@ -1,0 +1,21 @@
+{% comment %}
+  Renders Image or Icon default when no data
+  We use https://placehold.co/
+
+  Accepts:
+  - type: {String} "image" or "svg"
+  - width: {String} Image/svg width
+  - height: {String} Image/svg height
+  - class: {String} Class you want add
+
+  Usage:
+  {% render 'image-default', type: type, width: width, height: height, class: class %}
+
+  Example:
+  {% render 'image-default', type: "image", width: 600, height: 400, class: "image" %}
+  
+{% endcomment %}
+
+{% if type == "image" %}
+    <img class="{{ class }}" src="https://placehold.co/{{ width | default: 600 }}x{{ height | default: 400 }}" alt="default image"/>
+{% endif %}

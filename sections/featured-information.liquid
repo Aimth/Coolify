@@ -1,0 +1,310 @@
+{{ 'featured-information.css' | asset_url | stylesheet_tag }}
+{% liquid
+  assign sst = section.settings
+  assign container = sst.container
+%}
+{%- capture style -%}
+    --section-padding-top: {{ sst.padding_top }}px; 
+    --section-padding-bottom: {{ sst.padding_bottom }}px; 
+  {%- endcapture -%}
+<div class="tp-ftr-info color-{{ sst.color_scheme }} gradient section-py {% if sst.reset_spacing == false %}section-mb{% endif %}" style="{{ style | strip | strip_newlines }}">
+  <div class="{{ container }} section-full">
+    <div class="tp-ftr-info__wrap tp-grid tp-grid--1-col-mobile tp-grid--2-col-tablets tp-grid--3-col-desktop">
+      {% for block in section.blocks %}
+        {% liquid
+          assign bst = block.settings
+        %}
+        {% case block.type %}
+          {% when 'product' %}
+            <div class="info__prd info__item tp-grid__item">
+              <h2 class="mb-30 md:mb-40 line-clamp-1">{{ bst.heading }}</h2>
+              <div class="info__prd-wrap bd-radius color-{{ bst.color_scheme }} gradient">
+                {% render 'product-item-layout-1'
+                  , card_product: bst.product %}
+              </div>
+            </div>
+          {% when 'product_list' %}
+            <div class="info__prd-list info__item tp-grid__item">
+              <h2 class="mb-30 md:mb-40 line-clamp-1">{{ bst.heading }}</h2>
+              <div class="bd-radius color-{{ bst.color_scheme }} gradient">
+                <div class="info__prd-list-inner ">
+                  <div class="prd-list-wrap">
+                    {%- for product in bst.product_list -%}
+                      <div class="prd__item">
+                        {% render 'product-item-horizontal'
+                          , card_product: product %}
+                      </div>
+                    {%- else -%}
+                      {%- for i in (1..6) -%}
+                        <div class="prd__item">
+                          {% render 'product-item-horizontal' %}
+                        </div>
+                      {%- endfor -%}
+                    {%- endfor -%}
+                  </div>
+                  <div class="p-20 text-left info__prd-list-btn">
+                    <a href="#" class="tp-btn tp-btn__underline n-hvr">
+                      {{ 'sections.featured_info.view_all_products' | t }}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+        {% endcase %}
+      {% endfor %}
+      <div class="info__item info__prd-testimonial tp-grid__item">
+        <h2 class="mb-30 md:mb-40 line-clamp-1">{{ sst.heading }}</h2>
+        <div class="bd-radius pb-20 color-{{ sst.color_scheme_testi }}  gradient">
+          <div class="info__prd-testimonial-inner">
+            {% for block in section.blocks %}
+              {% liquid
+                assign bst = block.settings
+              %}
+              {% case block.type %}
+                {% when 'testimonial_item' %}
+                  <div class="testimonial-item p-20">
+                    <div class="tp-testimonial__wrapper mb-16">
+                      <div class="testi-top">
+                        <div class="testi-title flex items-center justify-start gap-5 mb-10">
+                          <div class="testi-star flex items-center gap-2">
+                            {% liquid
+                              render 'icon', icon_name: 'star'
+                              render 'icon', icon_name: 'star'
+                              render 'icon', icon_name: 'star'
+                              render 'icon', icon_name: 'star'
+                              render 'icon', icon_name: 'star'
+                            %}
+                          </div>
+                          {% if bst.title != blank %}
+                            <h5 class="mb-0">{{ bst.title }}</h5>
+                          {% endif %}
+                        </div>
+                        {% if bst.content != blank %}
+                          <div class="testi-desc rsmb-p mb-16">
+                            {{ bst.content }}
+                          </div>
+                        {% endif %}
+                      </div>
+                      <div class=" flex items-center gap-12">
+                        {% render 'responsive-image'
+                          , image: bst.image
+                          , aspect_ratio: 'original'
+                          , custom_ratio: sst.custom_ratio
+                          , class: 'h-full'
+                          , w_default: 280
+                          , h_default: 300
+                        %}
+                        <div class="content-bottom">
+                          {% if bst.name != blank %}
+                            <h5 class="mb-0">{{ bst.name }}</h5>
+                          {% endif %}
+                          {% if bst.city != blank %}
+                            <span>{{ bst.city }}</span>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              {% endcase %}
+            {% endfor %}
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Featured information",
+    "tag": "section",
+    "disabled_on": {
+      "groups": ["*"]
+    },
+    "settings": [
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      },
+      {
+        "type": "header",
+        "content": "Configuration for the testimonial block"
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme_testi",
+        "label": "Color block testimonial",
+        "default": "background-1"
+      }, {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Happy Customers"
+      }, {
+        "type": "paragraph",
+        "content": "----------------------------------------"
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "header",
+        "content": "Desktop"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 90,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 100,
+        "min": 0,
+        "max": 500,
+        "step": 10,
+        "unit": "px"
+      }, {
+        "type": "paragraph",
+        "content": "---------------------"
+      }, {
+        "type": "checkbox",
+        "id": "reset_spacing",
+        "label": "Remove default space between sections",
+        "default": false
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Product",
+        "type": "product",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading",
+            "default": "Product Trending"
+          }, {
+            "type": "product",
+            "id": "product",
+            "label": "Product"
+          }, {
+            "type": "color_scheme",
+            "id": "color_scheme",
+            "label": "t:sections.all.colors.label",
+            "default": "background-1"
+          }
+        ]
+      }, {
+        "name": "Product list",
+        "type": "product_list",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading",
+            "default": "Product Sale"
+          }, {
+            "type": "product_list",
+            "id": "product_list",
+            "label": "Product list"
+          }, {
+            "type": "color_scheme",
+            "id": "color_scheme",
+            "label": "t:sections.all.colors.label",
+            "default": "background-1"
+          }
+        ]
+      }, {
+        "name": "Testimonial",
+        "type": "testimonial_item",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "default": "Title",
+            "label": "Title"
+          },
+          {
+            "type": "richtext",
+            "id": "content",
+            "label": "Content",
+            "default": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop</p>"
+          },
+          {
+            "type": "text",
+            "id": "name",
+            "label": "Name",
+            "default": "BrandonJr"
+          }, {
+            "type": "text",
+            "id": "city",
+            "label": "City",
+            "default": "New York, USA"
+          }, {
+            "type": "color_scheme",
+            "id": "color_scheme",
+            "label": "t:sections.all.colors.label",
+            "default": "background-1"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Featured information",
+        "blocks": [
+          {
+            "type": "product"
+          },
+          {
+            "type": "product_list"
+          },
+          {
+            "type": "testimonial_item"
+          },
+          {
+            "type": "testimonial_item"
+          }, {
+            "type": "testimonial_item"
+          }, {
+            "type": "testimonial_item"
+          }, {
+            "type": "testimonial_item"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,83 @@
+{% capture colors %}
+    <style>
+        {%- for block in section.blocks -%}
+          {% liquid
+            assign bst = block.settings
+            assign color_name = bst.heading | downcase | replace: ' ', '-'
+            assign color_code = bst.color_code
+            assign color_image = bst.color_image
+          %}
+            {%- if color_name != blank -%}
+                .tp-custom-{{ color_name }}{
+                    {% if color_image == blank %}
+                        background-color:{{ color_code }} !important;
+                        background-image: initial !important;
+                    {% else  %}
+                        background:{{ color_code }} url({{ color_image | img_url: '80x80' }}) no-repeat 50% 50%/cover !important;
+                    {% endif %}
+                }
+            {%- endif -%}
+        {%- endfor -%} 
+    </style>
+{% endcapture %}
+{{ colors | strip_newlines | remove: '  ' | remove: '	' }}
+{% schema %}
+  {
+    "name": "Custom Color",
+    "settings": [],
+    "limit": 1,
+    "enabled_on": {
+      "groups": ["custom.system"]
+    },
+    "blocks": [
+      {
+        "type": "color",
+        "name": "Color",
+        "settings": [
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Color Name"
+          }, {
+            "type": "color",
+            "id": "color_code",
+            "label": "Color code"
+          }, {
+            "type": "image_picker",
+            "id": "color_image",
+            "label": "Color Image"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Custom Color",
+        "blocks": [
+           {
+            "type": "color",
+            "settings": {
+              "heading": "Light Blue",
+              "color_code": "#70b9e9"
+            }
+          },
+           {
+            "type": "color",
+            "settings": {
+              "heading": "Light Yellow",
+              "color_code": "#f5f5c1"
+            }
+          },
+          {
+            "type": "color",
+            "settings": {
+              "heading": "Image",
+              "color_code": ""
+            }
+          }
+        ]
+
+      }
+    ]
+  }
+{% endschema %}

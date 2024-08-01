@@ -1,0 +1,628 @@
+{{ 'banner-text.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign gst = settings
+  assign sst = section.settings
+  assign container = sst.container
+  assign positionCoutDown = 'justify-start'
+  if sst.text_align == 'text-center'
+    assign positionCoutDown = 'justify-center'
+  elsif sst.text_align == 'text-right'
+    assign positionCoutDown = 'justify-end'
+  endif
+  if sst.border_radius
+    assign borderRadius = 'bd-radius'
+  endif
+  if sst.bn_design == 'text_overlay'
+    if sst.content_below_image_mb
+    endif
+  endif
+-%}
+{%- capture style -%}
+  --section-padding-top: {{ sst.padding_top }}px; 
+  --section-padding-bottom: {{ sst.padding_bottom }}px;
+  --section-margin-top: {{ sst.margin_top }}px;
+  --height-dk: {{ sst.height_dk }}px;
+  --height-tb: {{ sst.height_tb }}px;
+
+  --height-mobile: {{ sst.height_mb }}px;
+  {% if sst.height_mb_auto %}
+    --height-mobile: 'auto';
+  {% endif %} 
+  --width-image: {{ sst.width_image }};
+  --row-gap-content: {{ sst.row_gap_content }}px;
+{%- endcapture -%}
+
+
+<div class="banner-with-text rounded-[10px] banner-with-text-{{ section.id }}  {% unless sst.background_container %}color-{{ sst.color_scheme }} gradient{% endunless %}  section-py section-mb" style="{{ style | strip | strip_newlines }}">
+  <div class="{{ container }} section-full">
+    <div class="relative {% if sst.background_container %}color-{{ sst.color_scheme }} gradient{% endif %} {% if sst.bn_design == 'text_column' %}column-text {{ sst.text_position }}  {{ sst.img_position }} {{ borderRadius }}{% endif %}">
+      <div class="banner-text--media {{ borderRadius }}">
+        {% render 'responsive-image', image: sst.image | width: "100vw" %}
+      </div>
+      <div class="{{ sst.bn_design }} {{ sst.text_align }} 
+                  {% if sst.bn_design == 'text_overlay' %}
+                    {% if sst.content_below_image_mb %}
+                      content-below
+                    {% endif %} 
+                    {{ sst.position_content }} {{ sst.container_content }}
+                  {% endif %}">
+        <div class="banner-text--content-inner">
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign bst = block.settings
+              assign link = bst.link_btn
+            -%}
+            {% case block.type %}
+              {%- when 'subheading' -%}
+                <h6 class="banner-text--subheading rsmb-0 mb-0">
+                  {{ bst.sub_title }}
+                </h6>
+              {%- when 'heading' -%}
+                <h2 class="banner-text--heading mb-0" style="--fz-heading: {{ bst.font_size_heading }}px;--fz-heading-tb: {{ bst.font_size_heading_tb }}px;--fz-heading-mb: {{ bst.font_size_heading_mb }}px">
+                  {{ bst.title }}
+                </h2>
+              {%- when 'text' -%}
+                <div class="banner-text--des rsmb-p">
+                  {{ bst.txt_content }}
+                </div>
+              {% when 'short_description' %}
+                <div class="banner-text--short-desc">
+                  <h4 class="short_title">{{ bst.short_title }}</h4>
+                  <div class="short_desc">{{ bst.short_desc }}</div>
+                </div>
+              {% when 'link_text' %}
+                <div class="banner-text-link {% if bst.show_line %}line_text{% endif %} flex items-center" style="--font-size-label: {{ bst.font_size_label }}px;">
+                  <a class="h3 mb-0 n-hvr" href="{{ bst.link_text  }}">{{ bst.link_label }}</a>
+                </div>
+              {%- when 'buttons' -%}
+                {%- if bst.btn_content != blank -%}
+                  <div>
+                    <a
+                      {% if link == blank %}
+                      role="link"
+                      aria-disabled="true"
+                      {% else %}
+                      href="{{ link }}"
+                      {% endif %}
+                      class="tp-btn {{ bst.button_type }}">
+                      <span>{{ bst.btn_content | escape }}</span>
+                    </a>
+                  </div>
+                {%- endif -%}
+              {%- when 'product_list' -%}
+                <div class="product-list max-w-[585px] mb-32" style="--mx-prd-list: {{ bst.mx-prd-list }}px">
+                  <div
+                    class="swiper tp-product__banner hover__show-nav"
+                    data-mobile="1"
+                    data-tablet="2"
+                    data-desktop="2"
+                    data-space-between="{{ gst.spacing_grid_horizontal }}">
+                    <div class="swiper-wrapper">
+                      {% for product in bst.product_list %}
+                        <div class="swiper-slide" data-swiper-autoplay="7000">
+                          {% render 'product-item-layout-1'
+                            , card_product: product %}
+                        </div>
+                      {%- else -%}
+                        {%- for i in (1..4) -%}
+                          <div class="swiper-slide" data-swiper-autoplay="7000">
+                            {% liquid
+                              assign diff = 4 | minus: 1
+                              assign randomNumber = 'now' | date: '%N' | modulo: diff | plus: 1
+                              assign placeholder_image = 'product-apparel-' | append: randomNumber
+                              render 'product-item-layout-1', placeholder_image: placeholder_image
+                            %}
+                          </div>
+                        {%- endfor -%}
+                      {%- endfor -%}
+                    </div>
+                    {% render 'swiper-control'
+                      , class: 'prd-list'
+                      , show_bullet: false
+                      , show_arrow: true %}
+                  </div>
+                </div>
+              {%- when 'countdown_bn' -%}
+                {% if bst.bn_end_time != blank %}
+                  <div class="art__timer" data-timer="{{ bst.bn_end_time }}">
+                    <div class="timer-display timer-banner flex {{ positionCoutDown }}">
+                      <div class="timer-block">
+                        <span class="timer-block__num js-timer-days">00</span>
+                        <span class="timer-block__text">{{ 'general.times.handle.days' | t }}</span>
+                      </div>
+                      <div class="timer-block">
+                        <span class="timer-block__num js-timer-hours">00</span>
+                        <span class="timer-block__text">{{ 'general.times.handle.hrs' | t }}</span>
+                      </div>
+                      <div class="timer-block">
+                        <span class="timer-block__num js-timer-minutes">00</span>
+                        <span class="timer-block__text">{{ 'general.times.handle.mins' | t }}</span>
+                      </div>
+                      <div class="timer-block">
+                        <span class="timer-block__num js-timer-seconds">00</span>
+                        <span class="timer-block__text">{{ 'general.times.handle.secs' | t }}</span>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .banner-with-text-{{ section.id }} {
+    margin-top: {{ sst.margin_top }}px;
+  }
+  @media (max-width: 1024px) {
+    .banner-with-text-{{ section.id }} {
+      margin-top: 0;
+    }
+  }
+</style>
+{% schema %}
+  {
+    "name": "Banner with text",
+    "disabled_on": {
+      "groups": ["*"]
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": "General"
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width section-full",
+            "label": "Full width"
+          }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "accent-1"
+      },
+      {
+        "type": "checkbox",
+        "id": "background_container",
+        "label": "Background container",
+        "info": "The background is inside the container",
+        "default": false
+      }, {
+        "type": "select",
+        "id": "bn_design",
+        "label": "Design banner",
+        "default": "text_column",
+        "options": [
+          {
+            "value": "text_column",
+            "label": "Column banner"
+          }, {
+            "value": "text_overlay",
+            "label": "Text overlay image"
+          }
+        ]
+      }, {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Banner image"
+      }, {
+        "type": "select",
+        "id": "text_align",
+        "label": "Text alignment",
+        "default": "text-center",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          }, {
+            "value": "text-center",
+            "label": "Center"
+          }, {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ]
+      }, {
+        "type": "range",
+        "id": "row_gap_content",
+        "label": "Row gap content",
+        "min": 5,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "default": 20
+      }, {
+        "type": "header",
+        "content": "Config type \"Text overlay image\""
+      }, {
+        "type": "select",
+        "id": "container_content",
+        "label": "Layout content",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      }, {
+        "type": "select",
+        "id": "position_content",
+        "label": "Position content",
+        "default": "left",
+        "info": "* Apply to design \"Text overlay image\"",
+        "options": [
+          {
+            "value": "left",
+            "label": "Position left"
+          }, {
+            "value": "center",
+            "label": "Position center"
+          }, {
+            "value": "right",
+            "label": "Position right"
+          }
+        ]
+      }, {
+        "type": "checkbox",
+        "id": "content_below_image_mb",
+        "label": "Content below image on mobile ",
+        "default": false
+      }, {
+        "type": "header",
+        "content": "Config type \"Column banner\""
+      }, {
+        "type": "select",
+        "id": "img_position",
+        "label": "Image position",
+        "info": "* Apply to design \"Column banner\"",
+        "options": [
+          {
+            "value": "left",
+            "label": "Position left"
+          }, {
+            "value": "right",
+            "label": "Position right"
+          }
+        ]
+      }, {
+        "type": "select",
+        "id": "text_position",
+        "label": "Content position",
+        "options": [
+          {
+            "value": "top",
+            "label": "Top"
+          }, {
+            "value": "center",
+            "label": "Center"
+          }, {
+            "value": "bottom",
+            "label": "Bottom"
+          }
+        ]
+      }, {
+        "type": "text",
+        "id": "width_image",
+        "label": "Width image",
+        "default": "50%"
+      }, {
+        "type": "checkbox",
+        "id": "border_radius",
+        "label": "Bodder radius",
+        "default": true
+      }, {
+        "type": "number",
+        "id": "height_dk",
+        "label": "Section height (desktop)",
+        "default": 750
+      }, {
+        "type": "number",
+        "id": "height_tb",
+        "label": "Section height (tablet)",
+        "default": 600
+      }, {
+        "type": "number",
+        "id": "height_mb",
+        "label": "Section height (mobile)",
+        "default": 400
+      }, {
+        "type": "checkbox",
+        "id": "height_mb_auto",
+        "label": "Height mobile auto",
+        "default": false,
+        "info": "If this option is selected, the Section height (mobile) option will not be applied"
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }, {
+        "type": "checkbox",
+        "id": "reset_spacing",
+        "label": "Remove default space between sections",
+        "default": false
+      }, {
+        "type": "number",
+        "id": "margin_top",
+        "label": "Margin top",
+        "default": 0
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "name": "Heading",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Heading"
+          }, {
+            "type": "text",
+            "id": "font_size_heading",
+            "label": "Font size heading",
+            "default": "36"
+          }, {
+            "type": "text",
+            "id": "font_size_heading_tb",
+            "label": "Font size heading tablet",
+            "default": "36"
+          }, {
+            "type": "text",
+            "id": "font_size_heading_mb",
+            "label": "Font size heading mobile",
+            "default": "36"
+          }
+        ]
+      },
+      {
+        "type": "subheading",
+        "name": " Subheading",
+        "settings": [
+          {
+            "type": "text",
+            "id": "sub_title",
+            "label": "Subheading",
+            "default": "Subheading"
+          }
+        ]
+      },
+      {
+        "type": "short_description",
+        "name": " Short description",
+        "settings": [
+          {
+            "type": "text",
+            "id": "short_title",
+            "label": "Title",
+            "default": "Sort title"
+          }, {
+            "type": "textarea",
+            "id": "short_desc",
+            "label": "Description",
+            "default": "Description"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "name": "Text",
+        "settings": [
+          {
+            "type": "richtext",
+            "id": "txt_content",
+            "label": "Text",
+            "default": "<p>Pair large text with an image to give focus to your chosen product, collection, or blog post. Add details on availability, style, or even provide a review</p>"
+          }
+        ]
+      }, {
+        "name": "Link text",
+        "type": "link_text",
+        "settings": [
+          {
+            "type": "text",
+            "id": "link_label",
+            "label": "Link label"
+          }, {
+            "type": "url",
+            "id": "link_text",
+            "label": "Link text"
+          }, {
+            "type": "checkbox",
+            "id": "show_line",
+            "label": "Show line",
+            "default": true
+          }, {
+            "type": "text",
+            "id": "font_size_label",
+            "label": "Font size label",
+            "default": "36"
+          }
+        ]
+      }, {
+        "type": "buttons",
+        "name": "Button",
+        "settings": [
+          {
+            "type": "text",
+            "id": "btn_content",
+            "label": "Button Text",
+            "default": "Button"
+          }, {
+            "type": "url",
+            "id": "link_btn",
+            "label": "Link"
+          }, {
+            "type": "select",
+            "id": "button_type",
+            "label": "Button type",
+            "default": "tp-btn__primary",
+            "options": [
+              {
+                "value": "tp-btn__primary",
+                "label": "Primary"
+              }, {
+                "value": "tp-btn__secondary",
+                "label": "Secondary"
+              }
+            ]
+          }
+        ]
+      }, {
+        "type": "countdown_bn",
+        "name": "Countdown",
+        "settings": [
+          {
+            "type": "text",
+            "id": "bn_end_time",
+            "label": "End time",
+            "default": "12-24-2025",
+            "info": "e.g. mm-dd-yyyy"
+          },
+          {
+            "type": "color",
+            "id": "bn_txt_color",
+            "label": "Color"
+          },
+          {
+            "type": "range",
+            "id": "bn_txt_fs",
+            "label": "Font size",
+            "min": 8,
+            "max": 30,
+            "step": 1,
+            "unit": "px",
+            "default": 18
+          },
+          {
+            "type": "range",
+            "id": "number_txt_fs",
+            "label": "Font size number",
+            "min": 12,
+            "max": 80,
+            "step": 1,
+            "unit": "px",
+            "default": 36
+          }, {
+            "type": "range",
+            "id": "bn_txt_fw",
+            "label": "Font weight",
+            "min": 100,
+            "max": 900,
+            "step": 100,
+            "default": 400
+          }, {
+            "type": "select",
+            "id": "bn_txt_tf",
+            "label": "Text transform",
+            "options": [
+              {
+                "value": "unset",
+                "label": "Unset"
+              }, {
+                "value": "capitalize",
+                "label": "Capitalize"
+              }, {
+                "value": "uppercase",
+                "label": "Uppercase"
+              }, {
+                "value": "lowercase",
+                "label": "Lowercase"
+              }
+            ]
+          }, {
+            "type": "header",
+            "content": "Spacing"
+          }, {
+            "type": "range",
+            "id": "bn_txt_mt",
+            "min": 1,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "default": 1,
+            "label": "Margin top"
+          }, {
+            "type": "range",
+            "id": "bn_txt_mb",
+            "min": 1,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "default": 25,
+            "label": "Margin bottom"
+          }
+        ]
+      }, {
+        "name": "Product list",
+        "type": "product_list",
+        "settings": [
+          {
+            "type": "product_list",
+            "id": "product_list",
+            "label": "Product list"
+          }, {
+            "type": "text",
+            "id": "mx-prd-list",
+            "label": "Max width",
+            "default": "585"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Banner with text",
+        "blocks": [
+          {
+            "type": "heading"
+          }, {
+            "type": "text"
+          }, {
+            "type": "buttons"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

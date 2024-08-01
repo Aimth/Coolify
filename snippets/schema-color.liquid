@@ -1,0 +1,43 @@
+{% style %}
+  {% for scheme in settings.color_schemes -%}
+    {% assign scheme_classes = scheme_classes | append: ', .color-' | append: scheme.id %}
+    {% if forloop.index == 1 -%}
+      :root, 
+    {%- endif %}
+    .color-{{ scheme.id }} {
+      --color-background: {{ scheme.settings.background.red }}, 
+      {{ scheme.settings.background.green }}, 
+      {{ scheme.settings.background.blue }};
+      {% if scheme.settings.background_gradient != empty %}
+        --gradient-background: {{ scheme.settings.background_gradient }};
+      {% else %}
+        --gradient-background: {{ scheme.settings.background }};
+      {% endif %}
+      --color-background-grid: {{ scheme.settings.background_grid }};
+      --base-color: {{ scheme.settings.color_base_text }};
+      --other-color: {{ scheme.settings.color_other }};
+      --heading-color: {{ scheme.settings.color_headings }};
+      --border-color: {{ scheme.settings.border_color }};
+      --primary-color: {{ scheme.settings.color_primary }};
+      --secondary-color: rgba({{ scheme.settings.color_primary.red }}, {{ scheme.settings.color_primary.green }}, {{ scheme.settings.color_primary.blue }}, 0.8);
+      --tp-bg: rgba({{ scheme.settings.color_base_text.red }}, {{ scheme.settings.color_base_text.green }}, {{ scheme.settings.color_base_text.blue }}, 0.08);
+      /* Button  */
+      --color-btn-primary: {{ scheme.settings.color_btn_primary }};
+      --color-btn-secondary: {{ scheme.settings.color_btn_secondary }};
+      --color-btn-text: {{ scheme.settings.text_btn }};
+      --color-btn-text-underline: {{ scheme.settings.text_btn_underline }};
+      --color-hvr-btn-text: {{ scheme.settings.text_btn_hover }};
+      /*Input*/
+      --border-color-input: {{ scheme.settings.border_color_input }};
+      --background-color-input: {{ scheme.settings.background_color_input }};
+    }
+  {% endfor %}
+
+  {{ scheme_classes | prepend: 'body' }} {
+    color: var(--base-color);
+    background-color: rgb(var(--color-background));
+  }
+  :root {
+    --color-sub-menu: {{ settings.color_sub_menu }};
+  }
+{% endstyle %}

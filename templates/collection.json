@@ -1,0 +1,173 @@
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {
+        "container": "container",
+        "color_scheme": "background-1",
+        "show_background_grid": false,
+        "text_alignment": "text-left",
+        "position_content": "column",
+        "padding_top": 30,
+        "padding_bottom": 60
+      }
+    },
+    "357a165b-178c-4f3e-a604-7998196a1c0a": {
+      "type": "collection-list",
+      "blocks": {
+        "template--16192677937346__357a165b-178c-4f3e-a604-7998196a1c0a-collection_item-1": {
+          "type": "collection_item",
+          "settings": {
+            "heading": "Bags",
+            "collection": "trending",
+            "image": "shopify:\/\/shop_images\/Mask_group_28.png"
+          }
+        },
+        "template--16192677937346__357a165b-178c-4f3e-a604-7998196a1c0a-collection_item-2": {
+          "type": "collection_item",
+          "settings": {
+            "heading": "Foot Wear",
+            "collection": "new-arrivals",
+            "image": "shopify:\/\/shop_images\/Mask_group_29.png"
+          }
+        },
+        "template--16192677937346__357a165b-178c-4f3e-a604-7998196a1c0a-collection_item-4": {
+          "type": "collection_item",
+          "settings": {
+            "heading": "Sunglasses",
+            "collection": "men",
+            "image": "shopify:\/\/shop_images\/Mask_group_30.png"
+          }
+        },
+        "template--16192677937346__357a165b-178c-4f3e-a604-7998196a1c0a-collection_item-3": {
+          "type": "collection_item",
+          "settings": {
+            "heading": "Hats & Caps",
+            "collection": "men",
+            "image": "shopify:\/\/shop_images\/Mask_group_31.png"
+          }
+        },
+        "121dc1e4-59c3-4a21-8f7b-7b9733f566ac": {
+          "type": "collection_item",
+          "settings": {
+            "heading": "Active Wear",
+            "collection": "shoes-bag",
+            "image": "shopify:\/\/shop_images\/Mask_group_28.png"
+          }
+        }
+      },
+      "block_order": [
+        "template--16192677937346__357a165b-178c-4f3e-a604-7998196a1c0a-collection_item-1",
+        "template--16192677937346__357a165b-178c-4f3e-a604-7998196a1c0a-collection_item-2",
+        "template--16192677937346__357a165b-178c-4f3e-a604-7998196a1c0a-collection_item-4",
+        "template--16192677937346__357a165b-178c-4f3e-a604-7998196a1c0a-collection_item-3",
+        "121dc1e4-59c3-4a21-8f7b-7b9733f566ac"
+      ],
+      "disabled": true,
+      "settings": {
+        "show_heading_header": false,
+        "heading": "Title",
+        "description": "",
+        "text_alignment": "text-center",
+        "show_button": true,
+        "text_btn": "View all collections",
+        "link_btn": "",
+        "container": "container",
+        "color_scheme": "scheme-30767b86-79e0-4702-9cdb-67d30dc9214d",
+        "style_layout": "slider",
+        "design_collection": "design-2",
+        "hover_effect": "hvr_zoom",
+        "images_style": "rounded-[10px]",
+        "image_ratio": "3\/4",
+        "custom_ratio": "21:9",
+        "custom_column": 4,
+        "column_gap": 30,
+        "autoplay": false,
+        "loop": false,
+        "show_arrow": false,
+        "show_bullet": false,
+        "custom_column_tablets": "3",
+        "custom_column_mobile": "2",
+        "padding_top": 60,
+        "padding_bottom": 0,
+        "reset_spacing": true
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "blocks": {
+        "filter_7XwUje": {
+          "type": "filter",
+          "settings": {
+          }
+        },
+        "categories_TGGjEQ": {
+          "type": "categories",
+          "settings": {
+            "title": "Category",
+            "collection_list": [
+
+            ]
+          }
+        },
+        "popular_product_7NACQx": {
+          "type": "popular_product",
+          "settings": {
+            "title": "Featured product",
+            "product_list": [
+
+            ],
+            "maximum": 3
+          }
+        },
+        "image_banner_dAHGLB": {
+          "type": "image_banner",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Frame_236.png",
+            "link": "",
+            "open_link": false,
+            "image_ratio": "original",
+            "custom_ratio": "21:9",
+            "border_radius_img": true
+          }
+        }
+      },
+      "block_order": [
+        "filter_7XwUje",
+        "categories_TGGjEQ",
+        "popular_product_7NACQx",
+        "image_banner_dAHGLB"
+      ],
+      "settings": {
+        "container": "container",
+        "color_scheme": "",
+        "products_per_page": 18,
+        "column_number": "3",
+        "show_description": false,
+        "is_collapse_description": true,
+        "display_position": "top",
+        "pagination": "default",
+        "show_product_count": true,
+        "show_list_grid": true,
+        "enable_sorting": true,
+        "enable_filtering": true,
+        "collab_first": true,
+        "filter_type": "left_sidebar",
+        "background_sidebar": "no_background",
+        "bg_color_sidebar": "#eef2f6",
+        "collection_list": [
+
+        ],
+        "price_type": "range_slider",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "reset_spacing": false
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "357a165b-178c-4f3e-a604-7998196a1c0a",
+    "product-grid"
+  ]
+}

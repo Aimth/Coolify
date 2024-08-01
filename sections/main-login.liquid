@@ -1,0 +1,300 @@
+{{ 'customer.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'customer.js' | asset_url }}" defer></script>
+{% liquid
+  assign sst = section.settings
+%}
+{%- capture style -%}
+  --section-padding-top: {{ sst.padding_top }}px; --section-padding-bottom: {{ sst.padding_bottom }}px;
+{%- endcapture -%}
+
+<div class="{{ sst.container }}">
+  <div class="customer login color-{{ sst.color_scheme }} gradient section-py tp-grid tp-grid--2-col-desktop tp-grid--2-col-tablets tp-grid--1-col-mobile" style="{{ style | strip | strip_newlines }}">
+    <div class="mb-30 md:mb-0 col-left customer__left tp-grid__item">
+      {% comment %}Recover Password{% endcomment %}
+      <div class="customer_recover hidden">
+        <h3 id="recover" tabindex="-1">
+          {{ 'customer.recover_password.title' | t }}
+        </h3>
+        <p>
+          {{ 'customer.recover_password.subtext' | t }}
+        </p>
+
+        {%- form 'recover_customer_password' -%}
+          {% assign recover_success = form.posted_successfully? %}
+          <div class="field mb-30">
+            <input
+              class="field__input w-full"
+              type="email"
+              value=""
+              name="email"
+              id="RecoverEmail"
+              autocorrect="off"
+              autocapitalize="off"
+              autocomplete="email"
+              {% if form.errors %}
+              aria-invalid="true"
+              aria-describedby="RecoverEmail-email-error"
+              autofocus
+              {% endif %}
+              placeholder="{{ 'customer.login_page.email' | t }}">
+          </div>
+          {%- if form.errors -%}
+            <div class="tp-form-message--error">
+              <small id="RecoverEmail-email-error" class="form__message">
+                <svg
+                  aria-hidden="true"
+                  focusable="false"
+                  viewBox="0 0 13 13">
+                  <circle
+                    cx="6.5"
+                    cy="6.50049"
+                    r="5.5"
+                    stroke="white"
+                    stroke-width="2" />
+                  <circle
+                    cx="6.5"
+                    cy="6.5"
+                    r="5.5"
+                    fill="#EB001B"
+                    stroke="#EB001B"
+                    stroke-width="0.7" />
+                  <path d="M5.87413 3.52832L5.97439 7.57216H7.02713L7.12739 3.52832H5.87413ZM6.50076 9.66091C6.88091 9.66091 7.18169 9.37267 7.18169 9.00504C7.18169 8.63742 6.88091 8.34917 6.50076 8.34917C6.12061 8.34917 5.81982 8.63742 5.81982 9.00504C5.81982 9.37267 6.12061 9.66091 6.50076 9.66091Z" fill="white" />
+                  <path
+                    d="M5.87413 3.17832H5.51535L5.52424 3.537L5.6245 7.58083L5.63296 7.92216H5.97439H7.02713H7.36856L7.37702 7.58083L7.47728 3.537L7.48617 3.17832H7.12739H5.87413ZM6.50076 10.0109C7.06121 10.0109 7.5317 9.57872 7.5317 9.00504C7.5317 8.43137 7.06121 7.99918 6.50076 7.99918C5.94031 7.99918 5.46982 8.43137 5.46982 9.00504C5.46982 9.57872 5.94031 10.0109 6.50076 10.0109Z"
+                    fill="white"
+                    stroke="#EB001B"
+                    stroke-width="0.7" />
+                </svg>
+                {{ form.errors.messages.form }}
+              </small>
+            </div>
+          {%- endif -%}
+
+          <button class="tp-btn__primary tp-btn ">
+            {{ 'customer.login_page.submit' | t }}
+          </button>
+
+          <a class="tp-btn tp-btn__secondary customer_recover--cancel" href="javascript:void(0)">
+            {{ 'customer.login_page.cancel' | t }}
+          </a>
+        {%- endform -%}
+      </div>
+
+      {% comment %}Login form{% endcomment %}
+      <div class="login__form">
+        <h3
+          class="text-left mb-20"
+          id="login"
+          tabindex="-1">
+          {{ 'customer.login_page.title' | t }}
+        </h3>
+        <div class="login__subtitle">
+          {{ 'customer.login_page.subtitle' | t }}
+        </div>
+        {%- if recover_success == true -%}
+          <h3
+            class="form__message"
+            tabindex="-1"
+            autofocus>
+            <svg
+              aria-hidden="true"
+              focusable="false"
+              viewBox="0 0 13 13">
+              <path
+                d="M6.5 12.35C9.73087 12.35 12.35 9.73086 12.35 6.5C12.35 3.26913 9.73087 0.65 6.5 0.65C3.26913 0.65 0.65 3.26913 0.65 6.5C0.65 9.73086 3.26913 12.35 6.5 12.35Z"
+                fill="#428445"
+                stroke="white"
+                stroke-width="0.7"></path>
+              <path d="M5.53271 8.66357L9.25213 4.68197" stroke="white"></path>
+              <path d="M4.10645 6.7688L6.13766 8.62553" stroke="white"></path>
+            </svg>
+            {{ 'customer.recover_password.success' | t }}
+          </h3>
+        {%- endif -%}
+        {%- form 'customer_login'
+          , novalidate: 'novalidate' -%}
+          {%- if form.errors -%}
+            <div class="tp-form-message--error">
+              <h2
+                class="form__message"
+                tabindex="-1"
+                autofocus>
+                <span class="visually-hidden">{{ 'accessibility.error' | t }}</span>
+                <svg
+                  aria-hidden="true"
+                  focusable="false"
+                  viewBox="0 0 13 13">
+                  <circle
+                    cx="6.5"
+                    cy="6.50049"
+                    r="5.5"
+                    stroke="white"
+                    stroke-width="2" />
+                  <circle
+                    cx="6.5"
+                    cy="6.5"
+                    r="5.5"
+                    fill="#EB001B"
+                    stroke="#EB001B"
+                    stroke-width="0.7" />
+                  <path d="M5.87413 3.52832L5.97439 7.57216H7.02713L7.12739 3.52832H5.87413ZM6.50076 9.66091C6.88091 9.66091 7.18169 9.37267 7.18169 9.00504C7.18169 8.63742 6.88091 8.34917 6.50076 8.34917C6.12061 8.34917 5.81982 8.63742 5.81982 9.00504C5.81982 9.37267 6.12061 9.66091 6.50076 9.66091Z" fill="white" />
+                  <path
+                    d="M5.87413 3.17832H5.51535L5.52424 3.537L5.6245 7.58083L5.63296 7.92216H5.97439H7.02713H7.36856L7.37702 7.58083L7.47728 3.537L7.48617 3.17832H7.12739H5.87413ZM6.50076 10.0109C7.06121 10.0109 7.5317 9.57872 7.5317 9.00504C7.5317 8.43137 7.06121 7.99918 6.50076 7.99918C5.94031 7.99918 5.46982 8.43137 5.46982 9.00504C5.46982 9.57872 5.94031 10.0109 6.50076 10.0109Z"
+                    fill="white"
+                    stroke="#EB001B"
+                    stroke-width="0.7" />
+                </svg>
+                {{ 'templates.contact.form.error_heading' | t }}
+              </h2>
+
+              {{ form.errors | default_errors }}
+            </div>
+          {%- endif -%}
+
+          <div class="field">
+            <input
+              class="field__input w-full"
+              type="email"
+              name="customer[email]"
+              id="CustomerEmail"
+              autocomplete="email"
+              autocorrect="off"
+              autocapitalize="off"
+              {% if form.errors contains 'form' %}
+              aria-invalid="true"
+              {% endif %}
+              placeholder="{{ 'customer.login_page.email' | t }}">
+          </div>
+
+          {%- if form.password_needed -%}
+            <div class="field">
+              <input
+                class="field__input w-full"
+                type="password"
+                value=""
+                name="customer[password]"
+                id="CustomerPassword"
+                autocomplete="current-password"
+                {% if form.errors contains 'form' %}
+                aria-invalid="true"
+                {% endif %}
+                placeholder="{{ 'customer.login_page.password' | t }}">
+            </div>
+
+            <a class="login__recoverbt text-left inline-block mb-20" href="javascript:void(0)">
+              {{ 'customer.login_page.forgot_password' | t }}
+            </a>
+          {%- endif -%}
+
+          <button class="tp-btn tp-btn__primary min-w-[150px]"> 
+            {{ 'customer.login_page.sign_in' | t }}
+          </button>
+        {%- endform -%}
+      </div>
+      {%- if shop.checkout.guest_login -%}
+        <div>
+          <hr>
+          <h2>{{ 'customer.login_page.guest_title' | t }}</h2>
+
+          {%- form 'guest_login' -%}
+            <button>
+              {{ 'customer.login_page.guest_continue' | t }}
+            </button>
+          {%- endform -%}
+        </div>
+      {%- endif -%}
+    </div>
+    <div class="col-right login customer__right tp-grid__item">
+      {%- liquid
+        assign rg_heading = section.settings.rg_heading
+        assign rg_subheading = section.settings.rg_subheading
+      -%}
+      <h3 class="text-left mt-0">
+        {%- liquid
+          if rg_heading != blank
+            echo rg_heading
+          endif
+        -%}
+      </h3>
+      <div class="login__subtitle">
+        {%- liquid
+          if rg_subheading != blank
+            echo rg_subheading
+          else
+            echo 'customer.login_page.content.rg_subheading' | t
+          endif
+        -%}
+      </div>
+      <a class="tp-btn tp-btn__underline n-hvr" href="{{ routes.account_register_url }}">
+        {{ 'customer.login_page.create_account' | t }}
+      </a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "t:sections.main-login.name",
+    "settings": [
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      },
+      {
+        "type": "text",
+        "id": "rg_heading",
+        "label": "t:sections.main-login.register_heading",
+        "default": "First time at Coma",
+        "info": "If your website is multilingual, please leave this field blank, and you can translate it in the locale"
+      },
+      {
+        "type": "text",
+        "id": "rg_subheading",
+        "label": "t:sections.main-login.register_subheading",
+        "default": "Sign up for early Sale access plus tailored new arrivals, trends and promotions. To opt out, click unsubscribe in our emails.",
+        "info": "If your website is multilingual, please leave this field blank, and you can translate it in the locale"
+      }, {
+        "type": "header",
+        "content": "t:sections.all.padding.section_padding_heading"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_top",
+        "default": 80
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_bottom",
+        "default": 80
+      }
+    ]
+  }
+{% endschema %}

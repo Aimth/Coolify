@@ -1,0 +1,194 @@
+{% liquid
+  assign gst = settings
+  assign sst = section.settings
+  assign container = sst.container
+%}
+{%- capture style -%}
+    --section-padding-top: {{ sst.padding_top }}px; --section-padding-bottom: {{ sst.padding_bottom }}px;
+{%- endcapture -%}
+<script src="{{ 'blog-top-stories.js' | asset_url }}" defer="defer"></script>
+<div class="story-container color-{{ sst.color_scheme }} gradient section-py {% if sst.reset_spacing == false %}section-mb{% endif %}" style="{{ style | strip | strip_newlines }}">
+  <div class="{{ container }} section-full">
+    <header class="story-container__header flex flex-row items-center justify-between mb-40">
+      <h2 class="story-container__header-title mb-0">{{ section.settings.heading }}</h2>
+      {% if sst.show_arrow %}
+        <div class="story-container__header-nav">
+          <div class="flex items-center gap-10">
+            <div class="shadow swiper-navigation swiper-prev-bts">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="21"
+                viewBox="0 0 20 21"
+                fill="none">
+                <path d="M17.5 9.66895H4.15625L9.46875 4.2627C9.75 3.98145 9.75 3.54395 9.46875 3.2627C9.1875 2.98145 8.75 2.98145 8.46875 3.2627L2 9.8252C1.71875 10.1064 1.71875 10.5439 2 10.8252L8.46875 17.3877C8.59375 17.5127 8.78125 17.6064 8.96875 17.6064C9.15625 17.6064 9.3125 17.5439 9.46875 17.4189C9.75 17.1377 9.75 16.7002 9.46875 16.4189L4.1875 11.0752H17.5C17.875 11.0752 18.1875 10.7627 18.1875 10.3877C18.1875 9.98144 17.875 9.66895 17.5 9.66895Z" fill="#A3AEB9" />
+              </svg>
+            </div>
+            <div class="shadow swiper-navigation swiper-next-bts">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="21"
+                viewBox="0 0 20 21"
+                fill="none">
+                <path d="M18 9.85645L11.5312 3.29395C11.25 3.0127 10.8125 3.0127 10.5312 3.29395C10.25 3.5752 10.25 4.0127 10.5312 4.29395L15.7812 9.6377H2.5C2.125 9.6377 1.8125 9.95019 1.8125 10.3252C1.8125 10.7002 2.125 11.0439 2.5 11.0439H15.8437L10.5312 16.4502C10.25 16.7314 10.25 17.1689 10.5312 17.4502C10.6562 17.5752 10.8437 17.6377 11.0312 17.6377C11.2187 17.6377 11.4062 17.5752 11.5312 17.4189L18 10.8564C18.2812 10.5752 18.2812 10.1377 18 9.85645Z" fill="#A3AEB9" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </header>
+    <main
+      class="story-container__main swiper-container swiper"
+      data-autoplay="{{ sst.autoplay }}"
+      data-loop="{{ sst.loop }}"
+      data-mobile="1"
+      data-tablet="2"
+      data-desktop="{{ sst.post_item_desktop }}"
+      data-space-between="{{ settings.spacing_grid_horizontal }}">
+
+      <div class="swiper-wrapper">
+        {%- for block in section.blocks limit: sst.num_post_show -%}
+          {%- case block.type -%}
+            {%- when 'article_item' -%}
+              <div class="swiper-slide">
+                {%- render 'article-card'
+                  , article: block.settings.article_item
+                  , media_height: gst.image_height
+                  , media_aspect_ratio: article.image.aspect_ratio
+                  , show_image: gst.show_image
+                  , show_date: gst.show_date
+                  , show_author: gst.show_author
+                  , show_excerpt: true
+                  , gst: gst
+                -%}
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </main>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Today's Top Stories",
+    "class": "tts",
+    "tag": "section",
+    "disabled_on": {
+      "groups": ["*"]
+    },
+    "settings": [
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Today's Top Stories"
+      },
+      {
+        "type": "range",
+        "min": 2,
+        "max": 20,
+        "default": 12,
+        "step": 1,
+        "id": "num_post_show",
+        "label": "Posts to show"
+      }, {
+        "type": "range",
+        "min": 2,
+        "max": 5,
+        "step": 1,
+        "id": "post_item_desktop",
+        "default": 2,
+        "label": "Post per row (Desktop)"
+      }, {
+        "type": "checkbox",
+        "id": "autoplay",
+        "label": "Autoplay",
+        "default": false
+      }, {
+        "type": "checkbox",
+        "id": "loop",
+        "label": "Loop",
+        "default": false
+      }, {
+        "type": "checkbox",
+        "id": "show_arrow",
+        "label": "Show arrows",
+        "default": true
+      }, {
+        "type": "paragraph",
+        "content": "----------------------------------------"
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Article Item",
+        "type": "article_item",
+        "settings": [
+          {
+            "type": "article",
+            "id": "article_item",
+            "label": "Article Item"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Today's Top Stories"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

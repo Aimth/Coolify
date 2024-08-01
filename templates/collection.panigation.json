@@ -1,0 +1,54 @@
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {
+        "container": "container",
+        "color_scheme": "background-2",
+        "show_background_grid": false,
+        "text_alignment": "text-left",
+        "position_content": "row",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "container": "container",
+        "color_scheme": "",
+        "products_per_page": 12,
+        "column_number": "4",
+        "show_description": false,
+        "is_collapse_description": true,
+        "display_position": "top",
+        "pagination": "default",
+        "show_product_count": true,
+        "show_list_grid": true,
+        "enable_sorting": true,
+        "enable_filtering": true,
+        "collab_first": true,
+        "filter_type": "left_sidebar",
+        "background_sidebar": "background",
+        "bg_color_sidebar": "#EEF2F6",
+        "collection_list": [
+          "bags",
+          "caps",
+          "jackets",
+          "new-arrivals",
+          "scarves",
+          "shoes",
+          "spring-collection",
+          "wallets"
+        ],
+        "price_type": "range_slider",
+        "padding_top": 40,
+        "padding_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "product-grid"
+  ]
+}

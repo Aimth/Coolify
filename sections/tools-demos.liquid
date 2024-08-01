@@ -1,0 +1,83 @@
+<div class="all-demos max-h-full overflow-x-hidden idemos-status">
+  <div class="idemos flex flex-row flex-wrap px-15 pt-30">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'items' -%}
+          {% render "tools-item", bst: block.settings, forloop: forloop, target: "blank" %}
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "All Demos",
+  "settings": [
+  ],
+  "blocks": [
+    {
+      "name": "Items",
+      "type": "items",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Url"
+        },
+        {
+          "type": "select",
+          "id": "category",
+          "label": "Category",
+          "options": [
+            {
+              "value": "all-demos",
+              "label": "All"
+            },
+            {
+              "value": "new",
+              "label": "New"
+            },
+            {
+              "value": "clothing",
+              "label": "Clothing & Fashion"
+            },
+            {
+              "value": "healthy",
+              "label": "Healthy & Beauty"
+            },
+            {
+              "value": "technology",
+              "label": "Technology"
+            },
+            {
+              "value": "food",
+              "label": "Food & Beverage"
+            },
+            {
+              "value": "furnite",
+              "label": "Furnite"
+            }
+          ],
+          "default": "all-demos"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

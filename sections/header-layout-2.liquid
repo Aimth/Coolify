@@ -1,0 +1,853 @@
+{%- liquid
+  assign gst = settings
+  assign sst = section.settings
+  assign container = gst.container
+  assign transparent = gst.enable_transparent_header
+  assign top_search = gst.show_top_search
+  assign wishlist = gst.show_wishlist_icon
+  assign minicart = gst.show_minicart
+  assign enable_sticky = gst.enable_sticky_header
+  assign transparent_class = ''
+  assign img_logo = gst.logo
+  if request.page_type == 'index'
+    assign check_index = true
+  endif
+  if template.name == 'index' and transparent
+    assign transparent_class = 'transparent'
+  endif
+
+  assign search_suggest = gst.search_suggest
+-%}
+
+{{ 'header.css' | asset_url | stylesheet_tag }}
+{{ 'component-search.css' | asset_url | stylesheet_tag }}
+<link
+  rel="stylesheet"
+  href="{{ 'component-list-menu.css' | asset_url }}"
+  media="print"
+  onload="this.media='all'">
+
+<link
+  rel="stylesheet"
+  href="{{ 'component-cart-notification.css' | asset_url }}"
+  media="print"
+  onload="this.media='all'">
+{%- if settings.predictive_search_enabled -%}
+  <link
+    rel="stylesheet"
+    href="{{ 'component-price.css' | asset_url }}"
+    media="print"
+    onload="this.media='all'">
+  <link
+    rel="stylesheet"
+    href="{{ 'component-loading-overlay.css' | asset_url }}"
+    media="print"
+    onload="this.media='all'">
+{%- endif -%}
+{%- if section.settings.menu_type_desktop == 'mega' -%}
+  <link
+    rel="stylesheet"
+    href="{{ 'component-mega-menu.css' | asset_url }}"
+    media="print"
+    onload="this.media='all'">
+  <noscript>{{ 'component-mega-menu.css' | asset_url | stylesheet_tag }}</noscript>
+{%- endif -%}
+
+
+{%- if settings.cart_type == "drawer" -%}
+  {{ 'component-cart-drawer.css' | asset_url | stylesheet_tag }}
+  {{ 'component-cart.css' | asset_url | stylesheet_tag }}
+  {{ 'component-price.css' | asset_url | stylesheet_tag }}
+  {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
+  {{ 'component-loading-overlay.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+<noscript>{{ 'component-list-menu.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-search.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-cart-notification.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-cart-items.css' | asset_url | stylesheet_tag }}</noscript>
+
+<script src="{{ 'details-disclosure.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'header.js' | asset_url }}" defer="defer"></script>
+
+<{% if enable_sticky %}sticky-header data-sticky-type="always"{% else %}div{% endif %} class="header-wrapper {{ transparent_class }} {% if gst.show_line_separator %} header-wrapper--border-bottom{% endif %}">
+  <header class="header tp-header tp-header-layout-2 color-{{ section.settings.color_scheme }} gradient header-mobile py-16 lg:py-0 relative {% if check_index %}header-2-home-page{% endif %}">
+    <div class="header-top py-10 md:py-20">
+      <div class="{{ container }}">
+        <div class="header-top__wrap flex items-center justify-between gap-30">
+          <div class="header-logo">
+            {%- render 'logo'
+              , img_logo: img_logo
+              , check_index: check_index -%}
+          </div>
+          <div class="header-info flex items-center gap-30 text-sm">
+            {% liquid
+              if top_search
+                render 'header-search', header_layout: 'h_layout2', type_header: 'header-3'
+              endif
+            %}
+          </div>
+          <div class="col-header-right flex items-center gap-20">
+            {%- liquid
+              if wishlist
+                render 'wishlist'
+              endif
+              if minicart
+                render 'minicart', cart: cart
+              endif
+              if gst.show_account == 'account_header'
+                render 'my-account'
+              endif
+            -%}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="header-bottom color-{{ section.settings.color_scheme_bottom }} gradient" style="--color-sub-menu: {{ sst.color_sub_menu }}">
+      <div class="{{ container }}">
+        <div class="header-layout2 flex items-center lg:items-stretch justify-between">
+          <div class="toggle-nav">
+            {% render 'icon'
+              , icon_name: 'menu-mobile' %}
+          </div>
+          {% comment %} <div class="header-logo block lg:hidden">
+                                                {%- render 'logo'
+                                                  , img_logo: img_logo
+                                                  , check_index: check_index -%}
+                                        </div> {% endcomment %}
+          <div class="col-header-center flex-1 block lg:flex items-center gap-30">
+            <div class="close-hd-mobile flex items-center justify-between gap-5 font-medium lg:hidden">
+              <div class="flex items-center gap-12">
+                <button class="select-menu-mobile select-menu-mobile__menu active">{{ 'sections.header.menu' | t }}</button>
+                <button class="select-menu-mobile">{{ 'sections.header.category' | t }}</button>
+              </div>
+              <div class="close-hd-mobile__button flex items-center">
+                {% render 'icon'
+                  , icon_name: 'close' %}
+              </div>
+            </div>
+            <div class="mn-cate menu-mobile hidden items-stretch justify-between relative lg:flex">
+              <div class="title-cate flex items-center gap-10">
+                {% render 'icon'
+                  , icon_name: 'menu-mobile' %}
+                <span>{{ 'sections.header.category' | t }}</span>
+              </div>
+              <span class="icon-dropdown-cate">
+                {% render 'icon'
+                  , icon_name: 'dropdown' %}
+              </span>
+              <div class="mn-cate__sub absolute left-0 right-0 bottom-auto top-full">
+                {% if section.blocks.size > 0 %}
+                  <div class="mn-cate__sub-inner shadow py-15">
+                    <ul class="list-none">
+                      {% for block in section.blocks %}
+                        {% case block.type %}
+                          {% when 'vertical_menu' %}
+                            {% liquid
+                              assign bst = block.settings
+                            %}
+                            <li class="mn-cate-lv1 px-6 py-8 mb-4 list-none cursor-pointer" data-category-name="{{ block.settings.heading }}">
+                              {% if block.settings.menu != blank %}
+                                <div class="cate-title flex justify-between items-center">
+                                  <div class="menu-categories__content--title flex items-center gap-8">
+                                    {% if block.settings.icon_image != blank %}
+                                      <img
+                                        src="{{ block.settings.icon_image | image_url: width: block.settings.icon_image.width , height: block.settings.icon_image.height }}"
+                                        alt="icon-{{ block.settings.heading }}"
+                                        width="{{ block.settings.icon_image.width }}"
+                                        height="{{ block.settings.icon_image.height }}"
+                                        loading="lazy">
+                                    {% endif %}
+                                    <span class="menu-categories__content--title">
+                                      {{ block.settings.heading }}</span>
+                                  </div>
+                                  {% render 'icon'
+                                    , icon_name: 'arrow-right' %}
+                                </div>
+                              {% else %}
+                                {% assign urlTarget = block.settings.link_title | default: '#' %}
+                                <div class="cate-title flex items-center gap-8">
+                                  {% if block.settings.icon_image != blank %}
+                                    <img
+                                      src="{{ block.settings.icon_image | image_url: width: block.settings.icon_image.width , height: block.settings.icon_image.height }}"
+                                      alt="icon-{{ block.settings.heading }}"
+                                      width="{{ block.settings.icon_image.width }}"
+                                      height="{{ block.settings.icon_image.height }}"
+                                      loading="lazy">
+                                  {% endif %}
+                                  <a class="menu-categories__content--title" href="{{ urlTarget }}">
+                                    {{- block.settings.heading -}}
+                                  </a>
+                                </div>
+                              {% endif %}
+
+                              {% if block.settings.menu != blank %}
+                                <div class="sub-menu-category flex items-start gap-30 shadow" style="--sub-width:{{ bst.sub_width }}px">
+                                  <div class="list-mn-category  flex-1 tp-grid tp-grid--{{ bst.columns_desktop }}-col-desktop">
+                                    {%- for link in block.settings.menu.links -%}
+                                      <ul class="list-none tp-grid__item">
+                                        {% if link.links.size > 0 %}
+                                          <li class="mb-12">
+                                            <a
+                                              href="{{ link.url }}"
+                                              title="{{ link.title | escape }}"
+                                              class="sub-cate-lv1 h5"
+                                              data-level="{{ link.levels }}">
+                                              {{ link.title | escape }}
+                                            </a>
+                                          </li>
+                                          <ul class="list-none">
+                                            {% for child_link in link.links %}
+                                              <li class="mb-6">
+                                                <a
+                                                  href="{{ child_link.url }}"
+                                                  title="{{ child_link.title | escape }}"
+                                                  class=""
+                                                  data-level="{{ child_link.levels }}">
+                                                  {{ child_link.title | escape }}
+                                                </a>
+                                              </li>
+                                            {% endfor %}
+                                          </ul>
+                                        {% else %}
+                                          <li class="sub-cate-lv2">
+                                            <a
+                                              href="{{ link.url }}"
+                                              title="{{ link.title | escape }}"
+                                              class=""
+                                              data-level="{{ link.levels }}">
+                                              {{ link.title | escape }}
+                                            </a>
+                                          </li>
+                                        {% endif %}
+                                      </ul>
+                                    {% endfor %}
+                                  </div>
+                                  {% if bst.image_banner_1 != blank or bst.image_banner_2 != blank %}
+                                    <div class="banner-menu w-[260px]">
+                                      {% if bst.image_banner_1 != blank %}
+                                        <div class="cate-banner-1">
+                                          <a href="{{ bst.link_banner_1 |  default: "#" }}">
+                                            <img
+                                              src="{{ bst.image_banner_1 | image_url: width: bst.image_banner_1.width, height: bst.image_banner_1.height }}"
+                                              width="{{ bst.image_banner_1.width }}"
+                                              height="{{ bst.image_banner_1.height }}"
+                                              loading="lazy"
+                                              alt="{{ bst.image_banner_1.alt }}">
+                                          </a>
+                                        </div>
+                                      {% endif %}
+                                      {% if bst.image_banner_2 != blank %}
+                                        <div class="cate-banner-2 mt-30">
+                                          <a href="{{ bst.link_banner_2 |  default: "#" }}">
+                                            <img
+                                              src="{{ bst.image_banner_2 | image_url: width: bst.image_banner_2.width, height: bst.image_banner_2.height }}"
+                                              width="{{ bst.image_banner_2.width }}"
+                                              height="{{ bst.image_banner_2.height }}"
+                                              loading="lazy"
+                                              alt="{{ bst.image_banner_2.alt }}">
+                                          </a>
+                                        </div>
+                                      {% endif %}
+                                    </div>
+                                  {% endif %}
+                                </div>
+                              {% endif %}
+                            </li>
+                        {% endcase %}
+                      {% endfor %}
+                    </ul>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="contnet-center menu-mobile mobile-active hidden lg:block">
+              {% render 'horizontal-menu'
+                , block: block
+                , container: container
+                , typeheader: 'layout-2' %}
+            </div>
+          </div>
+          <div class="col-header-right flex items-center">
+            <div class="flex gap-5">
+              <p class="mb-0 fw-body">{{ 'sections.footer.phone' | t }}:</p>
+              <p class="mb-0">
+                <a href="tel:{{ settings.store_phone }}">
+                  {{ settings.store_phone }}
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+</{% if enable_sticky %}sticky-header{% else %}div{% endif %}>
+
+{%- if settings.cart_type == "notification" -%}
+  {%- render 'cart-notification'
+    , color_scheme: section.settings.color_scheme
+    , desktop_menu_type: section.settings.menu_type_desktop -%}
+{%- endif -%}
+
+<script type="application/ld+json">
+  {
+      "@context": "http://schema.org",
+      "@type": "Organization",
+      "name": {{ shop.name | json }},
+      {% if settings.logo %}
+      "logo": {{ settings.logo | image_url: width: 500 | prepend: "https:" | json }},
+      {% endif %}
+      "sameAs": [
+        {{ settings.social_twitter_link | json }},
+        {{ settings.social_facebook_link | json }},
+        {{ settings.social_pinterest_link | json }},
+        {{ settings.social_instagram_link | json }},
+        {{ settings.social_tiktok_link | json }},
+        {{ settings.social_tumblr_link | json }},
+        {{ settings.social_snapchat_link | json }},
+        {{ settings.social_youtube_link | json }},
+        {{ settings.social_vimeo_link | json }}
+      ],
+      "url": {{ request.origin | append: page.url | json }}
+    }
+</script>
+
+{%- if request.page_type == 'index' -%}
+  {% assign potential_action_target = request.origin | append: routes.search_url | append: "?q={search_term_string}" %}
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "name": {{ shop.name | json }},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {{ potential_action_target | json }},
+        "query-input": "required name=search_term_string"
+      },
+      "url": {{ request.origin | append: page.url | json }}
+    }
+  </script>
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "Header 2",
+    "class": "section-header",
+    "enabled_on": {
+      "groups": ["header"]
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": "Header Top"
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "Color scheme top",
+        "default": "background-1"
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme_bottom",
+        "label": "Color scheme bottom",
+        "default": "background-2"
+      },
+      {
+        "type": "color",
+        "id": "color_sub_menu",
+        "label": "Color sub menu",
+        "default": "#002815"
+      }, {
+        "type": "checkbox",
+        "id": "show_info_2",
+        "label": "Show info 2",
+        "default": true
+      }, {
+        "type": "image_picker",
+        "id": "image_info_2",
+        "label": "Image info 2"
+      }, {
+        "type": "text",
+        "id": "title_info_2",
+        "label": "Title info 2",
+        "default": "Hotline:"
+      }, {
+        "type": "text",
+        "id": "desc_info_2",
+        "label": "Description info 2",
+        "default": "(+1) 2345 688 788"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "@app"
+      },
+      {
+        "type": "single_link",
+        "name": "Single link",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Single link"
+          }, {
+            "type": "url",
+            "id": "url",
+            "label": "Link"
+          }, {
+            "type": "checkbox",
+            "id": "open_link",
+            "label": "Open link in new window",
+            "default": false
+          }
+        ]
+      },
+      {
+        "type": "menu_normal",
+        "name": "Menu normal",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Dropdown"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "Link"
+          },
+          {
+            "type": "link_list",
+            "id": "menu",
+            "label": "Select menu",
+            "default": "main-menu"
+          },
+          {
+            "type": "checkbox",
+            "id": "open_link",
+            "label": "Open link in new window",
+            "default": false
+          }, {
+            "type": "select",
+            "id": "label",
+            "options": [
+              {
+                "value": "",
+                "label": "Select"
+              }, {
+                "value": "label1",
+                "label": "Hot"
+              }, {
+                "value": "label2",
+                "label": "New"
+              }
+            ],
+            "label": "Select label"
+          }
+        ]
+      },
+      {
+        "type": "banner_parent",
+        "name": "Banner parent",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Home"
+          },
+          {
+            "type": "select",
+            "id": "col",
+            "default": "w-1/5",
+            "options": [
+              {
+                "value": "w-full",
+                "label": "Width full"
+              },
+              {
+                "value": "w-1/2",
+                "label": "2 collumns"
+              },
+              {
+                "value": "w-1/3",
+                "label": "3 collumns"
+              },
+              {
+                "value": "w-1/4",
+                "label": "4 collumns"
+              }, {
+                "value": "w-1/5",
+                "label": "5 collumns"
+              }, {
+                "value": "w-1/6",
+                "label": "6 colummns"
+              }, {
+                "value": "w-1/7",
+                "label": "7 colummns"
+              }
+            ],
+            "label": "Width col:"
+          },
+          {
+            "type": "text",
+            "id": "button_label",
+            "default": "Explore All Demos (45+)",
+            "label": "Button label"
+          },
+          {
+            "type": "url",
+            "id": "button_link",
+            "label": "Link"
+          }, {
+            "type": "select",
+            "id": "button_type",
+            "options": [
+              {
+                "value": "tp-btn__primary",
+                "label": "Button primary"
+              }, {
+                "value": "tp-btn__secondary",
+                "label": "Button secondary"
+              }, {
+                "value": "tp-btn__underline",
+                "label": "Button underline"
+              }
+            ],
+            "label": "Button type",
+            "default": "tp-btn__primary"
+          }
+        ]
+      }, {
+        "type": "banner_child",
+        "name": "Banner(Multi-col child)",
+        "settings": [
+          {
+            "type": "paragraph",
+            "content": "This block is only used for Banner parent."
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Heading"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image item"
+          },
+          {
+            "type": "select",
+            "id": "label",
+            "options": [
+              {
+                "value": "",
+                "label": "None"
+              }, {
+                "value": "label1",
+                "label": "Hot"
+              }, {
+                "value": "label2",
+                "label": "New"
+              }
+            ],
+            "label": "Select label"
+          }, {
+            "type": "url",
+            "id": "banner_link",
+            "label": "Banner link"
+          }, {
+            "type": "checkbox",
+            "id": "open_link",
+            "label": "Open link in new window",
+            "default": false
+          }
+        ]
+      }, {
+        "type": "multi_column",
+        "name": "Multi Column",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Product"
+          },
+          {
+            "type": "header",
+            "content": "Config menu"
+          },
+          {
+            "type": "link_list",
+            "id": "menu_multi_col",
+            "label": "Add menu"
+          },
+          {
+            "type": "select",
+            "id": "col",
+            "default": "w-1/5",
+            "options": [
+              {
+                "value": "w-full",
+                "label": "Width full"
+              },
+              {
+                "value": "w-1/2",
+                "label": "2 collumns"
+              },
+              {
+                "value": "w-1/3",
+                "label": "3 collumns"
+              },
+              {
+                "value": "w-1/4",
+                "label": "4 collumns"
+              }, {
+                "value": "w-1/5",
+                "label": "5 collumns"
+              }, {
+                "value": "w-1/6",
+                "label": "6 colummns"
+              }
+            ],
+            "label": "Width col:"
+          }, {
+            "type": "header",
+            "content": "Config collection"
+          }, {
+            "type": "collection_list",
+            "id": "collection_list",
+            "label": "Collection list"
+          }, {
+            "type": "header",
+            "content": "Config product"
+          }, {
+            "type": "product_list",
+            "id": "product_list",
+            "limit": 5,
+            "label": "Product list"
+          }
+        ]
+      }, {
+        "type": "vertical_menu",
+        "name": "Vertical Menu",
+        "settings": [
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Title",
+            "default": "Title"
+          },
+          {
+            "type": "url",
+            "id": "link_title",
+            "label": "Link"
+          },
+          {
+            "type": "image_picker",
+            "id": "icon_image",
+            "label": "Icon",
+            "info": "Upload image: png, jpg or gif file"
+          },
+          {
+            "type": "header",
+            "content": "Sub Menu"
+          }, {
+            "type": "range",
+            "id": "sub_width",
+            "label": "Submenu width",
+            "min": 200,
+            "max": 1200,
+            "default": 900,
+            "step": 50,
+            "unit": "px"
+          }, {
+            "type": "range",
+            "id": "columns_desktop",
+            "min": 1,
+            "max": 3,
+            "step": 1,
+            "default": 2,
+            "label": "Number of columns on desktop"
+          }, {
+            "type": "link_list",
+            "id": "menu",
+            "label": "Select menu",
+            "default": "main-menu"
+          }, {
+            "type": "header",
+            "content": "Banner"
+          }, {
+            "type": "image_picker",
+            "id": "image_banner_1",
+            "label": "Banner 1"
+          }, {
+            "type": "url",
+            "id": "link_banner_1",
+            "label": "Link banner 1"
+          }, {
+            "type": "image_picker",
+            "id": "image_banner_2",
+            "label": "Banner 2"
+          }, {
+            "type": "url",
+            "id": "link_banner_2",
+            "label": "Link banner 2"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Header 2",
+        "blocks": [
+          {
+            "type": "vertical_menu",
+            "settings": {
+              "heading": "Fresh fruits",
+              "link_title": "",
+              "sub_width": 600,
+              "columns_desktop": 3
+            }
+          },
+         {
+            "type": "vertical_menu",
+            "settings": {
+              "heading": "Fresh meat",
+              "link_title": "",
+              "sub_width": 600,
+              "columns_desktop": 3
+            }
+          },
+          {
+            "type": "vertical_menu",
+            "settings": {
+              "heading": "Fresh vegetable",
+              "link_title": "",
+              "sub_width": 600,
+              "columns_desktop": 3
+            }
+          },
+          {
+            "type": "vertical_menu",
+            "settings": {
+              "heading": "Green sea food",
+              "link_title": "",
+              "sub_width": 600,
+              "columns_desktop": 3
+            }
+          },
+        {
+            "type": "vertical_menu",
+            "settings": {
+              "heading": "Organic dryfruit",
+              "link_title": "#",
+              "sub_width": 900,
+              "columns_desktop": 2
+            }
+          },
+         {
+            "type": "vertical_menu",
+            "settings": {
+              "heading": "Blackberry 100%organic",
+              "link_title": "#",
+              "sub_width": 900,
+              "columns_desktop": 2
+            }
+          },
+         {
+            "type": "vertical_menu",
+            "settings": {
+              "heading": "Organic juice",
+              "link_title": "#",
+              "sub_width": 900,
+              "columns_desktop": 2
+            }
+          },
+           {
+            "type": "vertical_menu",
+            "settings": {
+              "heading": "Sea & fish",
+              "link_title": "#",
+              "sub_width": 900,
+              "columns_desktop": 2
+            }
+          },
+           {
+            "type": "vertical_menu",
+            "settings": {
+              "heading": "Summer fruit",
+              "link_title": "#",
+              "sub_width": 900,
+              "columns_desktop": 2
+            }
+          },
+          {
+            "type": "multi_column",
+            "settings": {
+              "title": "Categories",
+              "menu_multi_col": "categories-menu",
+              "col": "w-1\/3",
+              "collection_list": [
+                "accessories",
+                "new-arrivals",
+                "best-selling",
+                "men",
+                "bags",
+                "collections"
+              ],
+              "product_list": []
+            }
+          },
+          {
+            "type": "single_link",
+            "settings": {
+              "title": "Men",
+              "url": "shopify:\/\/collections\/men",
+              "open_link": false
+            }
+          },
+          {
+            "type": "multi_column",
+            "settings": {
+              "title": "Pages",
+              "menu_multi_col": "pages-menu",
+              "col": "w-1\/5",
+              "collection_list": [],
+              "product_list": []
+            }
+          },
+          {
+            "type": "menu_normal",
+            "settings": {
+              "title": "Blog",
+              "url": "shopify:\/\/blogs\/news",
+              "menu": "blog",
+              "open_link": false,
+              "label": ""
+            }
+          }, {
+            "type": "single_link",
+            "settings": {
+              "title": "Contact",
+              "url": "shopify:\/\/pages\/contact",
+              "open_link": true
+            }
+          }, {
+            "type": "single_link",
+            "settings": {
+              "title": "<span class=\"color-primary\"> Buy Now<\/span>",
+              "url": "https:\/\/1.envato.market\/154NPd",
+              "open_link": true
+            }
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

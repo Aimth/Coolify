@@ -1,0 +1,62 @@
+{%- liquid
+  assign gst = settings
+  assign show_newsletter = false
+  if gst.newsletter_popup_home_only_yes
+    if template == 'index'
+      assign show_newsletter = true
+    endif
+  else
+    assign show_newsletter = true
+  endif
+  if customer and customer.accepts_marketing
+    assign show_newsletter = false
+  endif
+-%}
+{%- if gst.newsletter_popup_yes and show_newsletter -%}
+  <script src="{{ 'popup-info-subscribe.js' | asset_url }}" defer></script>
+  {{ 'component-newsletter-subscription.css' | asset_url | stylesheet_tag }}
+  <div
+    id="popupNewsletter"
+    class="tp-modal-subsc animation-newsletter hidden"
+    data-delay="{{ gst.newsletter_popup_delay | times: 1000 }}"
+    data-expires="{{ gst.newsletter_popup_expires }}"
+    data-only-index="{{ gst.newsletter_popup_home_only_yes }}">
+    <div class="{%- if settings.newsletter_image == blank -%}no-image{% endif %} tp-modal-subsc__wrapper">
+      <div class="tp-modal-subsc__inner flex items-stretch">
+        <button class="tp-modal-subsc--close tp-icon-close absolute top-12 right-12" type="button">
+          {% render 'icon'
+            , icon_name: 'close'
+            , width: 15
+            , height: 15 %}
+        </button>
+        {%- if settings.newsletter_image -%}
+          <div class="tp-modal-subsc__image w-1/2 {% if settings.show_image_mobile %}block{% else %}hidden md:block{% endif %}">
+            {% render 'responsive-image'
+              , image: gst.newsletter_image
+              , aspect_ratio: gst.image_ratio
+              , custom_ratio: gst.custom_ratio
+              , class: 'h-full'
+              , w_default: 570
+              , h_default: 570
+            %}
+          </div>
+        {%- endif -%}
+        <div class="tp-modal-subsc__content w-1/2 py-30 px-60">
+          <div class="content-wrapper text-center">
+            <h2>{{ 'newsletter.button_label_popup' | t }}</h2>
+            <p>{{ 'newsletter.description_popup' | t }}</p>
+            {% render 'form-newsletter' %}
+            <div class="custom-form text-center mb-20 flex items-center justify-center">
+              <input
+                id="offNewsletterCheckbox"
+                type="checkbox"
+                class="cursor-pointer">
+              <label class="text-center" for="offNewsletterCheckbox">{{ 'newsletter.popup_again' | t }}</label>
+            </div>
+            {%- render 'social-icons' -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}

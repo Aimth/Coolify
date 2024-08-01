@@ -1,0 +1,133 @@
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {
+        "container": "container",
+        "color_scheme": "background-1",
+        "show_background_grid": false,
+        "text_alignment": "text-center",
+        "position_content": "column",
+        "padding_top": 40,
+        "padding_bottom": 50
+      }
+    },
+    "main": {
+      "type": "store-location",
+      "blocks": {
+        "1f7b2fae-3925-427b-92d1-2a4c9fd3468b": {
+          "type": "location-item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/storelocation1.png",
+            "title": "Coma Mosaic",
+            "st_address": "2920 District Ave Unit #140 Fairfax, Virginia",
+            "email": "coma.contact@gmail.com",
+            "phone": "(276) 231-0152",
+            "open_time": "Mon-Thurs: 10am-7pm<br>Fri-Sat: 10am-8pm<br>Sun: 11am-6pm",
+            "btn_content": "View Map",
+            "link": "https:\/\/maps.app.goo.gl\/Tzv5aPb55oVyyTBu5",
+            "open_link": "_blank"
+          }
+        },
+        "4d186f64-aca7-48b2-85a5-69ddff74d3f8": {
+          "type": "location-item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/storelocation2.png",
+            "title": "Coma Chicago",
+            "st_address": "99 E Walton StreetChicago, IL",
+            "email": "storepify.contact@gmail.com",
+            "phone": "(312) 776-2345",
+            "open_time": "Mon-Thurs: 10am-7pm<br>Fri-Sat: 10am-8pm<br>Sun: 11am-6pm",
+            "btn_content": "View Map",
+            "link": "https:\/\/maps.app.goo.gl\/vFDenqNgo46f7ebq9",
+            "open_link": "_blank"
+          }
+        },
+        "e701aa17-38e6-4609-8d7a-259d7cdb1851": {
+          "type": "location-item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/storelocation3.png",
+            "title": "Coma Miami",
+            "st_address": "3989 NE 1st Ave.,Miami, FL",
+            "email": "storepify.contact@gmail.com",
+            "phone": "(786) 649-0668",
+            "open_time": "Mon-Thurs: 10am-7pm<br>Fri-Sat: 10am-8pm<br>Sun: 11am-6pm",
+            "btn_content": "View Map",
+            "link": "https:\/\/maps.app.goo.gl\/5ZmsZWf2mAzzJB9y5",
+            "open_link": "_blank"
+          }
+        },
+        "45a47bb7-e3d4-4510-8605-7bc089a9bd7a": {
+          "type": "location-item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/storelocation4.png",
+            "title": "Coma Portland",
+            "st_address": "15 NW Couch St.,Portland, OR",
+            "email": "storepify.contact@gmail.com",
+            "phone": "(458) 232-3468",
+            "open_time": "Mon-Thurs: 10am-7pm<br>Fri-Sat: 10am-8pm<br>Sun: 11am-6pm",
+            "btn_content": "View Map",
+            "link": "https:\/\/maps.app.goo.gl\/tPVLWLZpkiDkpgxH9",
+            "open_link": "_blank"
+          }
+        },
+        "163eb0dc-82fa-4fe0-8ab9-1c6c5dcd9650": {
+          "type": "location-item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/storelocation5.png",
+            "title": "Coma Seattle",
+            "st_address": "26 NE University Village St.,Seattle",
+            "email": "storepify.contact@gmail.com",
+            "phone": "(206)-593-6868",
+            "open_time": "Mon-Thurs: 10am-7pm<br>Fri-Sat: 10am-8pm<br>Sun: 11am-6pm",
+            "btn_content": "View Map",
+            "link": "https:\/\/maps.app.goo.gl\/2jaPaRrBJSD2wE5M9",
+            "open_link": "_blank"
+          }
+        },
+        "5be8a4c2-0cb7-4e28-8b6e-a0d3b04a0ec5": {
+          "type": "location-item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/storelocation6.png",
+            "title": "Coma Upper East Side",
+            "st_address": "55 Madison Ave.,New York City",
+            "email": "storepify.contact@gmail.com",
+            "phone": "(646) 921-6868",
+            "open_time": "Mon-Thurs: 10am-7pm<br>Fri-Sat: 10am-8pm<br>Sun: 11am-6pm",
+            "btn_content": "View Map",
+            "link": "https:\/\/maps.app.goo.gl\/zDZ7yL62rGVM2D6SA",
+            "open_link": "_blank"
+          }
+        }
+      },
+      "block_order": [
+        "1f7b2fae-3925-427b-92d1-2a4c9fd3468b",
+        "4d186f64-aca7-48b2-85a5-69ddff74d3f8",
+        "e701aa17-38e6-4609-8d7a-259d7cdb1851",
+        "45a47bb7-e3d4-4510-8605-7bc089a9bd7a",
+        "163eb0dc-82fa-4fe0-8ab9-1c6c5dcd9650",
+        "5be8a4c2-0cb7-4e28-8b6e-a0d3b04a0ec5"
+      ],
+      "settings": {
+        "show_heading_header": false,
+        "heading": "Store location",
+        "description": "",
+        "text_alignment": "text-center",
+        "container": "container",
+        "color_scheme": "",
+        "columns_desktop": 2,
+        "image_ratio": "original",
+        "custom_ratio": "21:9",
+        "columns_tablets": "2",
+        "columns_mobile": "1",
+        "reset_spacing": false,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "main"
+  ]
+}

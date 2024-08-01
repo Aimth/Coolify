@@ -1,0 +1,193 @@
+{{ 'faq.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign sst = section.settings
+  assign container = sst.container
+-%}
+{%- capture style -%}
+  --section-padding-top: {{ sst.padding_top }}px; 
+  --section-padding-bottom: {{ sst.padding_bottom }}px; 
+{%- endcapture -%}
+
+{%- if section.blocks.size > 0 -%}
+  <div
+    id="{{ section.id }}"
+    class="tp-faq color-{{ sst.color_scheme }} gradient section-py {% if sst.reset_spacing == false %}section-mb{% endif %}"
+    data-section-id="{{ section.id }}"
+    style="{{ style | strip | strip_newlines }}">
+    <div class="{{ container }}">
+      <div class="tp-grid tp-grid--2-col-desktop tp-grid--1-col-tablets tp-grid--1-col-mobile">
+        <div class="tp-faq__left tp-grid__item">
+          {%- for block in section.blocks %}
+            {% liquid
+              assign bst = block.settings
+            %}
+            {% assign remainder = forloop.index | modulo: 2 %}
+            {% if remainder == 1 %}
+              <details class="tp-faq__item brd-1 mb-20">
+                <summary class="tp-collap-tab__sm">
+                  <h5 class="summary-heading tp-bg flex items-center justify-between mb-0 px-16 py-16">
+                    <span>
+                      {{ bst.title }}</span>
+                    <span class="icon-toggle relative"></span>
+                  </h5>
+                </summary>
+                <div class="tp-faq__item-content content-animation px-24 py-16">
+                  <div class="tab-panel">
+                    {%- case block.type -%}
+                      {%- when 'custom_tab' -%}
+                        {% assign tab_content = bst.tab_content %}
+                        {%- case tab_content -%}
+                          {%- when 'content' -%}
+                            {{ bst.content }}
+                        {%- endcase -%}
+                    {%- endcase -%}
+                  </div>
+                </div>
+              </details>
+            {% endif %}
+          {%- endfor -%}
+        </div>
+        <div class="tp-faq__right tp-grid__item">
+          {%- for block in section.blocks %}
+            {% liquid
+              assign bst = block.settings
+            %}
+            {% assign remainder = forloop.index | modulo: 2 %}
+            {% if remainder == 0 %}
+              <details class="tp-faq__item brd-1 mb-20">
+                <summary class="tp-collap-tab__sm">
+                  <h5 class="summary-heading tp-bg flex items-center justify-between mb-0 px-16 py-16">
+                    <span>
+                      {{ bst.title }}</span>
+                    <span class="icon-toggle relative"></span>
+                  </h5>
+                </summary>
+                <div class="tp-faq__item-content content-animation px-24 py-16">
+                  <div class="tab-panel">
+                    {%- case block.type -%}
+                      {%- when 'custom_tab' -%}
+                        {% assign tab_content = bst.tab_content %}
+                        {%- case tab_content -%}
+                          {%- when 'content' -%}
+                            {{ bst.content }}
+                        {%- endcase -%}
+                    {%- endcase -%}
+                  </div>
+                </div>
+              </details>
+            {% endif %}
+          {%- endfor -%}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "Faq",
+    "tag": "section",
+    "class": "section",
+    "disabled_on": {
+      "groups": ["*"]
+    },
+    "settings": [
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      },
+      {
+        "type": "checkbox",
+        "id": "reset_spacing",
+        "label": "Remove default space between sections",
+        "default": false
+      },
+      {
+        "type": "paragraph",
+        "content": "----------------------------------------"
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "custom_tab",
+        "name": "Custom tab",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Custom Tab"
+          }, {
+            "type": "select",
+            "id": "tab_content",
+            "label": "Tab content",
+            "default": "content",
+            "options": [
+              {
+                "value": "content",
+                "label": "Content"
+              }
+            ]
+          }, {
+            "type": "richtext",
+            "id": "content",
+            "label": "Tab content",
+            "default": "<p></p>"
+          }, {
+            "type": "page",
+            "id": "page",
+            "label": "Tab content from page"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Faq"
+      }
+    ]
+  }
+{% endschema %}

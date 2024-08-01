@@ -1,0 +1,17 @@
+{% comment %}
+  Shopify Wishlist
+  Recently product
+  Usage:
+    - Replace the snippet name ('product-card') with your existing product card snippet
+    - Pass the product object as a snippet variable named 'product'
+{% endcomment %}
+{%- layout none -%}
+{% liquid
+  assign gst = settings
+  assign prdItemLayouts = gst.product_layout
+  if prdItemLayouts == 'prd-item-1'
+    render 'product-item-layout-1', card_product: product
+  elsif prdItemLayouts == 'prd-item-2'
+    render 'product-item-layout-2', card_product: product
+  endif
+%}

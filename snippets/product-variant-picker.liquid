@@ -1,0 +1,180 @@
+{% liquid
+  assign gst = settings
+  assign radius_variant = '--border-radius: 5px'
+  if gst.variant_style == 'square'
+    assign radius_variant = '--border-radius: 0'
+  elsif gst.variant_style == 'rounded'
+    assign radius_variant = '--border-radius: 50%'
+  endif
+
+  assign justify_content = 'justify-start'
+  if gst.card_text_alignment == 'center'
+    assign justify_content = 'justify-center'
+  elsif gst.card_text_alignment == 'right'
+    assign justify_content = 'justify-end'
+  endif
+  assign p-top = 'pt-0'
+%}
+
+{%- unless product.has_only_default_variant -%}
+  {%- if variant_type == 'swatches_variant' -%}
+    <variant-radios
+      id="variant-radios-{{ section.id }}"
+      class="no-js-hidden {{ p-top }}"
+      data-section="{{ section.id }}"
+      data-product="{{ product.id }}"
+      data-url="{{ product.url }}"
+      {% if update_url == false %}
+      data-update-url="false"
+      {% endif %}
+      {{ block.shopify_attributes }}
+      style="{{ radius_variant }}">
+
+      {%- for option in product.options_with_values -%}
+        <fieldset class="product-form__input mb-22 tp-prd-variant tp-prd-variant-{{ option.name | downcase }}">
+          {% if form_label == true %}
+            {% comment %}show page product details {% endcomment %}
+            <span class="form__label mb-10">{{ option.name }}</span>
+          {% endif %}
+          <div class="variatn-option flex flex-wrap items-center {{ justify_content }} gap-8">
+            {% render 'product-variant-options'
+              , product: product
+              , option: option
+              , block: block
+              , picker_type: 'button'
+            %}
+          </div>
+        </fieldset>
+      {%- endfor -%}
+      <script type="application/json">
+        {{ product.variants | json }}
+      </script>
+      <script type="application-variant/json">
+        {% assign variant_info = "" %}
+        {% for variant in product.variants %}
+          {% assign variant_id = variant.id %}
+          {% assign variant_quantity = variant.inventory_quantity %}
+          {% assign variant_info = variant_info | append: '{"id": ' | append: variant_id | append: ', "quantity": ' | append: variant_quantity | append: '}' | append: ',' %}
+        {% endfor %}
+        {% assign variant_info = "[" | append: variant_info | append: "]" %}
+        {% assign variant_info = variant_info | replace: '\\', '' |  replace: '},]', '}]'  %}
+        {{ variant_info }}
+      </script>
+    </variant-radios>
+  {% elsif variant_type == 'color_variant' %}
+    {% render 'product-color-swatches'
+      , product: product %}
+    {%- unless product.has_only_default_variant -%}
+      <script type="application/json" class="productinfo">
+              {{ product.variants | json }}
+      </script>
+    {%- endunless -%}
+  {% elsif variant_type == 'image_variant' %}
+    <variant-image-product-item
+      data-section="{{ section.id }}"
+      data-product="{{ product.id }}"
+      class="image-variant-wrapper flex items-center {{ justify_content }} gap-6 {{ p-top }} flex-wrap">
+      {%- for variant in product.variants -%}
+        {% if variant.featured_image != blank %}
+          {% liquid
+            if variant.available == true
+              if has_active == true
+                assign classActive = 'not-active'
+              else
+                assign classActive = 'active'
+                assign has_active = true
+              endif
+            else
+              assign classActive = 'not-active'
+            endif
+          %}
+          <div
+            flow="up"
+            tooltip="{{ variant.title }}"
+            class="{% if forloop.index <= 4 or isPage == 'product-detail' %}always-show{% else %}hidden{% endif %}">
+            <div
+              class="image-variant-item cursor-pointer  {{ classActive }}{% if variant.available == false %} variant-outstock{% endif %}{% if forloop.index <= 5 %} always-show{% endif %}"
+              data-id-variant="{{ variant.id }}"
+              data-price="{{ variant.price }}"
+              data-price-compare="{{ variant.compare_at_price }}"
+              data-src="{{ variant | image_url: width: variant.width, height: variant.height }}"
+              data-index="{{ variant.featured_media.position }}">
+              <img
+                data-index="{{ forloop.index }}"
+                src="{{ variant | image_url: width: 30, height: 30 }}"
+                loading="lazy"
+                width="30"
+                height="30"
+                alt="{{ variant.featured_image.alt | escape }}">
+            </div>
+            <span class="absolute inset-0  items-center justify-center hidden tp-bg">
+              {% render 'icon'
+                , icon_name: 'icon-loading'
+                , width: 16
+                , height: 16
+                , color: 'var(--primary-color)' %}
+            </span>
+          </div>
+          {% if forloop.last and forloop.index > 5 and isPage != 'product-detail' %}
+            {%- if product.handle != blank -%}
+              <a href="{{ product.url }}" class="n-hvr image-variant-btn">
+                +{{ forloop.index | minus: 5 }}</a>
+            {%- endif -%}
+          {% endif %}
+        {% endif %}
+      {%- endfor -%}
+    </variant-image-product-item>
+  {%- endif -%}
+{%- endunless -%}
+
+<noscript class="product-form__noscript-wrapper-{{ section.id }}">
+  <div class="product-form__input{% if product.has_only_default_variant %} hidden{% endif %}">
+    <label class="form__label" for="Variants-{{ section.id }}">
+      {{- 'products.product.product_variants' | t -}}
+    </label>
+    <div class="select">
+      <select
+        name="id"
+        id="Variants-{{ section.id }}"
+        class="select__select"
+        form="{{ product_form_id }}">
+        {%- for variant in product.variants -%}
+          <option
+            {% if variant == product.selected_or_first_available_variant %}
+            selected="selected"
+            {% endif %}
+            {% if variant.available == false %}
+            disabled
+            {% endif %}
+            value="{{ variant.id }}">
+            {%- liquid
+              echo variant.title
+              echo variant.price | money | strip_html | prepend: ' - '
+              if variant.available == false
+                echo 'products.product.sold_out' | t | prepend: ' - '
+              endif
+              if variant.quantity_rule.increment > 1
+                echo 'products.product.quantity.multiples_of' | t: quantity: variant.quantity_rule.increment | prepend: ' - '
+              endif
+              if variant.quantity_rule.min > 1
+                echo 'products.product.quantity.minimum_of' | t: quantity: variant.quantity_rule.min | prepend: ' - '
+              endif
+              if variant.quantity_rule.max != null
+                echo 'products.product.quantity.maximum_of' | t: quantity: variant.quantity_rule.max | prepend: ' - '
+              endif
+              # TODO: enable theme-check once `item_count_for_variant` is accepted as valid filter
+              # theme-check-disable
+              assign cart_quantity = cart | item_count_for_variant: variant.id
+              # theme-check-enable
+              if cart_quantity > 0
+                echo 'products.product.quantity.in_cart_html' | t: quantity: cart_quantity | prepend: ' - '
+              endif
+            -%}
+          </option>
+        {%- endfor -%}
+      </select>
+      {% render 'icon'
+        , icon_name: 'icon-caret' %}
+    </div>
+  </div>
+</noscript>

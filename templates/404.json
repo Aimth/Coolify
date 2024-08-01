@@ -1,0 +1,20 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-404",
+      "settings": {
+        "container": "container",
+        "custom_width": "440",
+        "heading": "Page not found",
+        "sub_heading": "Sorry for the inconvenience. Go to our homepage or check out our latest collections.",
+        "label": "Back to homepage",
+        "link": "",
+        "padding_top": 60,
+        "padding_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

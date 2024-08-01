@@ -1,0 +1,99 @@
+{%- liquid
+  assign sst = section.settings
+  assign container = sst.container
+-%}
+{%- capture style -%}
+  --section-padding-top: {{ sst.padding_top }}px; 
+  --section-padding-bottom: {{ sst.padding_bottom }}px; 
+  --border-height: {{ sst.height_border }}px;
+{%- endcapture -%}
+<div
+  class="tp-border color-{{ sst.color_scheme }} gradient section-py {% if sst.reset_spacing == false %}section-mb{% endif %}"
+  data-section-id="{{ section.id }}"
+  style="{{ style | strip | strip_newlines }}">
+  <div class="{{ container }}">
+    <div class="tp-border__inner"></div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Border",
+    "tag": "section",
+    "class": "section",
+    "disabled_on": {
+      "groups": ["*"]
+    },
+    "settings": [
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      },
+      {
+        "type": "range",
+        "id": "height_border",
+        "label": "Height border",
+        "min": 1,
+        "max": 10,
+        "step": 1,
+        "default": 1,
+        "unit": "px"
+      },
+      {
+        "type": "checkbox",
+        "id": "reset_spacing",
+        "label": "Remove default space between sections",
+        "default": false
+      }, {
+        "type": "paragraph",
+        "content": "----------------------------------------"
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Border"
+      }
+    ]
+  }
+{% endschema %}

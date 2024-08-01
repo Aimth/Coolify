@@ -1,0 +1,142 @@
+{{ 'wishlist.css' | asset_url | stylesheet_tag }}
+
+{% liquid
+  assign isPageWishList = false
+  if template == 'page.wishlist'
+    assign isPageWishList = true
+  endif
+  assign sst = section.settings
+  assign container = sst.container
+%}
+{%- capture style -%}
+  --section-padding-top: {{ sst.padding_top }}px; --section-padding-bottom: {{ sst.padding_bottom }}px;
+{%- endcapture -%}
+{% capture classGrid %}
+  tp-grid tp-grid--{{ sst.columns_mobile }}-col-mobile tp-grid--{{ sst.columns_tablets }}-col-tablets tp-grid--{{ sst.columns_desktop }}-col-desktop 
+{% endcapture %}
+
+<div class="tp-wishlist color-{{ sst.color_scheme }} gradient section-py section-mb" style="{{ style | strip | strip_newlines }}">
+  <div class="{{ container }}">
+    <div
+      class="wishlist"
+      id="wishlist"
+      data-page-wishlist="{{ isPageWishList }}">
+      <p class="text-center icon-loading-wishlist">Loading...</p>
+      <div class="{{ classGrid }}" grid-wishlist></div>
+      <div class="btn-remove-all-wrapper mt-20 text-center hidden">
+        <button class="btn-remove-all tp-btn tp-btn__primary">
+          <span class="text-btn-wishlist pointer-events-none">{{ 'button.remove_all_wishlist' | t }}</span>
+          <span class="icon-loading-btn absolute inset-0 pointer-events-none flex items-center justify-center opacity-0">
+            {% render 'icon'
+              , icon_name: 'icon-loading' %}
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Wishlist",
+    "class": "wishlist-product",
+    "tag": "section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Section header"
+      },
+      {
+        "type": "paragraph",
+        "content": "----------------------------------------"
+      },
+      {
+        "type": "header",
+        "content": "General"
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      }, {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      }, {
+        "type": "range",
+        "id": "columns_desktop",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "default": 4,
+        "label": "Number of columns on desktop"
+      }, {
+        "type": "select",
+        "id": "columns_tablets",
+        "options": [
+          {
+            "value": "1",
+            "label": "1 Columns"
+          }, {
+            "value": "2",
+            "label": "2 Columns"
+          }, {
+            "value": "3",
+            "label": "3 Columns"
+          }
+        ],
+        "default": "3",
+        "label": "Number of columns on columns_tablets"
+      }, {
+        "type": "select",
+        "id": "columns_mobile",
+        "options": [
+          {
+            "value": "1",
+            "label": "1 Columns"
+          }, {
+            "value": "2",
+            "label": "2 Columns"
+          }
+        ],
+        "default": "2",
+        "label": "Number of columns on mobile"
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }
+    ]
+  }
+{% endschema %}

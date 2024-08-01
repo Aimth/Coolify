@@ -1,0 +1,268 @@
+{{ 'scrolling_text.css' | asset_url | stylesheet_tag }}
+{% liquid
+  assign sst = section.settings
+  assign container = sst.container
+  assign grid_background = sst.show_background_grid
+  assign textSpacing = sst.text_spacing
+  assign iconSpacing = sst.spacing_icon
+%}
+{%- capture style -%}
+   --section-padding-top: {{ sst.padding_top }}px; 
+   --section-padding-bottom: {{ sst.padding_bottom }}px;
+   --section-padding-top-tb: {{ sst.padding_top_tb }}px; 
+   --section-padding-bottom-tb: {{ sst.padding_bottom_tb }}px;
+   --section-padding-top-mb: {{ sst.padding_top_mb }}px; 
+   --section-padding-bottom-mb: {{ sst.padding_bottom_mb }}px;
+   --fz-content: {{ sst.font-size }}px;
+   --fz-content-mb: {{ sst.font-size-mobile }}px;
+   --fw-content: {{ sst.font-weight }};
+  --text-spacing: {{ textSpacing }}px;
+ {%- endcapture -%}
+{%- style -%}
+
+  .scrolling__line {
+    margin: 0 {{ textSpacing }}px;
+  }
+
+  .scrolling__line .src-star {
+    background: transparent;
+  }
+{%- endstyle -%}
+
+<div class="scrolling {% if grid_background %}background-grid{% endif %} color-{{ sst.color_scheme }} gradient section-py {% if sst.reset_spacing == false %}section-mb{% endif %}" style="{{ style | strip | strip_newlines }}">
+  <div class="{{ container }} section-full">
+    <div class="scrolling__content flex items-center overflow-hidden {% if iconSpacing == 'icon_none' %}gap-item{% endif %}">
+      {%- for i in (0..5) -%}
+        <div class="item flex whitespace-nowrap {% if iconSpacing == 'icon_none' %}gap-item{% endif %}">
+          {% for block in section.blocks %}
+            {%- case block.type -%}
+              {%- when 'scrolling_text' -%}
+                <div class="scrolling__items scrolling__ticker flex items-center rsmb-p">
+                  <div class="scrolling__text color-base">
+                    {{ block.settings.content }}</div>
+                  {% unless iconSpacing == 'icon_none' %}
+                    <span class="scrolling__line">
+                      {% if iconSpacing == 'icon_line' %}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="22"
+                          height="2"
+                          viewBox="0 0 22 2"
+                          fill="none">
+                          <path d="M21.1249 1.86245H0.874951C0.424951 1.86245 0.0124512 1.48745 0.0124512 0.999951C0.0124512 0.549951 0.387451 0.137451 0.874951 0.137451H21.1249C21.5749 0.137451 21.9874 0.512451 21.9874 0.999951C21.9874 1.44995 21.5749 1.86245 21.1249 1.86245Z" fill="#05264E" />
+                        </svg>
+                      {% elsif iconSpacing == 'icon_percent' %}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="32"
+                          height="29"
+                          viewBox="0 0 32 29"
+                          fill="none">
+                          <path d="M29.8999 12L28.6999 11.05C28.3999 10.8 28.2999 10.45 28.3499 10.1L28.7499 8.64995C28.9999 7.74995 28.7999 6.79995 28.2499 5.99995C27.6499 5.19995 26.7499 4.69995 25.7499 4.64995L24.1999 4.54995C23.7999 4.54995 23.3999 4.29995 23.2999 3.94995L22.7499 2.59995C22.3999 1.74995 21.6499 1.04995 20.7499 0.749953C19.7999 0.449953 18.7999 0.549953 17.9499 1.04995L16.6499 1.84995C16.2999 2.04995 15.8499 2.04995 15.4499 1.84995L14.1499 1.04995C13.2999 0.549953 12.2999 0.399953 11.3499 0.749953C10.4499 1.04995 9.6999 1.69995 9.3499 2.59995L8.6999 3.99995C8.5499 4.34995 8.1999 4.59995 7.7999 4.59995L6.2499 4.69995C5.2499 4.74995 4.2999 5.24995 3.7499 6.04995C3.1999 6.79995 2.9999 7.79995 3.2499 8.69995L3.6499 10.15C3.7499 10.5 3.5999 10.85 3.2999 11.1L2.0999 12C1.2999 12.6 0.899902 13.5 0.899902 14.5C0.899902 15.45 1.3499 16.35 2.0999 17L3.2999 17.95C3.5999 18.2 3.7499 18.55 3.6499 18.9L3.2499 20.35C2.9999 21.25 3.1999 22.2 3.7499 23C4.3499 23.8 5.2499 24.3 6.2499 24.35L7.7999 24.45C8.1999 24.45 8.5999 24.7 8.6999 25.05L9.2499 26.4C9.5999 27.25 10.3499 27.95 11.2499 28.25C12.1999 28.55 13.1999 28.45 14.0499 27.95L15.3499 27.15C15.6999 26.95 16.1499 26.95 16.5499 27.15L17.8499 27.95C18.3999 28.25 18.9999 28.45 19.5999 28.45C19.9499 28.45 20.2999 28.4 20.6499 28.3C21.5499 28 22.2999 27.35 22.6499 26.45L23.1999 25.1C23.3499 24.75 23.6999 24.5 24.0999 24.5L25.6499 24.4C26.6499 24.35 27.5999 23.85 28.1499 23.05C28.6999 22.3 28.8999 21.3 28.6499 20.4L28.2499 18.95C28.1499 18.6 28.2999 18.25 28.5999 18L29.7999 17.05C30.5999 16.45 30.9999 15.55 30.9999 14.55C31.1499 13.55 30.6999 12.65 29.8999 12ZM28.4999 15.2L27.2999 16.15C26.2999 16.95 25.8499 18.25 26.1999 19.45L26.5999 20.9C26.6999 21.25 26.5499 21.5 26.4499 21.65C26.2499 21.9 25.9499 22.05 25.6499 22.1L24.0999 22.2C22.8499 22.25 21.6999 23.05 21.2499 24.2L20.6499 25.5C20.4999 25.85 20.1999 26 19.9999 26.05C19.6999 26.15 19.3499 26.1 19.0499 25.95L17.7499 25.15C17.1999 24.85 16.5999 24.65 15.9999 24.65C15.3999 24.65 14.7999 24.8 14.2499 25.15L12.9499 25.95C12.6499 26.1 12.2999 26.15 11.9999 26.05C11.8499 26 11.4999 25.85 11.3499 25.5L10.7999 24.15C10.3499 23 9.1999 22.2 7.9499 22.15L6.3999 22.05C6.0499 22.05 5.7499 21.85 5.5999 21.6C5.4999 21.45 5.3499 21.2 5.4499 20.85L5.8499 19.4C6.1999 18.2 5.7499 16.9 4.7499 16.1L3.4999 15.2C3.2499 15 3.1499 14.75 3.1499 14.5C3.1499 14.2 3.2999 13.95 3.4999 13.8L4.6999 12.85C5.6999 12.05 6.1499 10.75 5.7999 9.54995L5.3999 8.09995C5.2999 7.74995 5.4499 7.49995 5.5499 7.34995C5.7499 7.09995 6.0499 6.94995 6.3499 6.89995L7.8999 6.79995C9.1499 6.74995 10.2999 5.94995 10.7499 4.79995L11.2999 3.44995C11.4999 3.14995 11.7999 2.99995 11.9999 2.94995C12.2999 2.84995 12.6499 2.89995 12.9499 3.04995L14.2499 3.84995C15.2999 4.49995 16.6999 4.49995 17.7499 3.84995L19.0499 3.04995C19.3499 2.89995 19.6999 2.84995 19.9999 2.94995C20.1499 2.99995 20.4999 3.14995 20.6499 3.49995L21.1999 4.84995C21.6499 5.99995 22.7999 6.79995 24.0499 6.84995L25.5999 6.94995C25.9499 6.94995 26.2499 7.14995 26.3999 7.39995C26.4999 7.54995 26.6499 7.79995 26.5499 8.14995L26.1499 9.59995C25.7999 10.8 26.2499 12.1 27.2499 12.9L28.4499 13.85C28.6999 14.05 28.7999 14.3 28.7999 14.55C28.8999 14.8 28.7499 15.05 28.4999 15.2Z" fill="#C1121F" />
+                          <path d="M20.6 9.9C20.15 9.45 19.45 9.45 19 9.9L11.4 17.5C10.95 17.95 10.95 18.65 11.4 19.1C11.6 19.3 11.9 19.45 12.2 19.45C12.5 19.45 12.8 19.35 13 19.1L20.6 11.5C21.05 11.05 21.05 10.3 20.6 9.9Z" fill="#C1121F" />
+                          <path d="M14.5999 13.05C15.7999 11.85 15.7999 9.94998 14.5999 8.74998C14.0499 8.19998 13.2499 7.84998 12.4499 7.84998C11.6499 7.84998 10.8999 8.14998 10.2999 8.74998C9.0999 9.94998 9.0999 11.85 10.2999 13.05C10.8499 13.6 11.6499 13.95 12.4499 13.95C13.2499 13.95 13.9999 13.65 14.5999 13.05ZM11.8999 10.4C12.0499 10.25 12.2499 10.15 12.4499 10.15C12.6499 10.15 12.8499 10.25 12.9999 10.4C13.2999 10.7 13.2999 11.2 12.9999 11.5C12.6999 11.8 12.1999 11.8 11.8999 11.5C11.5999 11.2 11.5999 10.7 11.8999 10.4Z" fill="#C1121F" />
+                          <path d="M17.2499 15.75C16.6999 16.3 16.3499 17.1 16.3499 17.9C16.3499 18.7 16.6499 19.45 17.2499 20.05C17.8499 20.65 18.5999 20.95 19.3999 20.95C20.1999 20.95 20.9499 20.65 21.5499 20.05C22.0999 19.5 22.4499 18.7 22.4499 17.9C22.4499 17.1 22.1499 16.35 21.5499 15.75C20.3499 14.55 18.4499 14.55 17.2499 15.75ZM19.9499 18.45C19.6499 18.75 19.1499 18.75 18.8499 18.45C18.6999 18.3 18.5999 18.1 18.5999 17.9C18.5999 17.7 18.6999 17.5 18.8499 17.35C18.9999 17.2 19.1999 17.1 19.3999 17.1C19.5999 17.1 19.7999 17.2 19.9499 17.35C20.0999 17.5 20.1999 17.7 20.1999 17.9C20.1999 18.1 20.0999 18.3 19.9499 18.45Z" fill="#C1121F" />
+                        </svg>
+                      {% endif %}
+                    </span>
+                  {% endunless %}
+                </div>
+            {%- endcase -%}
+          {% endfor %}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+
+{% schema %}
+  {
+    "name": "Scrolling",
+    "tag": "section",
+    "disabled_on": {
+      "groups": ["*"]
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": "General"
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "full-width",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_background_grid",
+        "label": "Show background grid",
+        "default": false
+      }, {
+        "type": "range",
+        "id": "font-size",
+        "min": 16,
+        "max": 90,
+        "step": 1,
+        "label": "Font size",
+        "unit": "px",
+        "default": 36
+      }, {
+        "type": "range",
+        "id": "font-size-mobile",
+        "min": 16,
+        "max": 90,
+        "step": 1,
+        "label": "Font size mobile",
+        "unit": "px",
+        "default": 20
+      }, {
+        "type": "range",
+        "id": "font-weight",
+        "min": 300,
+        "max": 900,
+        "step": 100,
+        "label": "Font weight",
+        "default": 500
+      }, {
+        "type": "range",
+        "id": "text_spacing",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "label": "Spacing",
+        "unit": "px",
+        "default": 50
+      }, {
+        "type": "select",
+        "id": "spacing_icon",
+        "label": "Spacing icon",
+        "default": "icon_line",
+        "options": [
+          {
+            "value": "icon_line",
+            "label": "Line"
+          }, {
+            "value": "icon_percent",
+            "label": "Percent"
+          }, {
+            "value": "icon_none",
+            "label": "Hidden"
+          }
+        ]
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "header",
+        "content": "Desktop"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 90,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 90,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }, {
+        "type": "header",
+        "content": "Tablet"
+      }, {
+        "type": "range",
+        "id": "padding_top_tb",
+        "label": "Padding top",
+        "default": 50,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom_tb",
+        "label": "Padding bottom",
+        "default": 50,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }, {
+        "type": "header",
+        "content": "Mobile"
+      }, {
+        "type": "range",
+        "id": "padding_top_mb",
+        "label": "Padding top",
+        "default": 15,
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom_mb",
+        "label": "Padding bottom",
+        "default": 15,
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "unit": "px"
+      }, {
+        "type": "paragraph",
+        "content": "---------------------------------------"
+      }, {
+        "type": "checkbox",
+        "id": "reset_spacing",
+        "label": "Remove default space between sections",
+        "default": false
+      }
+    ],
+    "blocks": [
+      {
+        "type": "scrolling_text",
+        "name": "Content",
+        "settings": [
+          {
+            "type": "textarea",
+            "id": "content",
+            "label": "Text",
+            "default": "FREE RETURNS WITHIN 10 DAYS"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Scrolling text"
+      }
+    ]
+  }
+{% endschema %}

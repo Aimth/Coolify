@@ -1,0 +1,46 @@
+<div class="shop-pages max-h-full overflow-x-hidden idemos-status">
+    <div class="idemos flex flex-row flex-wrap px-15 pt-30">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'items' -%}
+            {% render "tools-item", bst: block.settings %}
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+</div>
+{% schema %}
+  {
+  "name": "Shop Pages",
+  "settings": [
+  ],
+  "blocks": [
+    {
+      "name": "Items",
+      "type": "items",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Url"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

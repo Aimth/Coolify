@@ -1,0 +1,310 @@
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {
+        "container": "container",
+        "color_scheme": "background-1",
+        "show_background_grid": false,
+        "text_alignment": "text-center",
+        "position_content": "column",
+        "padding_top": 40,
+        "padding_bottom": 50
+      }
+    },
+    "main": {
+      "type": "tp-about",
+      "blocks": {
+        "63d90245-2644-4827-9656-d1f72662ca04": {
+          "type": "title",
+          "settings": {
+            "title_about": "When you’re part of it, you put your heart into it At John Lewis & Partners, we’re more than employees - we’re owners. That’s why we’re all called Partners. And that’s why we all go above and beyond to offer quality products and outstanding service to the people who matter most - you, our customers. Because for us, it’s personal",
+            "sub_title_about": ""
+          }
+        }
+      },
+      "block_order": [
+        "63d90245-2644-4827-9656-d1f72662ca04"
+      ],
+      "settings": {
+        "container": "container",
+        "color_scheme": "",
+        "reset_spacing": false,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "76570ee5-17db-4bdd-9e40-b7c9aac02131": {
+      "type": "banner-with-text",
+      "blocks": {
+        "template--14765639041123__76570ee5-17db-4bdd-9e40-b7c9aac02131-heading-1": {
+          "type": "heading",
+          "settings": {
+            "title": "Premium quality. Not so premium prices.",
+            "font_size_heading": "36",
+            "font_size_heading_tb": "36",
+            "font_size_heading_mb": "36"
+          }
+        },
+        "template--14765639041123__76570ee5-17db-4bdd-9e40-b7c9aac02131-text-1": {
+          "type": "text",
+          "settings": {
+            "txt_content": "<p>We're coming directly to you – no middle men, no extra cost - so we can bring you the best quality and designs for the best possible price.<\/p><p>Compliments, Incoming - The most common side-effect of wearing KITRI. We make clothes to make you look and feel amazing, with a side of ‘where did you get that?’.<\/p><p>Always fresh - Keep checking in on us for new arrivals. Our monthly collections and weekly drops will work (and play!) as hard as you do.<\/p>"
+          }
+        },
+        "6deff1aa-42b9-494b-8d3a-88da25ef0f7c": {
+          "type": "buttons",
+          "settings": {
+            "btn_content": "SHOP NOW",
+            "link_btn": "shopify:\/\/collections",
+            "button_type": "tp-btn__primary"
+          }
+        }
+      },
+      "block_order": [
+        "template--14765639041123__76570ee5-17db-4bdd-9e40-b7c9aac02131-heading-1",
+        "template--14765639041123__76570ee5-17db-4bdd-9e40-b7c9aac02131-text-1",
+        "6deff1aa-42b9-494b-8d3a-88da25ef0f7c"
+      ],
+      "settings": {
+        "container": "container",
+        "color_scheme": "",
+        "background_container": false,
+        "bn_design": "text_column",
+        "image": "shopify:\/\/shop_images\/image_48.png",
+        "text_align": "text-left",
+        "row_gap_content": 20,
+        "container_content": "container",
+        "position_content": "left",
+        "content_below_image_mb": false,
+        "img_position": "left",
+        "text_position": "top",
+        "width_image": "50%",
+        "border_radius": false,
+        "height_dk": 460,
+        "height_tb": 460,
+        "height_mb": 460,
+        "height_mb_auto": false,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "reset_spacing": false,
+        "margin_top": 0
+      }
+    },
+    "8c4b5dc8-4d3b-4aa9-9636-5bf4bd775393": {
+      "type": "banner-with-text",
+      "blocks": {
+        "template--14765639041123__8c4b5dc8-4d3b-4aa9-9636-5bf4bd775393-heading-1": {
+          "type": "heading",
+          "settings": {
+            "title": "Our services",
+            "font_size_heading": "36",
+            "font_size_heading_tb": "36",
+            "font_size_heading_mb": "36"
+          }
+        },
+        "template--14765639041123__8c4b5dc8-4d3b-4aa9-9636-5bf4bd775393-text-1": {
+          "type": "text",
+          "settings": {
+            "txt_content": "<p>“Each consultation varies; it could be finding the perfect outfit for work or an entirely new wardrobe. I love it when I’m able to open someone’s eyes to something new - there’s such a wealth of opportunity across our fashion floor.”<\/p><ul><li>Personal styling service<\/li><li>Home Design Service<\/li><li>Nursery Advice Service<\/li><\/ul><p>Our Personal Stylists can help you find looks that work, to create a wardrobe that's unique to you.<\/p>"
+          }
+        },
+        "0ff294cc-4c17-4586-b951-ded19194bad7": {
+          "type": "buttons",
+          "settings": {
+            "btn_content": "CONTACT US",
+            "link_btn": "shopify:\/\/pages\/contact",
+            "button_type": "tp-btn__primary"
+          }
+        }
+      },
+      "block_order": [
+        "template--14765639041123__8c4b5dc8-4d3b-4aa9-9636-5bf4bd775393-heading-1",
+        "template--14765639041123__8c4b5dc8-4d3b-4aa9-9636-5bf4bd775393-text-1",
+        "0ff294cc-4c17-4586-b951-ded19194bad7"
+      ],
+      "settings": {
+        "container": "container",
+        "color_scheme": "",
+        "background_container": false,
+        "bn_design": "text_column",
+        "image": "shopify:\/\/shop_images\/image_48_1.png",
+        "text_align": "text-left",
+        "row_gap_content": 20,
+        "container_content": "container",
+        "position_content": "left",
+        "content_below_image_mb": false,
+        "img_position": "right",
+        "text_position": "top",
+        "width_image": "50%",
+        "border_radius": false,
+        "height_dk": 460,
+        "height_tb": 460,
+        "height_mb": 460,
+        "height_mb_auto": false,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "reset_spacing": false,
+        "margin_top": 0
+      }
+    },
+    "02cbd97e-6657-4cdc-8961-442e1db5370c": {
+      "type": "testimonial",
+      "blocks": {
+        "f4116fa3-9047-44d4-9683-3f7c0928a010": {
+          "type": "testimonial_item",
+          "settings": {
+            "color_scheme_item": "background-1",
+            "image": "shopify:\/\/shop_images\/Image-60.png",
+            "title": "Love it so much",
+            "content": "<p>I got this jacket a few years ago and my daughter loved it so much that when she out grew it she wanted it again. Yes the jacket is then but it’s warm in the Ohio winter. It’s thin because of the safety for use in the car seat.<\/p>",
+            "name": "BrandonJr",
+            "city": "Marin County CA"
+          }
+        },
+        "92d3fcc5-20f6-4f72-b4c7-14f047eaaba2": {
+          "type": "testimonial_item",
+          "settings": {
+            "color_scheme_item": "background-1",
+            "image": "shopify:\/\/shop_images\/Image-60.png",
+            "title": "Simple and hot!",
+            "content": "<p>The first time I wore this dress, I wore high heel booties and it was so cute! The second time I wore it, I wore it with flat slip ons to a friends house. Super sexy either way! Need more asap!<\/p>",
+            "name": "LenaFab",
+            "city": "Austin, TX"
+          }
+        },
+        "f63762be-6832-4725-a126-1fbdfc51db38": {
+          "type": "testimonial_item",
+          "settings": {
+            "color_scheme_item": "background-1",
+            "image": "shopify:\/\/shop_images\/Image-60.png",
+            "title": "Buying my second pair!",
+            "content": "<p>These boots are beautiful. In person they look just like the pictures. The quality is exceptional. Beware that they run small and narrow. I am almost always a size 8 but in this boot I took a 8.5.<\/p>",
+            "name": "Jaki McCalvin",
+            "city": "Marin County CA"
+          }
+        }
+      },
+      "block_order": [
+        "f4116fa3-9047-44d4-9683-3f7c0928a010",
+        "92d3fcc5-20f6-4f72-b4c7-14f047eaaba2",
+        "f63762be-6832-4725-a126-1fbdfc51db38"
+      ],
+      "settings": {
+        "show_heading_header": true,
+        "heading": "What clients say?",
+        "description": "",
+        "container": "container",
+        "color_scheme": "inverse",
+        "show_background_grid": false,
+        "layout": "layout_2",
+        "image_ratio": "original",
+        "custom_ratio": "21:9",
+        "show_image": true,
+        "limit_products": 8,
+        "sliders_perview": "3",
+        "autoplay": false,
+        "loop": true,
+        "padding_top": 90,
+        "padding_bottom": 100,
+        "padding_top_tb": 50,
+        "padding_bottom_tb": 50,
+        "padding_top_mb": 15,
+        "padding_bottom_mb": 15,
+        "reset_spacing": false
+      }
+    },
+    "913d878a-568b-438e-bcfd-17b62e40a166": {
+      "type": "our-team",
+      "blocks": {
+        "template--14765639041123__913d878a-568b-438e-bcfd-17b62e40a166-member-1": {
+          "type": "member",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Mask_group_4.png",
+            "name": "Kathryn Alaimo",
+            "city": "Founder & CEO",
+            "social_instagram_link": "#",
+            "social_facebook_link": "#",
+            "social_twitter_link": "#",
+            "social_youtube_link": "#"
+          }
+        },
+        "d6c5fda4-3e64-491a-b337-816eb74d5eff": {
+          "type": "member",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Mask_group_5.png",
+            "name": "Tony Berardis",
+            "city": "Partner & Home Design Stylist",
+            "social_instagram_link": "#",
+            "social_facebook_link": "#",
+            "social_twitter_link": "#",
+            "social_youtube_link": "#"
+          }
+        },
+        "444245b3-fdba-40c9-a5f2-dfdc31644a23": {
+          "type": "member",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Mask_group_7.png",
+            "name": "Denise Welch",
+            "city": "Partner & Nursery Advisor",
+            "social_instagram_link": "#",
+            "social_facebook_link": "#",
+            "social_twitter_link": "#",
+            "social_youtube_link": "#"
+          }
+        },
+        "7aaa1639-599c-4459-a465-f7ef5d7b7246": {
+          "type": "member",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Mask_group_6.png",
+            "name": "Kathryn Alaimo",
+            "city": "Founder & CEO",
+            "social_instagram_link": "#",
+            "social_facebook_link": "#",
+            "social_twitter_link": "#",
+            "social_youtube_link": "#"
+          }
+        }
+      },
+      "block_order": [
+        "template--14765639041123__913d878a-568b-438e-bcfd-17b62e40a166-member-1",
+        "d6c5fda4-3e64-491a-b337-816eb74d5eff",
+        "444245b3-fdba-40c9-a5f2-dfdc31644a23",
+        "7aaa1639-599c-4459-a465-f7ef5d7b7246"
+      ],
+      "settings": {
+        "show_heading_header": true,
+        "heading": "Our team",
+        "description": "",
+        "text_alignment": "text-center",
+        "container": "container",
+        "color_scheme": "",
+        "show_background_grid": false,
+        "image_ratio": "original",
+        "custom_ratio": "21:9",
+        "show_image": true,
+        "limit_products": 8,
+        "sliders_perview": "4",
+        "autoplay": false,
+        "loop": true,
+        "show_arrows": false,
+        "show_bullets": false,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "padding_top_tb": 0,
+        "padding_bottom_tb": 0,
+        "padding_top_mb": 0,
+        "padding_bottom_mb": 0,
+        "reset_spacing": false
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "main",
+    "76570ee5-17db-4bdd-9e40-b7c9aac02131",
+    "8c4b5dc8-4d3b-4aa9-9636-5bf4bd775393",
+    "02cbd97e-6657-4cdc-8961-442e1db5370c",
+    "913d878a-568b-438e-bcfd-17b62e40a166"
+  ]
+}

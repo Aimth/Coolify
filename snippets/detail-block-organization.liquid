@@ -1,0 +1,98 @@
+{% liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign show_vendor = block.settings.show_vendor
+  assign show_product_code = block.settings.show_sku
+  assign show_availability = block.settings.show_availability
+  assign show_categories = block.settings.show_categories
+  assign category_type = block.settings.category_type
+  assign category_text = block.settings.category_text
+%}
+<div class="tp-info-wrap flex flex-col justify-content-start items-start mb-20">
+  {% if show_product_code %}
+    <div class="flex items-center mb-8 item-product-code">
+      <div class="item-info-title item-product-code-title mr-12">
+        {{ 'products.product.product_code' | t }}:
+      </div>
+      <div class="item-info-content item-product-code-info">
+        {% if current_variant.sku != blank %}
+          {{ current_variant.sku }}{% else %}N/A{% endif %}
+      </div>
+    </div>
+  {% endif %}
+  {% if current_variant.inventory_quantity and show_availability %}
+    <div class="flex items-center mb-8 item-availability">
+      <div class="item-info-title item-availability-title mr-12">
+        {{ 'products.product.availability' | t }}:
+      </div>
+      {% assign availableValue = current_variant.available %}
+      {% if availableValue == true %}
+        {% assign availableStatus = 'products.product.in_stock' | t %}
+        {% assign availableClass = ' instock' %}
+      {% else %}
+        {% assign availableStatus = 'products.product.out_of_stock' | t %}
+        {% assign availableClass = ' outstock' %}
+      {% endif %}
+      {% if product.selected_or_first_available_variant.available and product.selected_or_first_available_variant.inventory_quantity < 1 %}
+        <div class="item-info-content item-availability-info">
+          {{ 'products.product.pre_order' | t }}
+        </div>
+      {% else %}
+        <div
+          class="item-info-content item-availability-info {{ availableClass }}"
+          data-instock="{{ 'products.product.in_stock' | t }}"
+          data-outstock="{{ 'products.product.out_of_stock' | t }}">
+          {{ availableStatus }}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+  {% if product.vendor != blank and show_vendor %}
+    <div class="flex items-center mb-8 item-brand">
+      <div class="item-info-title item-brand-title mr-12">{{ 'products.product.vendor' | t }}:</div>
+      <div class="item-brand-info font-medium">
+        {% if product.collections contains product.vendor %}
+          <a href="{{ shop.url }}/collections/{{ product.vendor | handle }}">
+            {{- product.vendor -}}
+          </a>
+        {% else %}
+          {{ product.vendor | link_to_vendor }}
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+  {% if show_categories %}
+    <div class="flex items-center item-product-code">
+      {% if category_text != blank %}
+        <div class="item-info-title item-product-code-title mr-12">{{ category_text }}</div>
+      {% endif %}
+
+      <div class="item-product-code-info font-medium">
+        {% for collection in product.collections %}
+          {% if category_type == 'first' %}
+            {% if forloop.first == true %}
+              <a href="{{ collection.url }}" title="{{- collection.title | escape -}}">
+                {{- collection.title | escape -}}
+              </a>
+            {% endif %}
+          {% elsif category_type == 'last' %}
+            {% if forloop.last == true %}
+              <a href="{{ collection.url }}" title="{{- collection.title | escape -}}">
+                {{- collection.title | escape -}}
+              </a>
+            {% endif %}
+          {% else %}
+            <a
+              class="mr-3.75"
+              href="{{ collection.url }}"
+              title="{{- collection.title | escape -}}">
+              {{- collection.title | escape -}}
+            </a>
+            {%- if forloop.last != true -%}
+              ,
+            {%- endif -%}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</div>

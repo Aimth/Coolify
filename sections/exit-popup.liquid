@@ -1,0 +1,356 @@
+{% liquid
+  assign sst = section.settings
+  assign show_popup = false
+
+  if sst.expu_popup == 'enable'
+    assign show_popup = true
+  elsif sst.expu_popup == 'only_home'
+    if template == 'index'
+      assign show_popup = true
+    endif
+  else
+    assign show_popup = false
+  endif
+%}
+{% if show_popup %}
+  {{ 'exit-popup.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'exit-popup.js' | asset_url }}" defer></script>
+  <div class="exit-popup hidden">
+    <div
+      class="expu"
+      data-delay="{{ sst.expu_popup_delay | times: 1000 }}"
+      data-expires="{{ sst.expu_popup_expires }}"
+      data-only-index="{{ sst.expu_popup_home_only_yes }}">
+      <div class="expu__wrap bd-radius color-{{ sst.color_scheme }} gradient relative animation-expu">
+        <button class="expu--close tp-icon-close absolute top-30 right-30" type="button">
+          {% render 'icon'
+            , icon_name: 'close'
+            , width: 15
+            , height: 15 %}
+        </button>
+        <div class="expu__content relative {% if sst.product_list == blank %}w-full{% else %}w-1/2{% endif %}">
+          {% if sst.image != blank %}
+            <div class="content-image h-full">
+              {% render 'responsive-image'
+                , image: sst.image
+                , aspect_ratio: sst.image_ratio
+                , custom_ratio: sst.custom_ratio
+                , class: 'h-full'
+                , w_default: 500
+                , h_default: 500
+              %}
+            </div>
+          {% endif %}
+          <div class="content-inner text-center flex flex-col items-center justify-center {% if sst.image != blank %} absolute inset-0{% endif %}">
+            {% for block in section.blocks %}
+              {% liquid
+                assign bst = block.settings
+              %}
+              {% capture styleText %}
+            --fz-text: {{ bst.font-size-text }}px;--fw-text: {{ bst.font-weight-text }};--mb-text: {{ bst.margin_bottom }}px;
+          {% endcapture %}
+              {% case block.type %}
+                {% when 'text' %}
+                  {% if bst.text != blank %}
+                    <div class="content-text" style="{{ styleText | strip | strip_newlines }}">{{ bst.text }}</div>
+                  {% endif %}
+                {% when 'discount' %}
+                  {% if bst.discount %}
+                    <div class="content-discout h3">{{ bst.discount }}</div>
+                  {% endif %}
+                {% when 'button' %}
+                  {% if bst.btn_label != blank %}
+                    <div class="content-btn">
+                      <a class="tp-btn tp-btn__{{ bst.type_button }} n-hvr " href="{{ bst.btn_link |  default: "#" }}">
+                        {{ bst.btn_label }}
+                      </a>
+                    </div>
+                  {% endif %}
+              {% endcase %}
+            {% endfor %}
+          </div>
+        </div>
+        {% if sst.product_list != blank %}
+          <div class="expu__prd color-{{ sst.color_scheme_prd_list }} gradient w-1/2">
+            {% if sst.heading != blank %}
+              <h4 class="expu__prd-heading mb-30">{{ sst.heading }}</h4>
+            {% endif %}
+            <div
+              class="swiper expu__prd-swiper hover__show-nav"
+              data-mobile="1"
+              data-tablet="2"
+              data-desktop="2">
+              <div class="swiper-wrapper">
+                {% for product in sst.product_list %}
+                  <div class="swiper-slide" data-swiper-autoplay="10000">
+                    {% render 'product-item-layout-1'
+                      , card_product: product %}
+                  </div>
+                {%- endfor -%}
+              </div>
+              {% render 'swiper-control'
+                , class: 'expu'
+                , show_bullet: false
+                , show_arrow: true %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+
+{% schema %}
+  {
+    "name": "Exit popup",
+    "tag": "section",
+    "limit": 1,
+    "enabled_on": {
+      "groups": ["custom.system"]
+    },
+    "settings": [
+      {
+        "type": "select",
+        "id": "expu_popup",
+        "label": "Enable popup",
+        "default": "enable",
+        "options": [
+          {
+            "value": "enable",
+            "label": "Enable"
+          }, {
+            "value": "only_home",
+            "label": "Only Home"
+          }, {
+            "value": "disable",
+            "label": "Disable "
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "expu_popup_delay",
+        "min": 5,
+        "max": 60,
+        "step": 1,
+        "unit": "sec",
+        "label": "Delay in sec",
+        "default": 10
+      },
+      {
+        "type": "range",
+        "id": "expu_popup_expires",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "unit": "day",
+        "label": "Days expired (cookie)",
+        "default": 7
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "accent-1"
+      }, {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Recommended Products",
+        "info": "displayed only when the 'Product list' option is valid"
+      }, {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      }, {
+        "type": "select",
+        "id": "image_ratio",
+        "default": "original",
+        "label": "Image ratio",
+        "options": [
+          {
+            "value": "original",
+            "label": "Original aspect ratio"
+          },
+          {
+            "value": "1\/1",
+            "label": "1:1"
+          },
+          {
+            "value": "3\/4",
+            "label": "3:4"
+          },
+          {
+            "value": "4\/3",
+            "label": "4:3"
+          }, {
+            "value": "16\/9",
+            "label": "16:9"
+          }, {
+            "value": "custom",
+            "label": "Custom ratio"
+          }
+        ]
+      }, {
+        "type": "text",
+        "id": "custom_ratio",
+        "label": "Custom ratio",
+        "default": "21:9"
+      }, {
+        "type": "header",
+        "content": "Settings Product list"
+      }, {
+        "type": "color_scheme",
+        "id": "color_scheme_prd_list",
+        "label": "t:sections.all.colors.label",
+        "default": "accent-1"
+      }, {
+        "type": "product_list",
+        "id": "product_list",
+        "label": "Product list"
+      }, {
+        "type": "range",
+        "id": "limit_product",
+        "label": "Limit product",
+        "min": 1,
+        "max": 10,
+        "step": 1,
+        "default": 5
+      }
+    ],
+    "blocks": [
+      {
+        "type": "text",
+        "name": "text",
+        "settings": [
+          {
+            "type": "text",
+            "id": "text",
+            "label": "Text",
+            "default": "Wait! before you leave..."
+          }, {
+            "type": "range",
+            "id": "font-size-text",
+            "label": "Font size text",
+            "min": 14,
+            "max": 50,
+            "step": 1,
+            "unit": "px",
+            "default": 24
+          }, {
+            "type": "range",
+            "id": "font-weight-text",
+            "label": "Font weight text",
+            "min": 200,
+            "max": 900,
+            "step": 100,
+            "default": 400
+          }, {
+            "type": "text",
+            "id": "margin_bottom",
+            "label": "Margin bottom",
+            "default": "10"
+          }
+        ]
+      }, {
+        "type": "discount",
+        "name": "Discount",
+        "settings": [
+          {
+            "type": "text",
+            "id": "discount",
+            "label": "Discount code",
+            "default": "COMA2024",
+            "info": "Maximum 20 characters"
+          }
+        ]
+      }, {
+        "type": "button",
+        "name": "Button",
+        "settings": [
+          {
+            "type": "text",
+            "id": "btn_label",
+            "label": "Button label",
+            "default": "Shop Clothing"
+          }, {
+            "type": "url",
+            "id": "btn_link",
+            "label": "Button link"
+          }, {
+            "type": "checkbox",
+            "id": "target",
+            "label": "Open this link in a new tab",
+            "default": false
+          }, {
+            "type": "select",
+            "id": "type_button",
+            "label": "Type button",
+            "default": "primary",
+            "options": [
+              {
+                "value": "primary",
+                "label": "Primary"
+              }, {
+                "value": "secondary",
+                "label": "Secondary"
+              }, {
+                "value": "underline",
+                "label": "Underline"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Exit popup",
+        "blocks": [
+          {
+            "type": "text",
+            "settings": {
+              "text": "WAIT! BEFORE YOU LEAVE",
+              "font-size-text": 20,
+              "font-weight-text": 400,
+              "margin_bottom": "10"
+            }
+          },
+          {
+            "type": "text",
+            "settings": {
+              "text": "Get 20% off for first order",
+              "font-size-text": 30,
+              "font-weight-text": 400,
+              "margin_bottom": "20"
+            }
+          },
+          {
+            "type": "discount",
+            "settings": {
+              "discount": "COMA2024"
+            }
+          },
+          {
+            "type": "text",
+            "settings": {
+              "text": "Use above code",
+              "font-size-text": 16,
+              "font-weight-text": 400,
+              "margin_bottom": "20"
+            }
+          }, {
+            "type": "button",
+            "settings": {
+              "btn_label": "Grap the discount",
+              "btn_link": "shopify:\/\/collections",
+              "target": true,
+              "type_button": "underline"
+            }
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

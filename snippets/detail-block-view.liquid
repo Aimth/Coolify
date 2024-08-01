@@ -1,0 +1,49 @@
+{% liquid
+  assign time_random = block.settings.time_random
+  assign min = block.settings.fv_min
+  assign max = block.settings.fv_max
+  assign sold = block.settings.fv_sold
+  assign hour = block.settings.fv_hour
+  assign show_viewing = block.settings.show_viewing
+  assign show_sold = block.settings.show_sold
+  assign display_form = block.settings.display_form
+  assign change_text_view = block.settings.change_text_view
+  assign change_text_sold = block.settings.change_text_sold
+
+  if display_form == 'display_row'
+    assign display_form_class = 'flex-row'
+  else
+    assign display_form_class = 'flex-col'
+  endif
+%}
+
+{% if show_viewing or show_sold %}
+  <div class="tp-product__viewing flex {{ display_form_class }} mb-10">
+    {% if show_viewing %}
+      <div
+        class="tpproduct__viewing-left flex items-center font-normal color-primary"
+        data-min="{{ min }}"
+        data-max="{{ max }}"
+        data-time="{{ time_random }}">
+        <span class="animate-pulse mr-2.5">
+          {% render 'icon'
+            , icon_name: 'icon-eye' %}
+          {% assign diff = max | minus: min %}
+        </span>
+
+        {% assign randomNumber = 'now' | date: '%N' | modulo: diff | plus: min %}
+        <span class="number-view">{{ randomNumber }}</span>&nbsp;{{ change_text_view }}</div>
+    {% endif %}
+
+    {% if show_sold %}
+      <div class="tpproduct__viewing-sold flex items-center font-normal pt-12 gap-8">
+        {% render 'icon'
+          , icon_name: 'icon-fire' %}
+        {{ sold }}
+        {{ change_text_sold }}
+        {{ hour }}
+        hours
+      </div>
+    {% endif %}
+  </div>
+{% endif %}

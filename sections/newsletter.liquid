@@ -1,0 +1,118 @@
+{{ 'newsletter.css' | asset_url | stylesheet_tag }}
+{% liquid
+  assign sst = section.settings
+  assign container = sst.container
+  assign bg_img = sst.background
+%}
+{%- capture style -%}
+  --section-padding-top: {{ sst.padding_top }}px; --section-padding-bottom: {{ sst.padding_bottom }}px;
+{%- endcapture -%}
+
+<div class="tp-newsletter color-{{ sst.color_scheme }} gradient section-mb">
+  <div class="{{ container }} section-full">
+    {% comment %} {% render 'section-header' %} {% endcomment %}
+    <div class="tp-newsletter__wrapper section-py" style="
+    {{ style | strip | strip_newlines }}
+    {% if bg_img != blank %}
+      background: url({{ bg_img | image_url: width: bg_img.width, height: bg_img.height }});
+      background-size: cover;
+      background-repeat: no-repeat!important;
+      background-position: center center!important;
+    {% endif %}
+  ">
+      <div class="tp-modal-subsc__content">
+        <div class="content-wrapper text-center">
+          {% if sst.heading != blank %}
+            <h4>{{ sst.heading }}</h4>
+          {% endif %}
+          {% if sst.description != blank %}
+            <div class="rsmb-0 mb-24">{{ sst.description }}</div>
+          {% endif %}
+          {% render 'form-newsletter' %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Newsletter",
+    "tag": "section",
+    "disabled_on": {
+      "groups": ["*"]
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": "General"
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      },
+      {
+        "type": "image_picker",
+        "id": "background",
+        "label": "Background"
+      }, {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Subscribe to our emails"
+      }, {
+        "type": "richtext",
+        "id": "description",
+        "label": "Description",
+        "default": "<p>Be the first to know about new collections and exclusive offers.</p>"
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 80,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 80,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Newsletter"
+      }
+    ]
+
+  }
+{% endschema %}

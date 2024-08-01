@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",(function(){document.querySelectorAll(".btn-sharing").forEach((function(t){t.addEventListener("click",(function(){var t=this.getAttribute("data-social");return window.open(t,"sharer","toolbar=0,status=0,width=660,height=445"),!1}))}))}));

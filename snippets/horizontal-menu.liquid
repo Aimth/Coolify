@@ -1,0 +1,409 @@
+
+{%- if section.blocks.size > 0 -%}
+  <nav class="navigation horizontal main-nav nav-sections">
+    <div class="mobile-menu-content">
+      {% if typeheader != 'layout-2' %}
+        <div class="close-hd-mobile flex items-center gap-5 font-medium lg:hidden justify-between">
+            <div class="close-hd-mobile__logo">
+                {%- assign img_logo = settings.logo -%}
+                {%- assign logo_alt = img_logo.alt | default: shop.name | escape -%}
+                {%- assign logo_height = settings.logo_width | divided_by: img_logo.aspect_ratio -%}
+                <picture class="coma-logo">
+                    <source media="(min-width:768px)" srcset="{{ logo_source | image_url: width: section.settings.logo_width }}">
+                    {% if img_logo %}
+                        {{- img_logo | image_url: width: 100 | image_tag: class: 'logo-menu-mobile', width: logo_width, height: img_logo.height, alt: img_logo.alt, reload: true -}}
+                    {% endif %}
+                </picture>
+            </div>
+            <div class="close-hd-mobile__button flex items-center">
+                {% render 'icon', icon_name: 'close-mobile' %}
+                {{  'mobile.close_menu' | t }}
+            </div>
+      </div>
+      {% endif %}
+        <ul
+                class="horizontal-list flex items-center list-none"
+        >
+            {%- for block in section.blocks -%}
+                {%- liquid
+                    assign bst = block.settings
+                    assign w-col = bst.col
+                -%}
+
+                {%- capture menuLevel0 -%}
+                    {%- liquid
+                        assign label = bst.label
+                        assign label_bg = label | split: 'label' | last | prepend: "label_color_"
+                    -%}
+                    <a class="relative n-hvr flex items-center gap-10  {% if block.type != 'single_link' %}pointer-events-none{% endif %}"
+                       href="{%- if bst.url != blank -%}{{ bst.url }}{%- else -%}#{%- endif -%}" {% if bst.open_link != blank %} target="_blank"{% endif %}>
+              <span>{{ bst.title }}
+              </span>
+                        {% if block.type != 'single_link' %}
+                            {% render 'icon', icon_name: 'dropdown' %}
+                        {% endif %}
+                        {%- if label != blank -%}
+                            <span class="label {{ label }} fw-500 px-6 d-inline-block"
+                                  style="--navigation-bg-label:{{ section.settings[label_bg] }};">{{ section.settings[label] }}
+                </span>
+                        {%- endif -%}
+                    </a>
+                {%- endcapture -%}
+
+                {%- case block.type -%}
+                    {%- when 'banner_parent' -%}
+                        <li
+                                class="level0 cursor-pointer py-32 menu-banner"
+                                {{ block.shopify_attributes }}
+                        >
+                            {{ menuLevel0 }}
+                            <div class="absolute left-0 right-0 top-full shadow mega-demo-sub">
+                                <div class="back-hd-mobile w-full flex items-center gap-5 font-medium lg:hidden">
+                                    {% render 'icon', icon_name: 'arrow-left' %}
+                                    {{ bst.title }}
+                                </div>
+                                <div class="{{ container }} sub-menu-wrapper mt-0 mb-0 ml-auto mr-auto">
+                                    <div class="list-item-demo block lg:flex flex-wrap justify-start ml-[-15px] mr-[-15px]">
+                                        {%- for block in section.blocks -%}
+                                            {%- liquid
+                                                assign bst = block.settings
+                                                assign data_label = bst.label
+                                               
+                                                if data_label == 'label1'
+                                                    assign label = 'Hot'
+                                                    assign class_label = 'hot'
+                                                elsif data_label == 'label2'
+                                                    assign label = 'New'
+                                                    assign class_label = 'new'
+                                                elsif data_label == 'none' 
+                                                    assign label = ''
+                                                    assign class_label = 'no-label'
+                                                endif
+                                            -%}
+                                            {% if block.type == 'banner_child' %}
+                                                <div class="item-demo {{ w-col }}">
+                                                    <div class="item-demo__inner lg:shadow">
+                                                        <a
+                                                        class="item-demo__img block overflow-hidden relative"
+                                                        target="_blank"
+                                                        title="{{ bst.title }}"
+                                                        href="{{ bst.banner_link }}"
+                                                >
+                                                    <div class="item-demo__label">
+                                                        <div class="label-wrap label--{{ class_label }}">
+                                                            <span class="label-text"> {{ label }} </span>
+                                                        </div>
+                                                    </div>
+                                                    {% if bst.image != blank %}
+                                                        <img
+                                                                loading="lazy"
+                                                                src="{{ bst.image | image_url: width: bst.image.width, height: bst.image.height }}"
+                                                                alt="{{ bst[text] }}"
+                                                                width="{{ bst.image.width }}"
+                                                                height="{{ bst.image.height }}"
+                                                        >
+                                                    {% else %}
+                                                        {% render 'image-default', type: 'image', width: 145, height: 190, class: '' %}
+                                                    {% endif %}
+                                                </a>
+                                                <h5 class="text-left lg:text-center mb-0">
+                                                    <a class="w-full block" title="{{ bst.title }}"
+                                                   href="{{ bst.banner_link }}">
+                                                    {{- bst.title -}}
+                                                </a>
+                                                </h5>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    {%- if block.settings.button_label != blank -%}
+                                        <div class="mega-sub__btn text-center font-medium">
+                                            <a
+                                                    class="tp-btn {{ block.settings.button_type }} n-hvr"
+                                                    {% if block.settings.button_link == blank %}
+                                                        role="link" aria-disabled="true"
+                                                    {% else %}
+                                                        href="{{ block.settings.button_link }}"
+                                                    {% endif %}
+                                            >
+                                                {{ block.settings.button_label | escape }}
+                                            </a>
+                                        </div>
+                                    {%- endif -%}
+                                </div>
+                            </div>
+                        </li>
+                    {%- when 'multi_column' -%}
+                        <li class="level0 cursor-pointer py-32 multi-col"{{ block.shopify_attributes }}>
+                            {{ menuLevel0 }}
+                            {% if bst.menu_multi_col != blank %}
+                                <div class="absolute left-0 right-0 top-full shadow mega-demo-sub">
+                                    <div class="back-hd-mobile w-full flex items-center gap-2 font-medium lg:hidden">
+                                        {% render 'icon', icon_name: 'arrow-left' %}
+                                        {{ bst.title }}
+                                    </div>
+                                    <div class="sub-menu-wrapper {{ container }} mt-0 mb-0 w-full block lg:flex items-stretch gap-30">
+                                        {%- assign linkls = linklists[bst.menu_multi_col].links -%}
+                                        <ul class="sub-menu-wrapper__inner block flex-1 lg:flex lg:items-start lg:flex-wrap ml-[-7.5px] mr-[-7.5px] list-none">
+                                            {% for link in linkls %}
+                                                <li class="menu-link-lv1 menu-link {{ w-col }} px-7.5 lg:mb-15">
+                                                    <a
+                                                            class="fw-menu mb-12 flex items-center justify-between lg:block"
+                                                            href="{{ link.url }}"
+                                                    >
+                                                        {{- link.title -}}
+                                                        {% if link.links.size > 0 %}
+                                                            <span class="lg:hidden">
+                                  {% render 'icon', icon_name: 'arrow-right' %}
+                                </span>
+                                                        {% endif %}
+                                                    </a>
+                                                    {% if link.links.size > 0 %}
+                                                        <ul class="menu dropdown-child list-none">
+                                                            <div class="back-hd-mobile w-full flex items-center gap-2 font-medium lg:hidden">
+                                                                {% render 'icon', icon_name: 'arrow-left' %}
+                                                                {{- link.title -}}
+                                                            </div>
+                                                            {% for child_link in link.links %}
+                                                                <li class="menu-link">
+                                                                    <a class="menu-label flex items-center gap-4"
+                                                                       href="{{ child_link.url }}">
+                                                                        {% comment %} {{- child_link.title -}} {% endcomment %}
+                                                                        {{ child_link.title | split: '[' | first }}
+                                                                        {%- if child_link.title contains '[' -%}
+                                                                            <span class="label-menu text-white text-sm py-1 px-6 bd-radius"
+                                          {% if child_link.title contains '(' %}
+                                              style="background: {{ child_link.title | split: '(' | last | split: ')' | first }}; color: #fff"
+                                          {% endif %}
+                                          >
+                                            {{ child_link.title | split: '[' | last | split: ']' | first }}
+                                          </span>
+                                                                        {%- endif -%}
+                                                                    </a>
+                                                                    {% if child_link.links.size > 0 %}
+                                                                        <ul class="menu dropdown-grandchild list-none">
+                                                                            {% for grandchild_link in child_link.links %}
+                                                                                <li class="menu-link">
+                                                                                    <a class="font-light menu-label"
+                                                                                       href="{{ grandchild_link.url }}">
+                                                                                        {{- grandchild_link.title -}}
+                                                                                    </a>
+                                                                                </li>
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                    {% endif %}
+                                                                </li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    {% endif %}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                        {% if bst.collection_list != blank %}
+                                            <div class="header-collections w-full lg:w-1/5 mb-30 lg:mb-0">
+                                                <div class="">
+                                                    {% for collection in bst.collection_list %}
+                                                        <div class="menu-link px-7.5 mt-30 lg:mt-0 lg:mb-15">
+                                                            <a href="{{ collection.url }}">
+                                                                <div class="flex items-center gap-16">
+                                                                    {% assign image = collection.image %}
+                                                                    {% if image != blank %}
+                                                                        <div class="header-collections__image">
+                                                                            {% render 'responsive-image', image: image, class: 'h-full' %}
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    <div class="header-collections__title fw-menu">
+                                                                        <p class="mb-0">
+                                                                            {{ collection.title }}
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                    {%- endfor -%}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        {% if bst.product_list != blank %}
+                                            <div class="header-product w-full lg:w-1/5">
+                                                <div
+                                                        class="swiper tp-header-product hover__show-nav"
+                                                        data-mobile="1"
+                                                        data-tablet="3"
+                                                        data-desktop="3"
+                                                >
+                                                    <div class="swiper-wrapper">
+                                                        {% for product in bst.product_list %}
+                                                            <div class="swiper-slide" data-swiper-autoplay="3000">
+                                                                {% render 'product-item-layout-1', card_product: product %}
+                                                            </div>
+                                                        {%- endfor -%}
+                                                    </div>
+                                                    {% render 'swiper-control', class: 'hd-prd', show_bullet: false, show_arrow: false %}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </li>
+                    {%- when 'single_link' -%}
+                        <li
+                                class="single py-32"
+                                {{ block.shopify_attributes }}
+                        >
+                            {{ menuLevel0 }}
+                        </li>
+                    {%- when 'menu_normal' -%}
+                        <li
+                                class="level0 cursor-pointer py-32 menu-normal relative"
+                                {{ block.shopify_attributes }}
+                        >
+                            {{ menuLevel0 }}
+                            {%- assign linkls = linklists[bst.menu].links -%}
+                            {% if linkls != blank %}
+                                <ul class="menu-normal__sub mega-demo-sub list-none">
+                                    <div class="back-hd-mobile w-full flex items-center gap-5 font-medium lg:hidden">
+                                        {% render 'icon', icon_name: 'arrow-left' %}
+                                        {{ bst.title }}
+                                    </div>
+                                    {% for link in linkls %}
+                                        <li class="menu-link menu-level1 flex items-center justify-between">
+                                            <a href="{{ link.url }}">{{ link.title }}</a>
+                                            {% if link.links.size > 0 %}
+                                                <svg
+                                                        class="menu-mb__click"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="5"
+                                                        height="8"
+                                                        viewBox="0 0 5 10"
+                                                        fill="none"
+                                                >
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                          d="M0.104897 0.112982C0.138064 0.0771683 0.177465 0.0487541 0.220844 0.0293668C0.264222 0.00997949 0.310725 0 0.35769 0C0.404654 0 0.451158 0.00997949 0.494536 0.0293668C0.537914 0.0487541 0.577316 0.0771683 0.610483 0.112982L4.8951 4.72783C4.92835 4.76355 4.95473 4.80599 4.97273 4.85271C4.99073 4.89943 5 4.94952 5 5.0001C5 5.05068 4.99073 5.10077 4.97273 5.14749C4.95473 5.19422 4.92835 5.23665 4.8951 5.27238L0.610483 9.88722C0.543438 9.95943 0.452505 10 0.35769 10C0.262874 10 0.171942 9.95943 0.104897 9.88722C0.0378524 9.81501 0.000186941 9.71707 0.000186941 9.61494C0.000186941 9.51282 0.0378524 9.41488 0.104897 9.34267L4.13744 5.0001L0.104897 0.657534C0.0716462 0.62181 0.0452651 0.579373 0.0272651 0.532651C0.00926505 0.485929 0 0.435842 0 0.385258C0 0.334673 0.00926505 0.284586 0.0272651 0.237865C0.0452651 0.191143 0.0716462 0.148705 0.104897 0.112982Z"
+                                                          fill="black"></path>
+                                                </svg>
+                                                <ul class="menu-level2 list-none">
+                                                    {% for child_link in link.links %}
+                                                        <li class="menu-link flex items-center justify-between">
+                                                            <a class="font-light menu-label"
+                                                               href="{{ child_link.url }}">
+                                                                {{- child_link.title -}}
+                                                            </a>
+                                                            {% if child_link.links.size > 0 %}
+                                                                <svg
+                                                                        class="menu-mb__click"
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        width="5"
+                                                                        height="8"
+                                                                        viewBox="0 0 5 10"
+                                                                        fill="none"
+                                                                >
+                                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                          d="M0.104897 0.112982C0.138064 0.0771683 0.177465 0.0487541 0.220844 0.0293668C0.264222 0.00997949 0.310725 0 0.35769 0C0.404654 0 0.451158 0.00997949 0.494536 0.0293668C0.537914 0.0487541 0.577316 0.0771683 0.610483 0.112982L4.8951 4.72783C4.92835 4.76355 4.95473 4.80599 4.97273 4.85271C4.99073 4.89943 5 4.94952 5 5.0001C5 5.05068 4.99073 5.10077 4.97273 5.14749C4.95473 5.19422 4.92835 5.23665 4.8951 5.27238L0.610483 9.88722C0.543438 9.95943 0.452505 10 0.35769 10C0.262874 10 0.171942 9.95943 0.104897 9.88722C0.0378524 9.81501 0.000186941 9.71707 0.000186941 9.61494C0.000186941 9.51282 0.0378524 9.41488 0.104897 9.34267L4.13744 5.0001L0.104897 0.657534C0.0716462 0.62181 0.0452651 0.579373 0.0272651 0.532651C0.00926505 0.485929 0 0.435842 0 0.385258C0 0.334673 0.00926505 0.284586 0.0272651 0.237865C0.0452651 0.191143 0.0716462 0.148705 0.104897 0.112982Z"
+                                                                          fill="black"></path>
+                                                                </svg>
+                                                                <ul class="menu-level3 list-none">
+                                                                    {% for grandchild_link in child_link.links %}
+                                                                        <li class="menu-link">
+                                                                            <a class="font-light menu-label"
+                                                                               href="{{ grandchild_link.url }}">
+                                                                                {{- grandchild_link.title -}}
+                                                                            </a>
+                                                                        </li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            {% endif %}
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                {%- endcase -%}
+            {%- endfor -%}
+
+            {% if settings.mb_recent != blank %}
+                <li class="single lg:hidden">
+                    <a href="{{ settings.mb_recent.url }}" title="{{ settings.mb_recent.title }}"  class="flex flex-row items-center !justify-start">
+                        {% render 'icon', icon_name: 'menu-mobile-recent' %}
+                        {{ 'mobile.recent_viewed' | t }}
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if settings.mb_wishlist != blank %}
+            <li class="single lg:hidden">
+                <a href="{{ settings.mb_wishlist.url }}" title="{{ settings.mb_wishlist.title }}"  class="flex flex-row items-center !justify-start">
+                    {% render 'icon', icon_name: 'menu-mobile-wishlist' %}
+                    {{ 'mobile.wishlist' | t }}
+                </a>
+            </li>
+            {% endif %}
+
+            {% if settings.mb_show_login %}
+                <li class="single lg:hidden">
+                    <a href="/account" class="flex flex-row items-center !justify-start">
+                        {% render 'icon', icon_name: 'menu-mobile-login' %}
+                        {{ 'mobile.login' | t }}
+                    </a>
+                </li>
+            {% endif %}
+
+        </ul>
+
+        {% if settings.mb_show_language or settings.mb_show_currency or settings.mb_show_social %}
+            <div class="m-footer pl-25 pr-25 pt-20 pb-20 lg:hidden">
+                <div class="m-footer__selector flex-row flex items-center justify-start mb-10">
+                    {% assign show_language = settings.mb_show_language %}
+                    {% assign show_currency = settings.mb_show_currency %}
+                    {% if show_language %}
+                        <div class="language mr-10">
+                            <localization-form>
+                                {%- form 'localization'
+                                        , id: 'FooterLanguageForm'
+                                        , class: 'localization-form' -%}
+                                    <div class="no-js-hidden">
+                                        {%- render 'language-localization'
+                                                , localPosition: 'FooterLanguage' -%}
+                                    </div>
+                                {%- endform -%}
+                            </localization-form>
+                        </div>
+                    {% endif %}
+                    {% if show_currency %}
+                        <div class="currency">
+                            <localization-form>
+                                {%- form 'localization'
+                                        , id: 'FooterCountryForm'
+                                        , class: 'localization-form' -%}
+                                    <div class="no-js-hidden">
+                                        {%- render 'country-localization'
+                                                , localPosition: 'FooterCountry' -%}
+                                    </div>
+                                {%- endform -%}
+                            </localization-form>
+                        </div>
+                    {% endif %}
+                </div>
+                {% if settings.mb_show_social %}
+                    <div class="header__socials">
+                        <div class=" flex items-center gap-24">
+                            {% assign show_socials = true %}
+                            {% if show_socials %}
+                                {%- render 'social-icons'
+                                        , flow: 'down' -%}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+    </div>
+  </nav>
+{%- endif -%}

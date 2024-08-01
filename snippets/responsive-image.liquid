@@ -1,0 +1,115 @@
+{% comment %} 
+                                            Renders Image with real data
+                                            WW
+                                            Accepts: 
+                                            - image: {bject} Image source 
+                                            - class: {String} Class 
+                                            - ratio: {String} Ratio of image
+                                           
+                                            Usage:
+                                            {%- render 'responsive-image', image: image, class: "class" -%}
+                                           
+                                            Example:
+                                            {%- render 'responsive-image' , image: bst.image_mobile , width: "100vw" , class: "h-full" -%} 
+{% endcomment %}
+
+{%- liquid
+  assign h_integer = h_default
+  assign h_float = h_integer | times: 1.0
+  assign ratio = w_default | divided_by: h_float | default: '1/1'
+  assign gst = settings
+  assign container = gst.general_layout
+  assign custom_container = gst.custom_width_bd
+  assign container_width = ''
+  if container == 'default'
+    assign container_width = '1260'
+  elsif container == custom_width
+    assign container_width = custom_container
+  endif
+
+  if image != blank
+
+    if aspect_ratio == 'original'
+      assign ratio = image.aspect_ratio
+    elsif aspect_ratio == 'custom' and custom_ratio
+      assign ratio = custom_ratio | replace: ':', '/'
+    elsif aspect_ratio
+      assign ratio = aspect_ratio
+    else
+      if type == 'product'
+        if gst.product_aspect_ratio != 'custom'
+          if gst.product_aspect_ratio == 'original'
+            assign ratio = image.aspect_ratio
+          else
+            assign ratio = gst.product_aspect_ratio
+          endif
+        else
+          assign ratio = gst.product_aspect_ratio_custom | replace: ':', '/'
+        endif
+      else
+        assign ratio = image.aspect_ratio
+      endif
+    endif
+  else
+    if aspect_ratio == 'original'
+
+      assign ratio = image.aspect_ratio | default: ratio
+    elsif aspect_ratio == 'custom' and custom_ratio
+      assign ratio = custom_ratio | replace: ':', '/'
+    elsif aspect_ratio
+      assign ratio = aspect_ratio
+    else
+      if type == 'product'
+        if gst.product_aspect_ratio != 'custom'
+          assign ratio = gst.product_aspect_ratio
+        else
+          assign ratio = gst.product_aspect_ratio_custom | replace: ':', '/'
+        endif
+      else
+        assign ratio = '1/1'
+      endif
+    endif
+  endif
+  assign width_default = container_width | minus: 130 | divided_by: 4 | append: 'px'
+  if width
+    assign width_default = width
+  endif
+-%}
+
+<div
+  class="tp__responsive-image h-full tp-image-js {{ images_style }} {% if image != blank %}tp-loading-image{% endif %} {{ class }}"
+  {% if ratio != blank %}
+  style="--aspect-ratio: {{ ratio }};"
+  {% endif %}>
+  {%- if image != blank -%}
+    <img
+      srcset="
+        {%- if image.width >= 165 -%}{{ image | image_url: width: 165 }} 165w,{%- endif -%}
+        {%- if image.width >= 330 -%}{{ image | image_url: width: 330 }} 330w,{%- endif -%}
+        {%- if image.width >= 535 -%}{{ image | image_url: width: 535 }} 535w,{%- endif -%}
+        {%- if image.width >= 750 -%}{{ image | image_url: width: 750 }} 750w,{%- endif -%}
+        {%- if image.width >= 1000 -%}{{ image | image_url: width: 1000 }} 1000w,{%- endif -%}
+        {%- if image.width >= 1500 -%}{{ image | image_url: width: 1500 }} 1500w,{%- endif -%}
+        {%- if image.width >= 3000 -%}{{ image | image_url: width: 3000 }} 3000w,{%- endif -%}
+        {{ image | image_url }} {{ image.width }}w
+      "
+      src="{{ image | image_url: width: image.width }}"
+      sizes="(min-width: {{ container_width }}px) {{ width_default }}, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+      alt="{{ image.alt | escape }}"
+      loading="lazy"
+      width="{{ image.width }}"
+      height="{{ image.height }}"
+      {{ image_attributes }}>
+  {% else %}
+    {% if imageDefault == 'collection' %}
+      {{ placeholder_image | placeholder_svg_tag: 'placeholder-svg' }}
+    {% else %}
+      {{ placeholder_image | default: 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {% comment %} {% render 'image-default'
+                                                                                                                                                                , type: 'image'
+                                                                                                                                                                , width: w_default
+                                                                                                                                                                , height: h_default
+                                                                                                                          , class: '' %} {% endcomment %}
+    {% endif %}
+  {%- endif -%}
+</div>

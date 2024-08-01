@@ -1,0 +1,22 @@
+{% if template != 'cart' %}
+  <a
+    href="{{ routes.cart_url }}"
+    class="cart-icon-bubble link link--text focus-inset ml-3.75 icon-contain-count hidden md:block relative"
+    id="cart-icon-bubble"
+  >
+    {% render 'icon', icon_name: 'cart' %}
+    <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+    <div class="wlist-cart-count">
+      {% liquid
+        assign count = cart.item_count
+        if count == 0
+          assign count = 0
+        elsif count > 100
+          assign count = '99+'
+        endif
+      %}
+      <span aria-hidden="true">{{ count }}</span>
+      <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+    </div>
+  </a>
+{% endif %}

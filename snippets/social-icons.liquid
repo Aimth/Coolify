@@ -1,0 +1,108 @@
+<ul class="list-social">
+  {%- if settings.social_instagram_link != blank -%}
+    <li
+      class="list-social__item"
+       flow="{{ flow | default: 'up' }}"
+      tooltip="{{ 'general.social.links.instagram' | t }}">
+      <a href="{{ settings.social_instagram_link }}" class="link list-social__link">
+        {%- render 'icon'
+          , icon_name: 'icon-instagram' -%}
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_facebook_link != blank -%}
+    <li
+      class="list-social__item"
+       flow="{{ flow | default: 'up' }}"
+      tooltip="{{ 'general.social.links.facebook' | t }}">
+      <a href="{{ settings.social_facebook_link }}" class="link list-social__link">
+        {%- render 'icon'
+          , icon_name: 'icon-facebook' -%}
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_twitter_link != blank -%}
+    <li
+      class="list-social__item"
+       flow="{{ flow | default: 'up' }}"
+      tooltip="{{ 'general.social.links.twitter' | t }}">
+      <a href="{{ settings.social_twitter_link }}" class="link list-social__link">
+        {%- render 'icon'
+          , icon_name: 'icon-twitter' -%}
+        <span class="visually-hidden">{{ 'general.social.links.twitter' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_youtube_link != blank -%}
+    <li
+      class="list-social__item"
+       flow="{{ flow | default: 'up' }}"
+      tooltip="{{ 'general.social.links.youtube' | t }}">
+      <a href="{{ settings.social_youtube_link }}" class="link list-social__link">
+        {%- render 'icon'
+          , icon_name: 'icon-youtube' -%}
+        <span class="visually-hidden">{{ 'general.social.links.youtube' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_pinterest_link != blank -%}
+    <li
+      class="list-social__item"
+       flow="{{ flow | default: 'up' }}"
+      tooltip="{{ 'general.social.links.pinterest' | t }}">
+      <a href="{{ settings.social_pinterest_link }}" class="link list-social__link">
+        {%- render 'icon'
+          , icon_name: 'icon-pinterest' -%}
+        <span class="visually-hidden">{{ 'general.social.links.pinterest' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_tiktok_link != blank -%}
+    <li
+      class="list-social__item"
+       flow="{{ flow | default: 'up' }}"
+      tooltip="{{ 'general.social.links.tiktok' | t }}">
+      <a href="{{ settings.social_tiktok_link }}" class="link list-social__link">
+        {%- render 'icon'
+          , icon_name: 'icon-tiktok' -%}
+        <span class="visually-hidden">{{ 'general.social.links.tiktok' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_snapchat_link != blank -%}
+    <li
+      class="list-social__item"
+       flow="{{ flow | default: 'up' }}"
+      tooltip="{{ 'general.social.links.snapchat' | t }}">
+      <a href="{{ settings.social_snapchat_link }}" class="link list-social__link">
+        {%- render 'icon'
+          , icon_name: 'icon-snapchat' -%}
+        <span class="visually-hidden">{{ 'general.social.links.snapchat' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_tumblr_link != blank -%}
+    <li
+      class="list-social__item"
+       flow="{{ flow | default: 'up' }}"
+      tooltip="{{ 'general.social.links.tumblr' | t }}">
+      <a href="{{ settings.social_tumblr_link }}" class="link list-social__link">
+        {%- render 'icon'
+          , icon_name: 'icon-tumblr' -%}
+        <span class="visually-hidden">{{ 'general.social.links.tumblr' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_vimeo_link != blank -%}
+    <li
+      class="list-social__item"
+       flow="{{ flow | default: 'up' }}"
+      tooltip="{{ 'general.social.links.vimeo' | t }}">
+      <a href="{{ settings.social_vimeo_link }}" class="link list-social__link">
+        {%- render 'icon'
+          , icon_name: 'icon-vimeo' -%}
+        <span class="visually-hidden">{{ 'general.social.links.vimeo' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+</ul>

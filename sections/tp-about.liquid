@@ -1,0 +1,438 @@
+{{ 'about.css' | asset_url | stylesheet_tag }}
+{% liquid
+  assign sst = section.settings
+  assign container = sst.container
+%}
+{%- capture style -%}
+  --section-padding-top: {{ sst.padding_top }}px; 
+  --section-padding-bottom: {{ sst.padding_bottom }}px; 
+{%- endcapture -%}
+<div class="tp-about color-{{ sst.color_scheme }} gradient section-py {% if sst.reset_spacing == false %}section-mb{% endif %}" style="{{ style | strip | strip_newlines }}">
+  <div class="tp-about__wrapper {{ container }}">
+    {% for block in section.blocks %}
+      {% liquid
+        assign typeOurMission = block.settings.id_display_type
+        if typeOurMission == 'style_1'
+          assign classTypeOurMission = 'tp-about__our-mission__style-1'
+        elsif typeOurMission == 'style_2'
+          assign classTypeOurMission = 'tp-about__our-mission__style-2'
+        elsif typeOurMission == 'style_3'
+          assign classTypeOurMission = 'tp-about__our-mission__style-3'
+        endif
+
+        assign typeImage = block.settings.id_display_type_image
+        if typeImage == 'style_1'
+          assign classTypeImage = 'tp-about__image_about__style-1'
+        elsif typeImage == 'style_2'
+          assign classTypeImage = 'tp-about__image_about__style-2'
+        endif
+      %}
+      {% case block.type %}
+        {% when 'title' %}
+          <div class="tp-about__title text-center">
+            {% if block.settings.title_about != blank %}
+              <h3 class="tp-about-title mb-5">{{ block.settings.title_about }}</h3>
+            {% endif %}
+            {% if block.settings.sub_title_about %}
+              <div class="tp-about-desc">{{ block.settings.sub_title_about }}</div>
+            {% endif %}
+          </div>
+        {% when 'featured-about' %}
+          <div class="tp-about__featured flex justify-start items-start gap-30">
+            <div class="tp-about__featured__item text-center">
+              {% if block.settings.title_featured_about_1 != blank %}
+                <h3 class="tp-block-title">{{ block.settings.title_featured_about_1 }}</h3>
+              {% endif %}
+              {% if block.settings.desc_featured_about_1 %}
+                <div class="tp-about-desc">
+                  {{ block.settings.desc_featured_about_1 }}
+                </div>
+              {% endif %}
+            </div>
+            <div class="tp-about__featured__item text-center">
+              {% if block.settings.title_featured_about_2 != blank %}
+                <h3 class="tp-block-title">{{ block.settings.title_featured_about_2 }}</h3>
+              {% endif %}
+              {% if block.settings.desc_featured_about_2 %}
+                <div class="tp-about-desc">
+                  {{ block.settings.desc_featured_about_2 }}
+                </div>
+              {% endif %}
+            </div>
+            <div class="tp-about__featured__item text-center">
+              {% if block.settings.title_featured_about_3 != blank %}
+                <h3 class="tp-block-title">{{ block.settings.title_featured_about_3 }}</h3>
+              {% endif %}
+              {% if block.settings.desc_featured_about_3 %}
+                <div class="tp-about-desc">
+                  {{ block.settings.desc_featured_about_3 }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% when 'our_mission' %}
+          <div class="tp-about__our-mission {{ classTypeOurMission }}">
+            <div class="tp-our-mission__top flex justify-start items-center">
+              <div class="tp-our-mission__image">
+                {% assign ImageOurMission = block.settings.image_our_mission %}
+                {% if ImageOurMission != blank %}
+                  <img
+                    class="full-img"
+                    src="{{ ImageOurMission | image_url: width: ImageOurMission.width , height: ImageOurMission.height }}"
+                    alt="background image"
+                    width="{{ ImageOurMission.width }}"
+                    height="{{ ImageOurMission.height }}"
+                    loading="lazy">
+                {% else %}
+                  {% render 'image-default'
+                    , type: 'image'
+                    , width: 600
+                    , height: 370
+                    , class: '' %}
+                {% endif %}
+              </div>
+              <div class="tp-our-mission__content {% if typeOurMission == 'style_2' or typeOurMission == 'style_3' %}shadow{% endif %}">
+                {% if block.settings.sub_title_our_mission != blank %}
+                  <span class="tp-block-sub-title">{{ block.settings.sub_title_our_mission }}</span>
+                {% endif %}
+                {% if block.settings.title_our_mission != blank %}
+                  <h3 class="tp-block-title">{{ block.settings.title_our_mission }}</h3>
+                {% endif %}
+                {% if block.settings.desc_our_mission %}
+                  <div class="tp-about-desc mb-16">
+                    {{ block.settings.desc_our_mission }}
+                  </div>
+                {% endif %}
+                <a class="tp-btn tp-btn__primary" href="{% if block.settings.link_our_mission != blank %}{{ block.settings.link_our_mission }}{% else %}#{% endif %}">
+                  {{- 'button.know_more' | t -}}
+                </a>
+              </div>
+            </div>
+            {% if block.settings.intro_our_mission != blank %}
+              <div class="tp-our-mission__intro">
+                <div class="tp-our-mission__intro-desc">
+                  {{ block.settings.intro_our_mission }}
+                  {% if typeOurMission == 'style_3' %}
+                    <svg
+                      fill="none"
+                      height="30"
+                      viewbox="0 0 30 30"
+                      width="30"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5.4 -4.76837e-06L0.400001 29.2H4L11.6 -4.76837e-06H5.4ZM23.4 -4.76837e-06L18.4 29.2H22L29.6 -4.76837e-06H23.4Z" fill="black" />
+                    </svg>
+                  {% endif %}
+                </div>
+                <div class="tp-our-mission__name">{{ block.settings.name_our_mission }}</div>
+              </div>
+            {% endif %}
+          </div>
+        {% when 'image_about' %}
+          <div class="tp-about__image_about {{ classTypeImage }}">
+            <div class="tp-image-about flex justify-start items-start gap-30 mb-40">
+              {% assign ImageAbout1 = block.settings.image_about_1 %}
+              {% assign ImageAbout2 = block.settings.image_about_2 %}
+              {% assign ImageAbout3 = block.settings.image_about_3 %}
+              {% if ImageAbout1 != blank %}
+                <div class="tp-image-about__item">
+                  <img
+                    class="full-img"
+                    src="{{ ImageAbout1 | image_url: width: ImageAbout1.width , height: ImageAbout1.height }}"
+                    alt="background image"
+                    width="{{ ImageAbout1.width }}"
+                    height="{{ ImageAbout1.height }}"
+                    loading="lazy">
+                </div>
+              {% endif %}
+              {% if ImageAbout1 != blank %}
+                <div class="tp-image-about__item">
+                  <img
+                    class="full-img"
+                    src="{{ ImageAbout2 | image_url: width: ImageAbout2.width , height: ImageAbout2.height }}"
+                    alt="background image"
+                    width="{{ ImageAbout2.width }}"
+                    height="{{ ImageAbout2.height }}"
+                    loading="lazy">
+                </div>
+              {% endif %}
+              {% if ImageAbout3 != blank %}
+                <div class="tp-image-about__item">
+                  <img
+                    class="full-img"
+                    src="{{ ImageAbout3 | image_url: width: ImageAbout3.width , height: ImageAbout3.height }}"
+                    alt="background image"
+                    width="{{ ImageAbout3.width }}"
+                    height="{{ ImageAbout3.height }}"
+                    loading="lazy">
+                </div>
+              {% endif %}
+            </div>
+            {% if block.settings.desc_image_about %}
+              <div class="tp-about-desc">
+                {{ block.settings.desc_image_about }}
+              </div>
+            {% endif %}
+          </div>
+
+        {% when 'description' %}
+          <div class="tp-about__description">
+            {{ block.settings.about_description }}
+          </div>
+      {% endcase %}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "About",
+    "tag": "section",
+    "disabled_on": {
+      "groups": ["*"]
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": "General"
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      },
+      {
+        "type": "checkbox",
+        "id": "reset_spacing",
+        "label": "Remove default space between sections",
+        "default": false
+      }, {
+        "type": "paragraph",
+        "content": "----------------------------------------"
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "title",
+        "name": "Title about",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title_about",
+            "label": "Title about",
+            "default": "Our history"
+          }, {
+            "type": "richtext",
+            "id": "sub_title_about",
+            "label": "Sub title about",
+            "default": "<p>By creating an Account on our service, you agree to subscribe to newsletters, marketing or promotional materials and other information we may send.</p>"
+          }
+        ]
+      },
+      {
+        "type": "description",
+        "name": "description",
+        "settings": [
+          {
+            "type": "richtext",
+            "id": "about_description",
+            "label": "About description"
+          }
+        ]
+      },
+      {
+        "type": "featured-about",
+        "name": "Featured about",
+        "settings": [
+          {
+            "type": "header",
+            "content": "Featured about 1"
+          },
+          {
+            "type": "text",
+            "id": "title_featured_about_1",
+            "label": "Title featured about 1",
+            "default": "Communucation"
+          },
+          {
+            "type": "richtext",
+            "id": "desc_featured_about_1",
+            "label": "Description featured about 1",
+            "default": "<p>By creating an Account on our service, you agree to subscribe to newsletters, marketing or promotional materials and other information we may send.</p>"
+          },
+          {
+            "type": "header",
+            "content": "Featured about 2"
+          }, {
+            "type": "text",
+            "id": "title_featured_about_2",
+            "label": "Title featured about 2",
+            "default": "Communucation"
+          }, {
+            "type": "richtext",
+            "id": "desc_featured_about_2",
+            "label": "Description featured about 2",
+            "default": "<p>By creating an Account on our service, you agree to subscribe to newsletters, marketing or promotional materials and other information we may send.</p>"
+          }, {
+            "type": "header",
+            "content": "Featured about 3"
+          }, {
+            "type": "text",
+            "id": "title_featured_about_3",
+            "label": "Title featured about 3",
+            "default": "Communucation"
+          }, {
+            "type": "richtext",
+            "id": "desc_featured_about_3",
+            "label": "Description featured about 3",
+            "default": "<p>By creating an Account on our service, you agree to subscribe to newsletters, marketing or promotional materials and other information we may send.</p>"
+          }
+        ]
+      },
+      {
+        "type": "our_mission",
+        "name": "Our mission",
+        "settings": [
+          {
+            "type": "select",
+            "id": "id_display_type",
+            "label": "Display type",
+            "options": [
+              {
+                "value": "style_1",
+                "label": "Style 1"
+              }, {
+                "value": "style_2",
+                "label": "Style 2"
+              }, {
+                "value": "style_3",
+                "label": "Style 3"
+              }
+            ],
+            "default": "style_1"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_our_mission",
+            "label": "Image our mission"
+          },
+          {
+            "type": "text",
+            "id": "sub_title_our_mission",
+            "label": "Sub title our mission",
+            "default": "Our Mission"
+          },
+          {
+            "type": "text",
+            "id": "title_our_mission",
+            "label": "Title our mission",
+            "default": "Ut varius posuere elit, sagittis malesuada nunc suscipit sit amet."
+          }, {
+            "type": "text",
+            "id": "desc_our_mission",
+            "label": "Description our mission",
+            "default": "Et, dark a cup, cortado, siphon at arabica flavour macchiato. Cream, at, acerbic redeye iced americano coffee white. To go et, steamed a café au lait."
+          }, {
+            "type": "url",
+            "id": "link_our_mission",
+            "label": "Link our mission"
+          }, {
+            "type": "richtext",
+            "id": "intro_our_mission",
+            "label": "Intro our mission",
+            "default": "<p>Etiam ligula nisi, feugiat tempus magna id, ultrices efficitur sem. Nullam lectus turpis, maximus non pretium nec, rutrum at dui. Aliquam gravida ex a risus dapibus molestie.</p>"
+          }, {
+            "type": "richtext",
+            "id": "name_our_mission",
+            "label": "Name our mission",
+            "default": "<p>Storepify. MAGAZINE</p>"
+          }
+        ]
+      }, {
+        "type": "image_about",
+        "name": "Image about",
+        "settings": [
+          {
+            "type": "select",
+            "id": "id_display_type_image",
+            "label": "Display type",
+            "options": [
+              {
+                "value": "style_1",
+                "label": "Style 1"
+              }, {
+                "value": "style_2",
+                "label": "Style 2"
+              }
+            ],
+            "default": "style_1"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_about_1",
+            "label": "Image about 1"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_about_2",
+            "label": "Image about 2"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_about_3",
+            "label": "Image about 3"
+          }, {
+            "type": "richtext",
+            "id": "desc_image_about",
+            "label": "Description image about",
+            "default": "<p>Sed rutrum nibh placerat magna facilisis, a efficitur massa tempor. Proin ut ultricies eros, non pulvinar tellus. Donec gravida id erat at pulvinar. Curabitur suscipit aliquet egestas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus mi massa, volutpat vitae eros nec, pharetra tempor libero. Nullam nibh orci, tincidunt non diam ut, dictum lacinia lorem. Pellentesque mollis sollicitudin nisl, non interdum lacus vestibulum at. Pellentesque congue nibh non neque vestibulum, non volutpat neque hendrerit. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "About"
+      }
+    ]
+  }
+{% endschema %}

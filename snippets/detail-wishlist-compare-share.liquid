@@ -1,0 +1,238 @@
+{% liquid
+  assign wishlist_check = true
+  assign compare_check = true
+  assign block_wishlist_check = block.settings.use_dt_wishlist
+  assign block_share_check = block.settings.use_dt_share
+  assign show_ask_a_question = block.settings.show_ask_a_question
+%}
+
+{% if wishlist_check == true or compare_check == true or block_share_check == true or show_ask_a_question == true %}
+  <div class="tp-box-wrapper tp-wishlist-compare flex flex-wrap items-center justify-start relative gap-24 mb-24">
+    {% if wishlist_check == true and block_wishlist_check == true %}
+      <div class="tp-wishlist">
+        <button
+          button-wishlist
+          type="button"
+          aria-label="Add to wishlist"
+          class="button-wishlist gap-8 flex items-center"
+          data-product-handle="{{ product.handle }}">
+          {% render 'icon'
+            , icon_name: 'icon-wishlist' %}
+          <span class="font-medium pointer-events-none">{{ 'products.product.wishlist' | t }}</span>
+        </button>
+      </div>
+    {% endif %}
+    {% if block_share_check == true %}
+      {% liquid
+        assign show_pinterest = block.settings.show_pinterest
+        assign show_instagram = block.settings.show_instagram
+        assign show_facebook = block.settings.show_facebook
+        assign show_twitter = block.settings.show_twitter
+        assign show_copy = block.settings.show_copy
+      %}
+      <div class="tp-share tp-popup-parent flex items-center cursor-pointer">
+        <button
+          button-share
+          type="button"
+          aria-label="Share"
+          class="button-share button-popup mr-3"
+          data-product-handle="{{ product.handle }}">
+          <span class="flex items-center gap-8 pointer-events-none">
+            {% render 'icon'
+              , icon_name: 'icon-share' %}
+            {{ 'products.product.share' | t }}
+          </span>
+        </button>
+
+        <div class="tp-share__popup tp-popup-parent__content shadow">
+          <div class="tsp__wrap">
+            <span class="absolute top-0 right-0 p-12 tp-icon-close close-popup">
+              {% render 'icon'
+                , icon_name: 'close'
+                , width: 15
+                , height: 15 %}
+            </span>
+            <div class="mb-16">
+              <h5 class="mb-16">{{ 'products.product.copy_link' | t }}:</h5>
+              {% if show_copy %}
+                <div class="tsp-copy flex items-center justify-between">
+                  {{ shop.url | append: product.url | truncate: 30 }}
+                  <div>
+                    <span class="product-share__link cursor-pointer" data-url="{{ shop.url | append: product.url }}">
+                      {% render 'icon'
+                        , icon_name: 'icon-copy' %}
+                    </span>
+                    <span class="copy_success cursor-pointer hidden" data-url="{{ shop.url | append: product.url }}">
+                      {% render 'icon'
+                        , icon_name: 'icon-success' %}
+                    </span>
+                    <span class="text-copied hidden">
+                      {{ 'products.product.label_copied' | t }}
+                    </span>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+            <div class="tsp__content">
+              <h5 class="mb-16">{{ 'products.product.share' | t }}:</h5>
+              <ul class="flex items-center justify-center gap-8">
+                {% if show_pinterest %}
+                  <li
+                    class="list-social__item"
+                    flow="up"
+                    tooltip="Pinterest">
+                    <a
+                      class="flex items-center justify-center flex-col"
+                      href="//pinterest.com/share?url={{ shop.url | append: product.url }}"
+                      target="_blank">
+                      <span class="tsp__icon">
+                        {% render 'icon'
+                          , icon_name: 'icon-pinterest' %}
+                      </span>
+                    </a>
+                  </li>
+                {% endif %}
+
+                {% if show_instagram %}
+                  <li
+                    class="list-social__item"
+                    flow="up"
+                    tooltip="Instagram">
+                    <a
+                      class="flex items-center justify-center flex-col"
+                      href="//instagram.com/share?url={{ shop.url | append: product.url }}"
+                      target="_blank">
+                      <span class="tsp__icon">
+                        {% render 'icon'
+                          , icon_name: 'icon-instagram' %}
+                      </span>
+                    </a>
+                  </li>
+                {% endif %}
+
+                {% if show_facebook %}
+                  <li
+                    class="list-social__item"
+                    flow="up"
+                    tooltip="Facebook">
+                    <a
+                      class="flex items-center justify-center flex-col"
+                      href="//www.facebook.com/sharer.php?u={{ shop.url | append: product.url }}"
+                      target="_blank">
+                      <span class="tsp__icon">
+                        {% render 'icon'
+                          , icon_name: 'icon-facebook' %}
+                      </span>
+                    </a>
+                  </li>
+                {% endif %}
+
+                {% if show_twitter %}
+                  <li
+                    class="list-social__item"
+                    flow="up"
+                    tooltip="Twitter">
+                    <a
+                      class="flex items-center justify-center flex-col"
+                      href="//twitter.com/share?url={{ shop.url | append: product.url }}"
+                      target="_blank">
+                      <span class="tsp__icon">
+                        {% render 'icon'
+                          , icon_name: 'icon-twitter' %}
+                      </span>
+                    </a>
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    {% if show_ask_a_question %}
+      <div class="tp-popup-parent tp-ask-question flex items-center cursor-pointer">
+        <button
+          button-share
+          type="button"
+          aria-label="Share"
+          class="button-popup mr-3"
+          data-product-handle="{{ product.handle }}">
+          <span class="flex items-center gap-8 pointer-events-none">
+            {% render 'icon'
+              , icon_name: 'icon-ask-question' %}
+            {{ 'products.product.ask_question' | t }}
+          </span>
+        </button>
+
+        <div class="tp-ask-question__content tp-popup-parent__content shadow">
+          <div class="tsp__wrap">
+            <span class="absolute top-0 right-0 p-12 tp-icon-close close-popup">
+              {% render 'icon'
+                , icon_name: 'close'
+                , width: 15
+                , height: 15 %}
+            </span>
+            <div class="tsp__content">
+              <h4 class="mb-20">
+                {{ 'products.product.ask_question' | t }}</h4>
+              <div>
+                <div class="">
+                  {% if block.settings.title_form != blank %}
+                    <h2 class="contact-title">{{ block.settings.title_form }}</h2>
+                  {% endif %}
+                  {%- form 'contact'
+                    , id: 'ContactForm'
+                    , class: 'isolate' -%}
+                    <div class="contact__fields mb-16">
+                      <div class="field field--with-error flex-col sm:flex-row flex items-center gap-16">
+                        <input
+                          class="field__input w-full"
+                          autocomplete="name"
+                          type="text"
+                          id="ContactForm-name"
+                          name="contact[{{ 'templates.contact.form.name' | t }}]"
+                          value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+                          placeholder="{{ 'templates.contact.form.name' | t }}"
+                          required>
+                        <input
+                          autocomplete="email"
+                          type="email"
+                          id="ContactForm-email"
+                          class="field__input"
+                          name="contact[email]"
+                          spellcheck="false"
+                          autocapitalize="off"
+                          value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                          aria-required="true"
+                          {% if form.errors contains 'email' %}
+                          aria-invalid="true"
+                          aria-describedby="ContactForm-email-error"
+                          {% endif %}
+                          placeholder="{{ 'templates.contact.form.email' | t }}">
+                      </div>
+                    </div>
+                    <div class="field mb-16">
+                      <textarea
+                        rows="3"
+                        id="ContactForm-body"
+                        class="text-area field__input"
+                        name="contact[{{ 'templates.contact.form.comment' | t }}]"
+                        placeholder="{{ 'templates.contact.form.comment' | t }}">
+                        {{- form.body -}}
+                      </textarea>
+                    </div>
+                    <div class="contact__button">
+                      <button class="tp-btn tp-btn__primary w-full" type="submit">
+                        {{ 'templates.contact.form.send' | t }}
+                      </button>
+                    </div>
+                  {%- endform -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endif %}

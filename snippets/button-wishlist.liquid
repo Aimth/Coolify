@@ -1,0 +1,45 @@
+{% comment %} 
+        Shopify Wishlist 
+        Usage: 
+        - Markup: {%- render 'button-wishlist', product: product -%} 
+        - Place this snippet inside your existing product card snippet 
+        Parameters: 
+        - product: <Shopify product> (required) 
+{% endcomment %}
+{%- if product.handle != blank -%}
+  <button
+    button-wishlist
+    type="button"
+    aria-label="Add to wishlist"
+    class="button-wishlist shadow"
+    data-product-handle="{{ product.handle }}">
+    {% if type == 'prd-item-3' %}
+      <span class="prd-item-3-action pointer-events-none">
+        <span class="hidden">
+          {{ 'product_items.wishlist' | t }}
+        </span>
+        {% render 'icon'
+          , icon_name: 'icon-wishlist' %}
+      </span>
+    {% else %}
+      {% render 'icon'
+        , icon_name: 'icon-wishlist' %}
+    {% endif %}
+
+
+  </button>
+
+  <script>
+    var wishlistLocalStorage = localStorage.getItem('shopify-wishlist');
+    if (wishlistLocalStorage) {
+      var arrWishlistLocal = wishlistLocalStorage.split(',');
+      var dataProductHandle = '{{ product.handle }}';
+      if (arrWishlistLocal.includes(dataProductHandle)) {
+        var buttonEle = document.querySelector('#product-{{ product.id }}');
+        if (buttonEle && !buttonEle.classList.contains('active')) {
+          buttonEle.classList.add('active');
+        }
+      }
+    }
+  </script>
+{%- endif -%}

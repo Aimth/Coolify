@@ -1,0 +1,108 @@
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {
+        "container": "container",
+        "color_scheme": "background-1",
+        "show_background_grid": false,
+        "text_alignment": "text-left",
+        "position_content": "column",
+        "padding_top": 40,
+        "padding_bottom": 50
+      }
+    },
+    "f1805c0c-bd33-41e6-8c77-3e6f5cc8d258": {
+      "type": "blog-top-stories",
+      "blocks": {
+        "784e1e9b-2c81-4b46-8c00-30329f889aaa": {
+          "type": "article_item",
+          "settings": {
+            "article_item": "news\/street-style-snaps-these-looks-from-fashionistas"
+          }
+        },
+        "38df4516-eb7c-4fb9-9ceb-f4ee1cb0dada": {
+          "type": "article_item",
+          "settings": {
+            "article_item": "news\/office-mens-fashion"
+          }
+        },
+        "1b453b72-9f34-4e4a-87b9-70fa9d8a73ca": {
+          "type": "article_item",
+          "settings": {
+            "article_item": "news\/spring-summer-2024-fashion-trends-bright-colors"
+          }
+        },
+        "c0a7b1a8-077f-4855-9ccc-60a838584cb0": {
+          "type": "article_item",
+          "settings": {
+            "article_item": "news\/how-to-coordinate-clothes-with-leather-jackets"
+          }
+        }
+      },
+      "block_order": [
+        "784e1e9b-2c81-4b46-8c00-30329f889aaa",
+        "38df4516-eb7c-4fb9-9ceb-f4ee1cb0dada",
+        "1b453b72-9f34-4e4a-87b9-70fa9d8a73ca",
+        "c0a7b1a8-077f-4855-9ccc-60a838584cb0"
+      ],
+      "settings": {
+        "container": "container",
+        "color_scheme": "",
+        "heading": "Today's Top Stories",
+        "num_post_show": 12,
+        "post_item_desktop": 2,
+        "autoplay": false,
+        "loop": false,
+        "show_arrow": true,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "main": {
+      "type": "main-blog",
+      "blocks": {
+        "f515b67b-32aa-49a0-962e-f3ea3b33e4f7": {
+          "type": "categories",
+          "settings": {
+            "title": "Categories",
+            "menu": "main-menu"
+          }
+        },
+        "d30b4fd0-c64b-497f-a72c-ac5f25901f5c": {
+          "type": "recent_post",
+          "settings": {
+            "title": "Recent Post",
+            "sidebar_recent_blog_name": ""
+          }
+        },
+        "b01aaba6-5eea-448e-8264-e35e1f4a0286": {
+          "type": "sidebar_tags",
+          "settings": {
+            "title": "Tags"
+          }
+        }
+      },
+      "block_order": [
+        "f515b67b-32aa-49a0-962e-f3ea3b33e4f7",
+        "d30b4fd0-c64b-497f-a72c-ac5f25901f5c",
+        "b01aaba6-5eea-448e-8264-e35e1f4a0286"
+      ],
+      "settings": {
+        "container": "container",
+        "color_scheme": "",
+        "position_sidebar": "none",
+        "post_per_page": 6,
+        "columns": "3",
+        "show_loadmore_paginate": "paginate",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "f1805c0c-bd33-41e6-8c77-3e6f5cc8d258",
+    "main"
+  ]
+}

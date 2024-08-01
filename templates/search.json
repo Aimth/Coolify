@@ -1,0 +1,36 @@
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {
+        "container": "container",
+        "color_scheme": "inverse",
+        "show_background_grid": false,
+        "text_alignment": "text-left",
+        "position_content": "row",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "main": {
+      "type": "main-search",
+      "settings": {
+        "container": "container",
+        "color_scheme": "",
+        "products_per_page": 16,
+        "column_number": "3",
+        "enable_filtering": true,
+        "collab_first": false,
+        "filter_type": "left_sidebar",
+        "price_type": "range_slider",
+        "enable_sorting": true,
+        "padding_top": 60,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "main"
+  ]
+}

@@ -1,0 +1,201 @@
+{{ 'sticky-product-detail.css' | asset_url | stylesheet_tag }}
+<sticky-product-detail class="sticky-product-detail shadow-inner {% if product.has_only_default_variant -%} show-qty-mobile{% endif %}">
+  <div class="flex justify-between container items-center">
+    <div class="sticky__info">
+      {% if product.featured_image != null %}
+        {% if product.selected_or_first_available_variant.featured_media != null %}
+          {%- for variant in product.variants -%}
+            {% if variant.featured_media != null %}
+              <a
+                href="{{ product.url }}"
+                class="sticky__info--thumb bd-radius overflow-hidden"
+                data-index="{{ forloop.index }}"
+                data-media-id="{{ section.id }}-{{ variant.featured_media.id }}">
+                <img
+                  data-index="{{ forloop.index }}"
+                  src="{{ variant | image_url: width: variant.width , height: variant.height }}"
+                  loading="lazy"
+                  width="60"
+                  height="80"
+                  alt="{{ variant.preview_image.alt | escape }}">
+              </a>
+              {% break %}
+            {% endif %}
+          {%- endfor -%}
+        {% else %}
+          <a class="sticky__info--thumb bd-radius overflow-hidden" href="{{ product.url }}">
+            <img
+              src="{{ product.featured_media | image_url: width: product.featured_media.width }}"
+              alt="{{ product.featured_media.alt | escape }}"
+              class="motion-reduce"
+              {% unless lazy_load == false %}
+              loading="lazy"
+              {% endunless %}
+              width="60"
+              height="80">
+          </a>
+        {% endif %}
+      {% endif %}
+
+      <div class="stick__info--title-price">
+        <a href="{{ product.url }}" class="product-title">
+          <h5 class="font-normal mb-0 line-clamp-2">{{ product.title }}</h5>
+        </a>
+        <div
+          class="no-js-hidden"
+          id="price-{{ section.id }}-{{ card_product.id }}"
+          role="status"
+          {{ block.shopify_attributes }}>
+          {% render 'price'
+            , product: product
+            , use_variant: true
+            , %}
+        </div>
+      </div>
+    </div>
+
+    <div class="sticky__actions flex items-center gap-12">
+      <span class="error-message hidden"></span>
+      {%- unless product.has_only_default_variant -%}
+        <div class="sticky__actions--variants">
+          <variant-select-sticky
+            class="no-js-hidden"
+            data-section="{{ section.id }}"
+            data-url="{{ product.url }}"
+            {{ block.shopify_attributes }}>
+            <div class="select">
+              <select
+                id=""
+                class="select__select field__select cursor-pointer"
+                name="options[{{ option.name | escape }}]"
+                form="product-form-{{ section.id }}">
+                {%- for variant in product.variants -%}
+                  {% liquid
+                    if forloop.first
+                    assign fistQtyVariant = variant.inventory_quantity
+                    endif
+                  %}
+                 
+                  <option
+                    value="{{ variant.id }}"
+                    data-price="{{ variant.price }}"
+                    data-price-compare="{{ variant.compare_at_price }}"
+                    variant_quantity = "{{ variant.inventory_quantity }}"
+                    >
+                    {{ variant.title }}
+                  </option>
+                {%- endfor -%}
+              </select>
+              {% render 'icon'
+                , icon_name: 'dropdown' %}
+            </div>
+
+            <script type="application/json">
+              {{ product.variants | json }}
+            </script>
+          </variant-select-sticky>
+        </div>
+      {%- endunless -%}
+
+      <div class="sticky__actions--qty">
+        <div
+          id="Quantity-Form-{{ section.id }}"
+          class="quantity-Form-{{ section.id }} product-form__input product-form__quantity"
+          {{ block.shopify_attributes }}>
+          {% comment %} TODO: enable theme-check once `item_count_for_variant` is accepted as valid filter {% endcomment %}
+          {% # theme-check-disable %}
+          {%- assign cart_qty = cart | item_count_for_variant: product.selected_or_first_available_variant.id -%}
+          {% # theme-check-enable %}
+          <div class="product-form__input product-form__quantity">
+            <quantity-input class="tp-item__quantity quantity">
+              <button
+                class="tp-item__qty_btn quantity__button no-js-hidden"
+                name="minus"
+                type="button">
+                <svg
+                  class="pointer-events-none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 16 16"
+                  fill="none">
+                  <path
+                    d="M4 8H12"
+                    stroke="#333C45"
+                    stroke-linecap="round" />
+                </svg>
+              </button>
+              <input
+                class="quantity__input tp-item__qty_input quantity__input-sticky"
+                type="number"
+                name="quantity"
+                id="Quantity-{{ section.id }}"
+                data-cart-quantity="{{ cart_qty }}"
+                data-inventory="{{ fistQtyVariant |  default: product.selected_or_first_available_variant.inventory_quantity }}"
+                data-min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+                min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+                max="null"
+                step="{{ product.selected_or_first_available_variant.quantity_rule.increment }}"
+                value="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+                {% comment %}
+                form="{{ product_form_id }}"
+                {% endcomment %}>
+              <button
+                class="tp-item__qty_btn quantity__button no-js-hidden"
+                name="plus"
+                type="button">
+                <svg
+                  class="pointer-events-none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 16 16"
+                  fill="none">
+                  <path
+                    d="M3.99805 8.00016H11.9993M7.9987 12.0008V8.00016L7.9987 3.99951"
+                    stroke="#333C45"
+                    stroke-linecap="round" />
+                </svg>
+              </button>
+            </quantity-input>
+          </div>
+          <div class="quantity__rules caption no-js-hidden">
+            {%- if product.selected_or_first_available_variant.quantity_rule.increment > 1 -%}
+              <span class="divider">
+                {{- 'products.product.quantity.multiples_of'
+ | t: quantity: product.selected_or_first_available_variant.quantity_rule.increment
+                -}}
+              </span>
+            {%- endif -%}
+            {%- if product.selected_or_first_available_variant.quantity_rule.min > 1 -%}
+              <span class="divider">
+                {{- 'products.product.quantity.minimum_of'
+ | t: quantity: product.selected_or_first_available_variant.quantity_rule.min
+                -}}
+              </span>
+            {%- endif -%}
+            {%- if product.selected_or_first_available_variant.quantity_rule.max != null -%}
+              <span class="divider">
+                {{- 'products.product.quantity.maximum_of'
+ | t: quantity: product.selected_or_first_available_variant.quantity_rule.max
+                -}}
+              </span>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+      {%- render 'buy-buttons'
+        ,
+ product: product
+        ,
+ product_form_id: product_form_id
+        ,
+ section_id: section.id
+        ,
+ show_pickup_availability: true
+        ,
+ input_quantity_sticky: true
+      -%}
+    </div>
+  </div>
+</sticky-product-detail>

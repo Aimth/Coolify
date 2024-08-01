@@ -1,0 +1,137 @@
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {
+        "container": "container",
+        "color_scheme": "inverse",
+        "show_background_grid": false,
+        "text_alignment": "text-left",
+        "position_content": "row",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "main": {
+      "type": "main-article",
+      "blocks": {
+        "featured_image": {
+          "type": "featured_image",
+          "settings": {
+            "image_height": "adapt"
+          }
+        },
+        "7542635d-9e4b-4f86-a711-20143851cc2f": {
+          "type": "author_and_date",
+          "settings": {
+            "blog_show_date": true,
+            "blog_show_author": true
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {
+          }
+        },
+        "9321e11c-610b-480f-a28f-d856d93390d5": {
+          "type": "exerpt",
+          "settings": {
+          }
+        },
+        "share": {
+          "type": "share",
+          "settings": {
+            "share_label": "Share"
+          }
+        },
+        "content": {
+          "type": "content",
+          "settings": {
+          }
+        },
+        "ddc028f0-304c-4bb9-9d45-19558ba7ed76": {
+          "type": "topblog",
+          "settings": {
+            "otp_heading": "Our top 5 picks",
+            "otp1_title": "1. Best Overall:",
+            "otp1_article": "news\/best-puffer-jackets-for-women-all-styles-and-budgets-2023",
+            "otp2_title": "2. Best Budget Pick:",
+            "otp2_article": "news\/best-puffer-jackets-for-women-all-styles-and-budgets-2023",
+            "otp3_title": "3. Best Splurge Pick:",
+            "otp3_article": "news\/best-puffer-jackets-for-women-all-styles-and-budgets-2023",
+            "otp4_title": "4. Best Fleece:",
+            "otp4_article": "news\/best-puffer-jackets-for-women-all-styles-and-budgets-2023",
+            "otp5_title": "5. Best For The Outdoors:",
+            "otp5_article": "news\/best-puffer-jackets-for-women-all-styles-and-budgets-2023"
+          }
+        },
+        "tags": {
+          "type": "tags",
+          "settings": {
+          }
+        },
+        "nextprev": {
+          "type": "nextprev",
+          "settings": {
+          }
+        },
+        "c857a08b-6750-4a8c-83c1-fa6c2aba961b": {
+          "type": "categories",
+          "disabled": true,
+          "settings": {
+            "title": "Categories",
+            "menu": "main-menu"
+          }
+        },
+        "591ab3ee-1c3b-4d36-8272-38ab8ebb93e2": {
+          "type": "recent_post",
+          "disabled": true,
+          "settings": {
+            "title": "Recent Post",
+            "sidebar_recent_blog_name": "news"
+          }
+        },
+        "65cd0e5a-e9ec-47b5-b072-a168e7e5996c": {
+          "type": "sidebar_tags",
+          "disabled": true,
+          "settings": {
+            "title": "Tags"
+          }
+        },
+        "6d2dea80-9d7d-4cfe-a234-4fb536a9eaa9": {
+          "type": "popular_post",
+          "settings": {
+            "title": "Popular articles",
+            "sidebar_recent_blog_name": "news",
+            "sort_order": "published_at_desc",
+            "products_per_page": 3
+          }
+        }
+      },
+      "block_order": [
+        "featured_image",
+        "7542635d-9e4b-4f86-a711-20143851cc2f",
+        "title",
+        "9321e11c-610b-480f-a28f-d856d93390d5",
+        "share",
+        "content",
+        "ddc028f0-304c-4bb9-9d45-19558ba7ed76",
+        "tags",
+        "nextprev",
+        "c857a08b-6750-4a8c-83c1-fa6c2aba961b",
+        "591ab3ee-1c3b-4d36-8272-38ab8ebb93e2",
+        "65cd0e5a-e9ec-47b5-b072-a168e7e5996c",
+        "6d2dea80-9d7d-4cfe-a234-4fb536a9eaa9"
+      ],
+      "settings": {
+        "sid_pos": "right",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "main"
+  ]
+}

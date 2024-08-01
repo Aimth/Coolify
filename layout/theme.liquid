@@ -1,0 +1,83 @@
+<!doctype html>
+{% assign rtl = settings.enable_rtl %}
+<html
+  class="no-js {% if settings.enable_loading_site %}tp-over-flow-hidden{% endif %} {% if rtl %}rtl{% endif %}"
+  lang="{{ request.locale.iso_code }}"
+  {% if rtl %}
+  dir="rtl"
+  {% endif %}>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link
+      rel="preconnect"
+      href="https://fonts.shopifycdn.com"
+      crossorigin>
+    {%- if settings.favicon != blank -%}
+      <link
+        rel="icon"
+        type="image/png"
+        href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+    <title>
+      {{ page_title }}
+      {%- if current_tags %}
+        &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %}
+        &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %}
+        &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+    {% render 'meta-tags' %}
+    {%- render 'scripts-tag' -%}
+    {{ content_for_header }}
+    <script>
+      document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+      if (Shopify.designMode) {
+        document.documentElement.classList.add('shopify-design-mode');
+      }
+    </script>
+    {%- render 'head-assets' -%}
+  </head>
+
+  <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
+    {% if settings.enable_loading_site %}
+      <div class="tp-loading-site">
+        <span class="loading-notification"></span>
+      </div>
+    {% endif %}
+    <div class="tp-close-overlay opacity-0 !block"></div>
+    {%- if settings.cart_type == 'drawer' and template != 'cart' -%}
+      {%- render 'cart-drawer' -%}
+      <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
+    {%- sections 'header-group' -%}
+    <main
+      id="MainContent"
+      class="content-for-layout focus-none"
+      role="main"
+      tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+    {% liquid
+      render 'modal-newsletters-subscription'
+      render 'form-infor'
+      sections 'footer-group'
+      sections 'system-group'
+      render 'tool-demos'
+      if settings.show_quick_view
+        render 'tp-modal-quickview'
+      endif
+      if settings.enable_eu_cookie_bar_gdpr != blank
+        render 'tp-cookie'
+      endif
+    %}
+    <div id="snackbar" class=""></div>
+  </body>
+</html>

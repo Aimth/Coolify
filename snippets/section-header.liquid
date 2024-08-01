@@ -1,0 +1,38 @@
+{% liquid
+  assign show_heading_header = sst.show_heading_header
+  assign text_align_title = sst.text_alignment
+  assign heading = sst.heading
+  assign description = sst.description
+  assign claasTextAlign = 'justify-between mr-auto'
+  if text_align_title == 'text-center'
+    assign claasTextAlign = 'justify-center text-center gap-8'
+    assign classDesc = 'm-auto text-center'
+  elsif text_align_title == 'text-right'
+    assign claasTextAlign = 'justify-end text-right gap-8'
+    assign classDesc = 'm-auto text-right'
+  endif
+%}
+
+{%- if show_heading_header -%}
+  {%- if heading != blank or description != blank -%}
+    <div class="tp-section-header mb-30 md:mb-40 {{ class | default: '' }}">
+      <div class="flex items-center flex-wrap mb-20 {{ claasTextAlign }}">
+        {%- if heading != blank -%}
+          <h2 class="tp-section-heading mb-0">
+            {{ heading }}
+          </h2>
+        {%- endif -%}
+        {% if sst.show_button %}
+          <a href="{{ linkBtn | default: '#' }}" class="flex tp-btn tp-btn__underline n-hvr items-center gap-12">
+            {{ sst.text_btn }}
+          </a>
+        {% endif %}
+      </div>
+      {%- if description != blank -%}
+        <div class="tp-section-des max-w-[585px] {{ classDesc }}">
+          {{ description }}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+{%- endif -%}

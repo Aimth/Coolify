@@ -1,0 +1,78 @@
+{
+  "name": "Footer Group",
+  "type": "footer",
+  "sections": {
+    "footer_bM4VGD": {
+      "type": "footer",
+      "blocks": {
+        "about_us_39EhLT": {
+          "type": "about_us",
+          "settings": {
+            "heading": "",
+            "description": "",
+            "alignment": "left",
+            "show_address": true,
+            "show_phone": true,
+            "show_email": true,
+            "show_open_time": false,
+            "show_social": false,
+            "item_width": 25,
+            "item_width_tablets": 100
+          }
+        },
+        "link_list_BwT68x": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Quick links",
+            "menu": "about-us",
+            "alignment": "left",
+            "item_width": 16,
+            "item_width_tablets": 33
+          }
+        },
+        "link_list_eTJMxe": {
+          "type": "link_list",
+          "settings": {
+            "heading": "My account",
+            "menu": "my-account",
+            "alignment": "left",
+            "item_width": 17,
+            "item_width_tablets": 33
+          }
+        },
+        "link_list_faqeb7": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Help center",
+            "menu": "help-center",
+            "alignment": "left",
+            "item_width": 17,
+            "item_width_tablets": 33
+          }
+        },
+        "newsletter_kdJ86j": {
+          "type": "newsletter",
+          "settings": {
+            "heading": "Subscribe Newsletter",
+            "description": "<p>15% OFF your order when you sign-up to our emails<\/p>",
+            "alignment": "left",
+            "item_width": 25,
+            "item_width_tablets": 100
+          }
+        }
+      },
+      "block_order": [
+        "about_us_39EhLT",
+        "link_list_BwT68x",
+        "link_list_eTJMxe",
+        "link_list_faqeb7",
+        "newsletter_kdJ86j"
+      ],
+      "settings": {
+      }
+    }
+  },
+  "order": [
+    "footer_bM4VGD"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {
+        "container": "container",
+        "color_scheme": "background-1",
+        "show_background_grid": false,
+        "text_alignment": "text-center",
+        "position_content": "column",
+        "padding_top": 40,
+        "padding_bottom": 50
+      }
+    },
+    "main": {
+      "type": "main-list-collections",
+      "settings": {
+        "heading": "",
+        "text_alignment": "text-center",
+        "container": "container",
+        "color_scheme": "scheme-30767b86-79e0-4702-9cdb-67d30dc9214d",
+        "sort": "alphabetical",
+        "design_collection": "design-2",
+        "images_style": "rounded-[16px]",
+        "image_ratio": "original",
+        "custom_ratio": "21:9",
+        "columns_desktop": 4,
+        "columns_tablets": "3",
+        "columns_mobile": "2",
+        "padding_top": 30,
+        "padding_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "main"
+  ]
+}

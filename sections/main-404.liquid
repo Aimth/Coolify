@@ -1,0 +1,142 @@
+{%- liquid
+  assign sst = section.settings
+  assign container = sst.container
+  assign image = sst.image
+  assign heading = sst.heading
+  assign sub_heading = sst.sub_heading
+  assign label = sst.label
+  assign link = sst.link
+  assign custom_width = sst.custom_width
+-%}
+{%- capture style -%}
+  --section-padding-top: {{ sst.padding_top }}px; 
+  --section-padding-bottom: {{ sst.padding_bottom }}px; 
+{%- endcapture -%}
+
+<div class="tp-main-404 color-{{ sst.color_scheme }} gradient section-py section-mb" style="{{ style | strip | strip_newlines }}">
+  <div class="{{ container }} section-full">
+    <div class="tp-main-404__content text-center">
+      <div class="tp-main-404__image mb-30">
+        {%- if image != blank -%}
+          <img
+            class="m-auto"
+            src="{{ image | image_url }}"
+            width="{{ custom_width }}"
+            alt="{{ image.alt | escape }}"
+            width="{{ image.width }}"
+            height="{{ image.height }}"
+            loading="lazy">
+        {%- else -%}
+          {%- render 'icon'
+            , icon_name: 'icon-404' -%}
+        {%- endif -%}
+      </div>
+      {%- if heading != blank or sub_heading != blank -%}
+        <div class="tp-main-404__header">
+          {%- if heading != blank -%}
+            <h2 class="mb-16">{{ heading }}</h2>
+          {%- endif -%}
+          {%- if sub_heading != blank -%}
+            <div class="tp-main-404__des mb-16">
+              {{ sub_heading }}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      <a href="{%- if link != blank -%}{{ link }}{%- else -%}{{ routes.root_url }}{%- endif -%}" class="tp-btn tp-btn__primary">
+        {{- label -}}
+      </a>
+    </div>
+  </div>
+  <style>
+    @media (max-width: 767px) {
+      .tp-main-404__image svg {
+        width: 300px;
+        height: 300px;
+      }
+    }
+  </style>
+</div>
+
+{% schema %}
+  {
+    "name": "404",
+    "tag": "section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "General"
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image",
+        "info": "*Choose image type png(440 x 255px recommended)"
+      },
+      {
+        "type": "text",
+        "id": "custom_width",
+        "label": "Custom width",
+        "default": "440"
+      }, {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Page not found"
+      }, {
+        "type": "textarea",
+        "id": "sub_heading",
+        "label": "Sub heading",
+        "default": "Sorry for the inconvenience. Go to our homepage or check out our latest collections."
+      }, {
+        "type": "text",
+        "id": "label",
+        "label": "Label button",
+        "default": "Back to homepage"
+      }, {
+        "type": "url",
+        "id": "link",
+        "label": "Link button"
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 60,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }
+    ]
+  }
+{% endschema %}

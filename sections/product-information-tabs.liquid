@@ -1,0 +1,292 @@
+{%- liquid
+  assign sst = section.settings
+  assign container = sst.container
+  assign design = sst.design
+-%}
+{%- capture style -%}
+  --section-padding-top: {{ sst.padding_top }}px; 
+  --section-padding-bottom: {{ sst.padding_bottom }}px; 
+{%- endcapture -%}
+
+{%- if section.blocks.size > 0 -%}
+  <div
+    id="{{ section.id }}"
+    class="tp-product-tabs design-{{design}} color-{{ sst.color_scheme }} gradient section-py {% if sst.reset_spacing == false %}section-mb{% endif %}"
+    data-section-type="tabs"
+    data-section-id="{{ section.id }}"
+    style="{{ style | strip | strip_newlines }}">
+    <div class="{{ container }}">
+      <div class="tp-product-tabs__inner {% unless design == 'tab' %}tp-collap-tab-main{%- endunless -%}">
+        {%- if design == 'tab' -%}
+          <div class="tp-product-tabs__header items-center justify-center gap-24 mb-40 hidden md:flex">
+            {%- for block in section.blocks %}
+              {% assign bst = block.settings %}
+              <button
+                class="tab-item js-tab-item relative fw-secondary pb-12 h4 mb-0 tab-item-{{ section.id }} {% if forloop.first %} active{% endif %}"
+                data-number="{{ forloop.index }}"
+                data-section-id="{{ section.id }}">
+                {{- bst.title -}}
+              </button>
+            {%- endfor -%}
+          </div>
+
+          {%- for block in section.blocks %}
+            {% liquid
+              assign bst = block.settings
+            %}
+            <details
+              class="tp-product-tabs__content-inner tp-collap-tab  js-prd-tab-content {% if forloop.first %} active{% else %}block md:hidden{% endif %}"
+              data-number="{{ forloop.index }}"
+              open>
+              <summary class="tp-collap-tab__sm block md:hidden">
+                <h4 class="summary-heading flex items-center justify-between mb-0 px-16 py-16">
+                  <span>
+                    {{ bst.title }}</span>
+                  <span class="icon-toggle relative"></span>
+                </h4>
+              </summary>
+              <div class="tp-collap-tab__content content-animation px-24 py-16 md:px-0 md:py-0">
+                <div class="tab-panel">
+                  {%- case block.type -%}
+                    {%- when 'description' -%}
+                      {{ product.description }}
+                    {%- when 'short_description' -%}
+                      {%- if product.metafields.custom.short_description -%}
+                        <div class="tp__single-shortdes">
+                          {{ product.metafields.custom.short_description }}
+                        </div>
+                      {%- endif -%}
+                    {%- when 'review' -%}
+                      <div class="AirReviews-Widget AirReviews-Widget--Block"></div>
+                    {%- when 'custom_tab' -%}
+                      {% assign tab_content = bst.tab_content %}
+                      {%- case tab_content -%}
+                        {%- when 'content' -%}
+                          {{ bst.content }}
+                        {%- when 'content_page' -%}
+                          {%- if bst.page != blank -%}
+                            {{ pages[bst.page].content }}
+                          {%- endif -%}
+                      {%- endcase -%}
+                  {%- endcase -%}
+                </div>
+              </div>
+            </details>
+          {%- endfor -%}
+        {% else %}
+          {%- for block in section.blocks %}
+            {% liquid
+              assign bst = block.settings
+            %}
+            <details
+              class="tp-collap-tab"
+              {% if design == 'collapsible_open_first' and forloop.first %}
+              open
+              {% elsif design == 'show_all' %}
+              open
+              {% endif %}>
+              <summary class="tp-collap-tab__sm">
+                <h4 class="summary-heading flex items-center justify-between mb-0 px-16 py-16">
+                  <span>
+                    {{ bst.title }}</span>
+                  <span class="icon-toggle relative"></span>
+                </h4>
+              </summary>
+              <div class="tp-collap-tab__content content-animation px-24 py-16">
+                <div class="tab-panel">
+                  {%- case block.type -%}
+                    {%- when 'description' -%}
+                      {{ product.description }}
+                    {%- when 'short_description' -%}
+                      {%- if product.metafields.custom.short_description -%}
+                        <div class="tp__single-shortdes">
+                          {{ product.metafields.custom.short_description }}
+                        </div>
+                      {%- endif -%}
+                    {%- when 'review' -%}
+                      <div id="shopify-product-reviews" data-id="{{ product.id }}">
+                        {{ product.metafields.spr.reviews }}
+                        <div class="AirReviews-Widget AirReviews-Widget--Block"></div>
+                      </div>
+                    {%- when 'custom_tab' -%}
+                      {% assign tab_content = bst.tab_content %}
+                      {%- case tab_content -%}
+                        {%- when 'content' -%}
+                          {{ bst.content }}
+                        {%- when 'content_page' -%}
+                          {%- if bst.page != blank -%}
+                            {{ pages[bst.page].content }}
+                          {%- endif -%}
+                      {%- endcase -%}
+                  {%- endcase -%}
+                </div>
+              </div>
+            </details>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "Product information tabs",
+    "tag": "section",
+    "class": "section",
+    "disabled_on": {
+      "groups": ["*"]
+    },
+    "settings": [
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      },
+      {
+        "type": "select",
+        "id": "design",
+        "label": "Design",
+        "default": "tab",
+        "options": [
+          {
+            "value": "tab",
+            "label": "Tabs"
+          }, {
+            "value": "collapsible",
+            "label": "Collapsible"
+          }, {
+            "value": "collapsible_open_first",
+            "label": "Collapsible open first tab"
+          }, {
+            "value": "show_all",
+            "label": "Show open all"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "reset_spacing",
+        "label": "Remove default space between sections",
+        "default": false
+      }, {
+        "type": "paragraph",
+        "content": "----------------------------------------"
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "description",
+        "name": "Description",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Description"
+          }
+        ]
+      }, {
+        "type": "short_description",
+        "name": "Short description",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Short Description"
+          }
+        ]
+      }, {
+        "type": "review",
+        "name": "Review",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Review"
+          }
+        ]
+      }, {
+        "type": "custom_tab",
+        "name": "Custom tab",
+        "limit": 4,
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Custom Tab"
+          }, {
+            "type": "select",
+            "id": "tab_content",
+            "label": "Tab content",
+            "default": "content",
+            "options": [
+              {
+                "value": "content",
+                "label": "Content"
+              }, {
+                "value": "content_page",
+                "label": "Content page"
+              }
+            ]
+          }, {
+            "type": "richtext",
+            "id": "content",
+            "label": "Tab content",
+            "default": "<p></p>"
+          }, {
+            "type": "page",
+            "id": "page",
+            "label": "Tab content from page"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

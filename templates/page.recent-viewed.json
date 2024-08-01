@@ -1,0 +1,23 @@
+{
+  "sections": {
+    "recently-products": {
+      "type": "main-recently",
+      "settings": {
+        "show_heading_header": true,
+        "heading": "Recently Viewed Products",
+        "description": "",
+        "text_alignment": "text-left",
+        "container": "container",
+        "color_scheme": "",
+        "sliders_perview": "4",
+        "autoplay": false,
+        "loop": true,
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    }
+  },
+  "order": [
+    "recently-products"
+  ]
+}

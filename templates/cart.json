@@ -1,0 +1,53 @@
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {
+        "container": "container",
+        "color_scheme": "background-1",
+        "show_background_grid": false,
+        "text_alignment": "text-center",
+        "position_content": "column",
+        "padding_top": 40,
+        "padding_bottom": 50
+      }
+    },
+    "cart-items": {
+      "type": "main-cart-items",
+      "settings": {
+        "container": "container",
+        "color_scheme": "",
+        "color_bg_sidebar": "#F4F4F4",
+        "reset_spacing": true,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "906dc777-a93c-485c-8b10-d41c1f31ad6a": {
+      "type": "product-slider",
+      "settings": {
+        "show_heading_header": true,
+        "heading": "You may be interested in",
+        "description": "",
+        "text_alignment": "text-left",
+        "show_button": true,
+        "text_btn": "See more",
+        "container": "container",
+        "color_scheme": "",
+        "collection": "collections",
+        "layout_slider": "layout-slider-1",
+        "limit_products": 8,
+        "sliders_perview": "4",
+        "autoplay": false,
+        "loop": false,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "cart-items",
+    "906dc777-a93c-485c-8b10-d41c1f31ad6a"
+  ]
+}

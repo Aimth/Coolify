@@ -1,0 +1,122 @@
+{%- liquid
+  assign gst = settings
+  assign font_source = gst.font_source
+-%}
+{% comment %} set font source {% endcomment %}
+{%- if font_source == 'shopify' -%}
+  {%- liquid
+    assign fnt_body_sp = gst.fnt_body_sp
+    assign fnt_headings_sp = gst.fnt_headings_sp | default: fnt_body_sp
+    assign fnt_menu_sp = gst.fnt_menu_sp | default: fnt_body_sp
+  -%}
+  {%- liquid
+    assign fm_body_sp = fnt_body_sp.family
+    assign fm_headings_sp = fnt_headings_sp.family
+    assign fm_menu_sp = fnt_menu_sp.family
+  -%}
+  {%- capture fnt_fm_body -%}{{ fm_body_sp }}, {{ fnt_body_sp.fallback_families }};{%- endcapture -%}
+  {%- liquid
+    assign fnt_fm_headings = fnt_fm_body
+    assign fnt_fm_menu = fnt_fm_body
+  -%}
+  {%- style -%}
+    {%- for variant in fnt_body_sp.variants -%}{{ variant | font_face: font_display: 'swap' }}
+  {%- endfor -%}
+  {%- endstyle -%}
+
+  {%- if fm_headings_sp != fm_body_sp -%}
+    {%- capture fnt_fm_headings -%}{{ fm_headings_sp }}, {{ fnt_headings_sp.fallback_families }};{%- endcapture -%}
+    {%- style -%}
+      {%- for variant in fnt_headings_sp.variants -%}{{ variant | font_face: font_display: 'swap' }}
+    {%- endfor -%}
+    {%- endstyle -%}
+  {%- endif -%}
+
+  {%- if fm_menu_sp != fm_body_sp -%}
+    {%- capture fnt_fm_menu -%}{{ fm_menu_sp }}, {{ fnt_menu_sp.fallback_families }};{%- endcapture -%}
+    {%- style -%}
+      {{ fnt_menu_sp | font_face: font_display: 'swap' }}
+    {%- endstyle -%}
+  {%- endif -%}
+  {%- unless fnt_body_sp.system? -%}
+    <link
+      rel="preload"
+      as="font"
+      href="{{ fnt_body_sp | font_url }}"
+      type="font/woff2"
+      crossorigin>
+  {%- endunless -%}
+  {%- unless fnt_headings_sp.system? -%}
+    {%- if fm_headings_sp != fm_body_sp -%}
+      <link
+        rel="preload"
+        as="font"
+        href="{{ fnt_headings_sp | font_url }}"
+        type="font/woff2"
+        crossorigin>
+    {%- endif -%}
+  {%- endunless -%}
+  {%- unless fnt_menu_sp.system? -%}
+    {%- if fm_menu_sp != fm_body_sp and fm_menu_sp != fnt_menu_sp -%}
+      <link
+        rel="preload"
+        as="font"
+        href="{{ fnt_menu_sp | font_url }}"
+        type="font/woff2"
+        crossorigin>
+    {%- endif -%}
+  {%- endunless -%}
+{%- elsif font_source == 'google' -%}
+  {%- liquid
+    assign fnt_body_gg = gst.fnt_body_gg
+    assign fnt_headings_gg = gst.fnt_headings_gg | default: fnt_body_gg
+    assign fnt_menu_gg = gst.fnt_menu_gg | default: fnt_body_gg
+  -%}
+  {%- capture font_var -%}
+    {{ fnt_body_gg | strip | replace: ' ', '+' }}:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i
+    {%- if fnt_body_gg != fnt_headings_gg -%}
+      |{{ fnt_headings_gg | strip | replace: ' ', '+' }}:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i
+    {%- endif -%}
+    {%- if fnt_menu_gg != fnt_body_gg and fnt_menu_gg != fnt_headings_gg -%}
+      |{{ fnt_menu_gg | strip | replace: ' ', '+' }}:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i
+    {%- endif -%}
+  {%- endcapture -%}
+
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family={{ font_var }}&display=swap"
+    media="print"
+    onload="this.media='all'">
+
+  {%- liquid
+    assign fnt_fm_body = fnt_body_gg
+    assign fnt_fm_headings = fnt_headings_gg
+    assign fnt_fm_menu = fnt_menu_gg
+  -%}
+{%- endif -%}
+
+{% style %}
+  :root  {
+    --font-body-family: {{ fnt_fm_body }};
+    --font-body-size: {{ gst.bd_font_size }}px;
+    --font-body-weight: {{ gst.bd_font_weight }};
+    --font-heading-family: {{ fnt_fm_headings }};
+    --font-heading-weight: {{ gst.headings_font_weight }};
+    --font-heading-weight-secondary: {{ gst.headings_font_weight_secondary }};
+    --letter-spacing-heading: {{ gst.headings_letter_spacing }}px;
+    --fz-h1: {{ gst.h1_font_size }}px;
+    --fz-h2: {{ gst.h2_font_size }}px;
+    --fz-h3: {{ gst.h3_font_size }}px;
+    --fz-h4: {{ gst.h4_font_size }}px;
+    --fz-h5: {{ gst.h5_font_size }}px;
+    --fz-h6: {{ gst.h6_font_size }}px;
+
+    --font-menu-family: {{ fnt_fm_menu }};
+    --font-menu-size: {{ gst.menu_font_size }}px;
+    --font-menu-weight: {{ gst.menu_font_weight }};
+    --font-menu-size-sub: {{ gst.menu_font_size_sub }}px;
+    --font-menu-weight-sub: {{ gst.menu_font_weight_sub }};
+    --letter-spacing-menu: {{ gst.menu_letter_spacing }}px;
+  }
+{% endstyle %}
+{% comment %} End set font source {% endcomment %}

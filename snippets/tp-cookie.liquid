@@ -1,0 +1,12 @@
+<div id="tp_cookie" class="tp_cookie hidden text-center shadow">
+  <div class="cookie-message">
+    {{- settings.message_cookie }}
+  </div>
+  {%- if settings.cookie_button_text != blank -%}
+    <div class="cookie-compliancew-full">
+      <button class="cookie-dismiss w-full tp-btn tp-btn__primary" id="ba-cookie-dismiss">
+        {{ settings.cookie_button_text }}
+      </button>
+    </div>
+  {%- endif -%}
+</div>

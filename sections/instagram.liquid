@@ -1,0 +1,469 @@
+{{ 'instagram.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'instagram.js' | asset_url }}" defer="defer"></script>
+
+{% liquid
+  assign sst = section.settings
+  assign container = sst.container
+  assign show_heading_header = sst.show_heading_header
+  assign show_number = sst.instagram_to_show
+  assign bdRadiusImg = ''
+  if sst.border_radius_img
+    assign bdRadiusImg = 'bd-radius'
+  endif
+%}
+{%- capture style -%}
+  --section-padding-top: {{ sst.padding_top }}px; 
+  --section-padding-bottom: {{ sst.padding_bottom }}px;
+  {% if sst.gap_item != blank %}
+  --grid-desktop-horizontal-spacing: {{ sst.gap_item }}px
+  {% endif %} 
+{%- endcapture -%}
+{% capture classGrid %}
+  {% if sst.layout_tablet_mobile == 'scroll' %}
+    tp-grid tp-scroll-tab-mb tp-grid--{{ sst.columns_desktop }}-col-desktop 
+  {% else %}
+  tp-grid tp-grid--{{ sst.columns_mobile }}-col-mobile tp-grid--{{ sst.columns_tablets }}-col-tablets tp-grid--{{ sst.columns_desktop }}-col-desktop 
+  {% endif %}
+{% endcapture %}
+
+<div
+  class="tp-instagram color-{{ sst.color_scheme }} gradient section-py {% if sst.reset_spacing == false %}section-mb{% endif %}"
+  data-access-token="{{ settings.instagram_token }}"
+  data-show_instagram="{{ section.settings.instagram_to_show }}"
+  data-type="{{ section.settings.data_instagram }}"
+  style="{{ style | strip | strip_newlines }}">
+  <div class="{{ container }} section-full">
+    {% render 'section-header'
+      , sst: sst
+      , class: 'mb-28' %}
+    {%- if show_heading_header -%}
+      <div class="tp-instagram__btn {{ sst.text_alignment }} mb-40">
+        {%- if sst.btn_content != blank -%}
+          <a
+            {% if sst.link == blank %}
+            role="link"
+            aria-disabled="true"
+            {% else %}
+            href="{{ sst.link }}"
+            {% endif %}
+            {%- if sst.open_link == '_blank' -%}
+            target="_blank"
+            {%- else -%}
+            target="_self"
+            {%- endif -%}
+            class="tp-btn tp-btn__primary n-hvr gap-8">
+            {{ sst.btn_content | escape }}
+          </a>
+        {%- endif -%}
+      </div>
+    {% endif %}
+    <div class="tp-instagram__list">
+      {% if sst.data_instagram == 'data_instagram' %}
+        <div class="tp-instagram__wrapper tp-instagram__parent flex"></div>
+      {% else %}
+        <div class="flex flex-wrap tp-instagram__parent {{ classGrid }}">
+          {% for block in section.blocks limit: show_number %}
+            {% liquid
+              assign bst = block.settings
+              assign placeholder_image_index = forloop.index | modulo: 3 | plus: 1
+              assign placeholder_image = 'hero-apparel-' | append: placeholder_image_index
+            %}
+            {% case block.type %}
+              {% when 'item_instagram' %}
+                <div class="tp-instagram__item tp-grid__item {{ bdRadiusImg }}">
+                  <a href="{{ bst.link_instagram }}" title="instagram item">
+                    {% render 'icon'
+                      , icon_name: 'icon-instagram'
+                      , width: 40
+                      , height: 40 %}
+                    <div class="tp-instagram__image h-full">
+                      {% assign imageInstagram = bst.image_instagram %}
+                      {% render 'responsive-image'
+                        , image: imageInstagram
+                        , aspect_ratio: sst.image_ratio
+                        , custom_ratio: sst.custom_ratio
+                        , class: 'h-full'
+                        , placeholder_image: placeholder_image
+                      %}
+                    </div>
+                  </a>
+                </div>
+              {% when 'text_content' %}
+                <div class="tp-instagram__item tp-instagram-item-content tp-grid__item {{ bdRadiusImg }}" style="--color-bg-item: {{ bst.color_bg }}; --color-content: {{ bst.color_content }};">
+                  <div class="item-content">
+                    {% if bst.heading != blank %}
+                      <h3>{{ bst.heading }}</h3>
+                    {% endif %}
+                    {% if bst.description != blank %}
+                      <div>{{ bst.description }}</div>
+                    {% endif %}
+                    <a
+                      {% if bst.link_content == blank %}
+                      role="link"
+                      aria-disabled="true"
+                      {% else %}
+                      href="{{ bst.link_content }}"
+                      {% endif %}
+                      {%- if bst.open_link == '_blank' -%}
+                      target="_blank"
+                      {%- else -%}
+                      target="_self"
+                      {%- endif -%}
+                      class="tp-btn tp-btn__underline n-hvr">
+                      {{ bst.text_btn | escape }}
+                    </a>
+                  </div>
+                </div>
+            {% endcase %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Instagram",
+    "tag": "section",
+    "disabled_on": {
+      "groups": ["*"]
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": "Section header"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_heading_header",
+        "label": "Show \"Section header\"",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "<span class='h1'>#Storepify</span>"
+      },
+      {
+        "type": "richtext",
+        "id": "description",
+        "label": "Description",
+        "default": "<p></p>"
+      }, {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "text-center",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          }, {
+            "value": "text-center",
+            "label": "Center"
+          }, {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ]
+      }, {
+        "type": "text",
+        "id": "btn_content",
+        "label": "Button label",
+        "default": "Follow our Instagram"
+      }, {
+        "type": "url",
+        "id": "link",
+        "label": "Link Follow our"
+      }, {
+        "type": "select",
+        "id": "open_link",
+        "options": [
+          {
+            "value": "_self",
+            "label": "Current tab"
+          }, {
+            "value": "_blank",
+            "label": "New tab"
+          }
+        ],
+        "label": "Button open link in",
+        "default": "_blank"
+      }, {
+        "type": "paragraph",
+        "content": "----------------------------------------"
+      }, {
+        "type": "header",
+        "content": "General"
+      }, {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      }, {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      }, {
+        "type": "select",
+        "id": "data_instagram",
+        "label": "Data instagram",
+        "info": "If you choose data instagram then go to \"Theme settings > Integration\" to update Instagram token. If you choose custom data, add blocks to customize",
+        "options": [
+          {
+            "value": "data_instagram",
+            "label": "Data instagram"
+          }, {
+            "value": "custom_data",
+            "label": "Custom data"
+          }
+        ],
+        "default": "custom_data"
+      }, {
+        "type": "select",
+        "id": "image_ratio",
+        "default": "original",
+        "label": "Image ratio",
+        "options": [
+          {
+            "value": "original",
+            "label": "Original aspect ratio"
+          },
+          {
+            "value": "1/1",
+            "label": "1:1"
+          },
+          {
+            "value": "3/4",
+            "label": "3:4"
+          },
+          {
+            "value": "4/3",
+            "label": "4:3"
+          }, {
+            "value": "16/9",
+            "label": "16:9"
+          }, {
+            "value": "custom",
+            "label": "Custom ratio"
+          }
+        ]
+      }, {
+        "type": "text",
+        "id": "custom_ratio",
+        "label": "Custom ratio",
+        "default": "21:9"
+      }, {
+        "type": "checkbox",
+        "id": "border_radius_img",
+        "label": "Border radius image",
+        "default": true
+      }, {
+        "type": "range",
+        "id": "instagram_to_show",
+        "min": 2,
+        "max": 12,
+        "step": 1,
+        "default": 8,
+        "label": "Instagram to show"
+      }, {
+        "type": "range",
+        "id": "columns_desktop",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "default": 4,
+        "label": "Number of columns on desktop"
+      }, {
+        "type": "select",
+        "id": "layout_tablet_mobile",
+        "label": "Layout tablet & mobile",
+        "default": "scroll",
+        "options": [
+          {
+            "value": "scroll",
+            "label": "Scroll"
+          }, {
+            "value": "column",
+            "label": "Column"
+          }
+        ]
+      }, {
+        "type": "header",
+        "content": "Config layout column"
+      }, {
+        "type": "select",
+        "id": "columns_tablets",
+        "options": [
+          {
+            "value": "1",
+            "label": "1 Columns"
+          }, {
+            "value": "2",
+            "label": "2"
+          }, {
+            "value": "3",
+            "label": "3"
+          }
+        ],
+        "default": "3",
+        "label": "Number of columns on columns_tablets"
+      }, {
+        "type": "select",
+        "id": "columns_mobile",
+        "options": [
+          {
+            "value": "1",
+            "label": "1"
+          }, {
+            "value": "2",
+            "label": "2"
+          }
+        ],
+        "default": "2",
+        "label": "Number of columns on mobile"
+      }, {
+        "type": "number",
+        "id": "gap_item",
+        "label": "Gap item",
+        "info": "If left blank, Horizontal space theme settings will be used"
+      }, {
+        "type": "checkbox",
+        "id": "reset_spacing",
+        "label": "Remove default space between sections",
+        "default": false
+      }, {
+        "type": "paragraph",
+        "content": "----------------------------------------"
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "item_instagram",
+        "name": "Item instagram",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image_instagram",
+            "label": "Image instagram"
+          }, {
+            "type": "url",
+            "id": "link_instagram",
+            "label": "Link instagram"
+          }
+        ]
+      }, {
+        "type": "text_content",
+        "name": "Text content",
+        "settings": [
+          {
+            "type": "color",
+            "id": "color_content",
+            "label": "Color content",
+            "default": "#fff"
+          },
+          {
+            "type": "color",
+            "id": "color_bg",
+            "label": "Color content",
+            "default": "#A3AEB9"
+          },
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading"
+          },
+          {
+            "type": "richtext",
+            "id": "description",
+            "label": "Description",
+            "default": "<p></p>"
+          }, {
+            "type": "text",
+            "id": "text_btn",
+            "label": "Text button",
+            "default": "View All"
+          }, {
+            "type": "url",
+            "id": "link_content",
+            "label": "Link content"
+          }, {
+            "type": "select",
+            "id": "open_link",
+            "options": [
+              {
+                "value": "_self",
+                "label": "Current tab"
+              }, {
+                "value": "_blank",
+                "label": "New tab"
+              }
+            ],
+            "label": "Button open link in",
+            "default": "_blank"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Instagram",
+        "category": "Image",
+        "blocks": [
+          {
+            "type": "item_instagram"
+          },
+          {
+            "type": "item_instagram"
+          },
+          {
+            "type": "item_instagram"
+          },
+          {
+            "type": "item_instagram"
+          }, {
+            "type": "item_instagram"
+          }, {
+            "type": "item_instagram"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

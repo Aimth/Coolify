@@ -1,0 +1,31 @@
+{% liquid
+  render 'font-source'
+  render 'schema-color'
+  render 'variable-css'
+%}
+{{ 'animate.css' | asset_url | stylesheet_tag: preload: true }}
+{% assign rtl = settings.enable_rtl %}
+{% if rtl %}
+  {{ 'tailwind.rtl.css' | asset_url | stylesheet_tag: preload: true }}
+  {{ 'reset.css' | asset_url | stylesheet_tag: preload: true }}
+  {{ 'swiper-bundle.rtl.css' | asset_url | stylesheet_tag: preload: true }}
+  {{ 'base.rtl.css' | asset_url | stylesheet_tag: preload: true }}
+  {{ 'component.rtl.css' | asset_url | stylesheet_tag: preload: true }}
+  {{ 'manual-rtl.css' | asset_url | stylesheet_tag: preload: true }}
+{% else %}
+  {{ 'tailwind.css' | asset_url | stylesheet_tag: preload: true }}
+  {{ 'reset.css' | asset_url | stylesheet_tag: preload: true }}
+  {{ 'swiper-bundle.css' | asset_url | stylesheet_tag: preload: true }}
+  {{ 'base.css' | asset_url | stylesheet_tag: preload: true }}
+  {{ 'utilities.css' | asset_url | stylesheet_tag: preload: true }}
+  {{ 'component.css' | asset_url | stylesheet_tag: preload: true }}
+{% endif %}
+
+
+{%- if settings.predictive_search_enabled -%}
+  <link
+    rel="stylesheet"
+    href="{{ 'component-predictive-search.css' | asset_url }}"
+    media="print"
+    onload="this.media='all'">
+{%- endif -%}

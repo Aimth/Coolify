@@ -1,0 +1,594 @@
+{
+  "sections": {
+    "2950b078-9262-4773-882c-d4dab45a39d4": {
+      "type": "slide",
+      "blocks": {
+        "slide_item_hiE3cj": {
+          "type": "slide_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Frame_262.png",
+            "overlay_slide": 0,
+            "content_box": "container",
+            "slider_effect": "fadeInUp",
+            "position_content": "left",
+            "text_align_content": "text_left",
+            "content_background": "rgba(0,0,0,0)",
+            "sub_title": "Affirm your style - POD fashion",
+            "title": "<p>Simple. Personal.<br\/> Yours: Create with<br\/> Ease!<\/p>",
+            "discount": "",
+            "description_1": "",
+            "slide_url": "shopify:\/\/collections\/pod",
+            "label_btn": "Shop POD Fashion"
+          }
+        }
+      },
+      "block_order": [
+        "slide_item_hiE3cj"
+      ],
+      "settings": {
+        "container": "full-width",
+        "color_scheme": "background-1",
+        "show_navigation": true,
+        "show_pagination": true,
+        "loop": false,
+        "autoplay": false,
+        "autoplay_time": 8,
+        "position_dots": "bottom_center",
+        "dots_style": "default",
+        "color_dots": "#ffffff",
+        "slide_height": "custom-height",
+        "height_dk": 900,
+        "height_tb": 600,
+        "height_mb": 415,
+        "font_size_title": 70,
+        "font_size_sub_title": 20,
+        "font_size_description": 20,
+        "font_weight_title": 700,
+        "font_weight_sub_title": 500,
+        "font_weight_description": 400,
+        "type_button": "primary",
+        "reset_spacing": false
+      }
+    },
+    "collection_list_JmMRgC": {
+      "type": "collection-list",
+      "blocks": {
+        "collection_item_Ef4xD6": {
+          "type": "collection_item",
+          "settings": {
+            "heading": "Hoodie",
+            "font_size_heading": 26,
+            "collection": "new-arrivals",
+            "image": "shopify:\/\/shop_images\/Image_9.png"
+          }
+        },
+        "collection_item_Yihmx8": {
+          "type": "collection_item",
+          "settings": {
+            "heading": "T-shirt",
+            "font_size_heading": 26,
+            "collection": "collections",
+            "image": "shopify:\/\/shop_images\/Image_10_c0a14c6b-4381-4612-9169-cf12fa1f5ca8.png"
+          }
+        },
+        "collection_item_CGWw7p": {
+          "type": "collection_item",
+          "settings": {
+            "heading": "Accessories",
+            "font_size_heading": 26,
+            "collection": "accessories",
+            "image": "shopify:\/\/shop_images\/Cate_box.jpg"
+          }
+        },
+        "collection_item_KzJWHC": {
+          "type": "collection_item",
+          "settings": {
+            "heading": "Pillow case",
+            "font_size_heading": 26,
+            "collection": "man",
+            "image": "shopify:\/\/shop_images\/Image_4_9267b082-a3e1-45b0-a7a4-abd1e259782a.png"
+          }
+        },
+        "collection_item_fD3kpC": {
+          "type": "collection_item",
+          "settings": {
+            "heading": "Phone case",
+            "font_size_heading": 26,
+            "collection": "accessories",
+            "image": "shopify:\/\/shop_images\/Image_7.png"
+          }
+        }
+      },
+      "block_order": [
+        "collection_item_Ef4xD6",
+        "collection_item_Yihmx8",
+        "collection_item_CGWw7p",
+        "collection_item_KzJWHC",
+        "collection_item_fD3kpC"
+      ],
+      "settings": {
+        "show_heading_header": true,
+        "heading": "Top Categories",
+        "description": "",
+        "text_alignment": "text-center",
+        "show_button": false,
+        "text_btn": "View all collections",
+        "link_btn": "",
+        "container": "container",
+        "color_scheme": "",
+        "style_layout": "slider",
+        "design_collection": "design-4",
+        "hover_effect": "hvr_zoom",
+        "images_style": "rounded-full",
+        "image_ratio": "original",
+        "custom_ratio": "21:9",
+        "custom_column": 5,
+        "column_gap": 50,
+        "autoplay": false,
+        "loop": true,
+        "show_arrow": false,
+        "show_bullet": false,
+        "custom_column_tablets": "4",
+        "custom_column_mobile": "2",
+        "height_item": "870",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "reset_spacing": false
+      }
+    },
+    "banner_image_Uecqnm": {
+      "type": "banner-image",
+      "blocks": {
+        "image_banner_k636bP": {
+          "type": "image_banner",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Mask_group_1_7da2f787-0d69-4b40-8db6-67c3618472a3.png",
+            "color_scheme": "background-2",
+            "subtext": "",
+            "title": "Your Story,<br>\nYour Design",
+            "content": "<p>Your Story, Your Design: Tell It with <\/p><p>Custom Prints!<\/p>",
+            "link": "shopify:\/\/collections\/pod",
+            "btn_content": "Shop Now",
+            "open_link": "_blank",
+            "parallax_bg_attachment": false,
+            "parallax_bg_height": 500
+          }
+        },
+        "image_banner_76NjCr": {
+          "type": "image_banner",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Mask_group_4_9c3292db-872b-4bc0-a0bd-c776879e8b9b.png",
+            "color_scheme": "background-2",
+            "subtext": "",
+            "title": "Effortless<br> Customization",
+            "content": "<p>Effortless Customization: Designing Made<\/p><p> Easy for You!<\/p>",
+            "link": "shopify:\/\/collections\/pod",
+            "btn_content": "Shop Now",
+            "open_link": "_blank",
+            "parallax_bg_attachment": false,
+            "parallax_bg_height": 500
+          }
+        }
+      },
+      "block_order": [
+        "image_banner_k636bP",
+        "image_banner_76NjCr"
+      ],
+      "settings": {
+        "show_heading_header": false,
+        "heading": "Title",
+        "description": "",
+        "text_alignment": "text-center",
+        "container": "container",
+        "color_scheme": "",
+        "columns_desktop": 2,
+        "card_banner_style": "card",
+        "image_ratio": "original",
+        "custom_ratio": "21:9",
+        "border_radius_img": true,
+        "hover_effect": "hvr_zoom",
+        "design_banner": "text-overlay-image",
+        "text_position": "center",
+        "height_mobile": "custom_height",
+        "height_image_desktop": "330",
+        "height_image_tablet": "330",
+        "height_img_mobile": "250",
+        "text_align": "text-left",
+        "font_size_sub_heading": 20,
+        "font_weight_sub_heading": 500,
+        "font_size_heading": 36,
+        "font_weight_heading": 400,
+        "font_size_description": 16,
+        "font_weight_description": 500,
+        "columns_tablets": "2",
+        "columns_mobile": "1",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "reset_spacing": false
+      }
+    },
+    "product_tab_t76mW3": {
+      "type": "product-tab",
+      "settings": {
+        "show_heading_header": false,
+        "heading": "Title",
+        "description": "",
+        "text_alignment": "text-left",
+        "container": "container",
+        "color_scheme": "scheme-30767b86-79e0-4702-9cdb-67d30dc9214d",
+        "collection_list": [
+          "pod",
+          "new-arrivals",
+          "best-selling"
+        ],
+        "layout_button": "layout_2",
+        "limit_products": 8,
+        "columns_desktop": 4,
+        "columns_tablets": "3",
+        "columns_mobile": "2",
+        "text_button": "",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "banner_with_text_LWwgPD": {
+      "type": "banner-with-text",
+      "blocks": {
+        "heading_w6dhcg": {
+          "type": "heading",
+          "settings": {
+            "title": "Multiple Design Patterns Are<br> Available",
+            "font_size_heading": "36",
+            "font_size_heading_tb": "36",
+            "font_size_heading_mb": "36"
+          }
+        },
+        "text_6Dre9P": {
+          "type": "text",
+          "settings": {
+            "txt_content": "<p>Easily add your design to a wide range of products<\/p><ul><li>Multiple categories for you to choose from<\/li><li>Store it on your website and serve you at any time<\/li><li>Provide you with free picture materials<\/li><li>You can also use your own materials to design your own pieces<\/li><li>Provide copywriting to design your own slogan<\/li><\/ul>"
+          }
+        },
+        "buttons_KPFnb3": {
+          "type": "buttons",
+          "settings": {
+            "btn_content": "Design your product",
+            "link_btn": "#",
+            "button_type": "tp-btn__secondary"
+          }
+        }
+      },
+      "block_order": [
+        "heading_w6dhcg",
+        "text_6Dre9P",
+        "buttons_KPFnb3"
+      ],
+      "settings": {
+        "container": "full-width",
+        "color_scheme": "background-2",
+        "background_container": false,
+        "bn_design": "text_overlay",
+        "image": "shopify:\/\/shop_images\/Multiple_design_pattern.png",
+        "text_align": "text-left",
+        "row_gap_content": 20,
+        "container_content": "container",
+        "position_content": "left",
+        "content_below_image_mb": true,
+        "img_position": "left",
+        "text_position": "top",
+        "width_image": "50%",
+        "border_radius": false,
+        "height_dk": 637,
+        "height_tb": 470,
+        "height_mb": 400,
+        "height_mb_auto": false,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "reset_spacing": false,
+        "margin_top": 0
+      }
+    },
+    "multicolumn_rdpEx7": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_b7tyHV": {
+          "type": "column",
+          "settings": {
+            "col_width_desktop": "lg:w-1\/3",
+            "col_width_tablets": "md:w-1\/2",
+            "col_width_mobile": "w-full",
+            "custom_width": "default",
+            "width_custom": 585,
+            "image": "shopify:\/\/shop_images\/Rectangle_19.png",
+            "show_image": true,
+            "title": "100% Cotton T-shirts",
+            "description": "<p>Design breathable, comfy tees that offer all-day comfort.<\/p>",
+            "btn_content": "Explore now",
+            "open_link": "_blank",
+            "link": "shopify:\/\/collections\/pod",
+            "type_button": "underline"
+          }
+        },
+        "column_j4WJMn": {
+          "type": "column",
+          "settings": {
+            "col_width_desktop": "lg:w-1\/3",
+            "col_width_tablets": "md:w-1\/2",
+            "col_width_mobile": "w-full",
+            "custom_width": "default",
+            "width_custom": 585,
+            "image": "shopify:\/\/shop_images\/Rectangle_19_1.png",
+            "show_image": true,
+            "title": "Custom Work Uniforms",
+            "description": "<p>Stand out at the job site with custom workwear – functional.<\/p>",
+            "btn_content": "Explore now",
+            "open_link": "_blank",
+            "link": "shopify:\/\/collections\/pod",
+            "type_button": "underline"
+          }
+        },
+        "column_mKFVre": {
+          "type": "column",
+          "settings": {
+            "col_width_desktop": "lg:w-1\/3",
+            "col_width_tablets": "md:w-1\/2",
+            "col_width_mobile": "w-full",
+            "custom_width": "default",
+            "width_custom": 585,
+            "image": "shopify:\/\/shop_images\/Rectangle_19_2.png",
+            "show_image": true,
+            "title": "Trend POD 2024",
+            "description": "<p>Refresh your wardrobe with the latest styles from our collection.<\/p>",
+            "btn_content": "Explore now",
+            "open_link": "_blank",
+            "link": "shopify:\/\/collections\/pod",
+            "type_button": "underline"
+          }
+        }
+      },
+      "block_order": [
+        "column_b7tyHV",
+        "column_j4WJMn",
+        "column_mKFVre"
+      ],
+      "settings": {
+        "show_heading_header": true,
+        "heading": "Can’t-miss Collections",
+        "description": "",
+        "text_alignment": "text-left",
+        "show_button": true,
+        "text_btn": "View all products",
+        "container": "container",
+        "hover_effect": "hvr_zoom",
+        "color_scheme": "scheme-30767b86-79e0-4702-9cdb-67d30dc9214d",
+        "image_ratio": "original",
+        "custom_ratio": "21:9",
+        "border_radius_img": true,
+        "column_alignment": "text-center",
+        "show_border_separate": false,
+        "button_label": "",
+        "button_link": "",
+        "button_type": "tp-btn__primary",
+        "reset_spacing": false,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "banner_image_gp3YNa": {
+      "type": "banner-image",
+      "blocks": {
+        "image_banner_kKTHLb": {
+          "type": "image_banner",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/CTA_4.png",
+            "color_scheme": "background-2",
+            "subtext": "",
+            "title": "Bring your team together<br> \n Matching clothing.",
+            "content": "<p>Create a unified look with unique details for each person<\/p><p> without starting your design from scratch.<\/p>",
+            "link": "shopify:\/\/collections\/pod",
+            "btn_content": "Get started",
+            "open_link": "_blank",
+            "parallax_bg_attachment": false,
+            "parallax_bg_height": 500
+          }
+        }
+      },
+      "block_order": [
+        "image_banner_kKTHLb"
+      ],
+      "settings": {
+        "show_heading_header": false,
+        "heading": "Title",
+        "description": "",
+        "text_alignment": "text-left",
+        "container": "container",
+        "color_scheme": "",
+        "columns_desktop": 1,
+        "card_banner_style": "card",
+        "image_ratio": "original",
+        "custom_ratio": "21:9",
+        "border_radius_img": true,
+        "hover_effect": "hvr_none",
+        "design_banner": "text-overlay-image",
+        "text_position": "center",
+        "height_mobile": "custom_height",
+        "height_image_desktop": "500",
+        "height_image_tablet": "500",
+        "height_img_mobile": "320",
+        "text_align": "text-left",
+        "font_size_sub_heading": 20,
+        "font_weight_sub_heading": 500,
+        "font_size_heading": 36,
+        "font_weight_heading": 500,
+        "font_size_description": 16,
+        "font_weight_description": 500,
+        "columns_tablets": "1",
+        "columns_mobile": "1",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "reset_spacing": false
+      }
+    },
+    "banner_with_text_VdB8VA": {
+      "type": "banner-with-text",
+      "blocks": {
+        "heading_fJJA3Q": {
+          "type": "heading",
+          "settings": {
+            "title": "Why to Choose COMA?",
+            "font_size_heading": "36",
+            "font_size_heading_tb": "36",
+            "font_size_heading_mb": "36"
+          }
+        },
+        "text_qV6RQd": {
+          "type": "text",
+          "settings": {
+            "txt_content": "<p>At PrintDoors, we hold the belief that every individual should be able to avail themselves of a diverse assortment of printing options that are both reasonably priced and of superior quality.<\/p><p><\/p>"
+          }
+        },
+        "short_description_nkQKm4": {
+          "type": "short_description",
+          "settings": {
+            "short_title": "Fast Fulfillment",
+            "short_desc": "Design your personalized printing anytime and anywhere, and get your products fast with our fast fulfillment."
+          }
+        },
+        "short_description_qmhqEb": {
+          "type": "short_description",
+          "settings": {
+            "short_title": "More than 9 technologies",
+            "short_desc": "Offer more than 9 cutting-edge technologies for the most professional manufacturing and printing services for your customized products."
+          }
+        },
+        "short_description_4FTwxg": {
+          "type": "short_description",
+          "settings": {
+            "short_title": "Reliable Quality",
+            "short_desc": "Make a lasting impression with our industry-leading technology, quality inks, and premium materials."
+          }
+        }
+      },
+      "block_order": [
+        "heading_fJJA3Q",
+        "text_qV6RQd",
+        "short_description_nkQKm4",
+        "short_description_qmhqEb",
+        "short_description_4FTwxg"
+      ],
+      "settings": {
+        "container": "container",
+        "color_scheme": "scheme-30767b86-79e0-4702-9cdb-67d30dc9214d",
+        "background_container": false,
+        "bn_design": "text_column",
+        "image": "shopify:\/\/shop_images\/Image_8.png",
+        "text_align": "text-left",
+        "row_gap_content": 20,
+        "container_content": "full-width",
+        "position_content": "left",
+        "content_below_image_mb": false,
+        "img_position": "left",
+        "text_position": "top",
+        "width_image": "50%",
+        "border_radius": true,
+        "height_dk": 460,
+        "height_tb": 460,
+        "height_mb": 400,
+        "height_mb_auto": false,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "reset_spacing": false,
+        "margin_top": 0
+      }
+    },
+    "testimonial_MxDn9R": {
+      "type": "testimonial",
+      "blocks": {
+        "testimonial_item_KHab4y": {
+          "type": "testimonial_item",
+          "settings": {
+            "color_scheme_item": "scheme-40ec7a9a-7096-4ed4-b20e-45698e7a9a31",
+            "image": "shopify:\/\/shop_images\/Image-60_6d1f5f00-e11f-4a35-9688-31c37e050f0b.png",
+            "title": "Perfect in every way",
+            "content": "<p>Good quality and print for the training shirts I use at my martial arts school. I've ordered these several times and have always been pleased with the results. They're still going strong.<\/p>",
+            "name": "Jaki McCalvin",
+            "city": "Marin County CA"
+          }
+        },
+        "testimonial_item_7bpHgV": {
+          "type": "testimonial_item",
+          "settings": {
+            "color_scheme_item": "scheme-40ec7a9a-7096-4ed4-b20e-45698e7a9a31",
+            "image": "shopify:\/\/shop_images\/Image-60_6d1f5f00-e11f-4a35-9688-31c37e050f0b.png",
+            "title": "Absolutely would buy again!",
+            "content": "<p>Good quality and print for the training shirts I use at my martial arts school. I've ordered these several times and have always been pleased with the results. They're still going strong.<\/p>",
+            "name": "LenaFab",
+            "city": "Austin, TX"
+          }
+        },
+        "testimonial_item_MEm84P": {
+          "type": "testimonial_item",
+          "settings": {
+            "color_scheme_item": "scheme-40ec7a9a-7096-4ed4-b20e-45698e7a9a31",
+            "image": "shopify:\/\/shop_images\/Image-60_6d1f5f00-e11f-4a35-9688-31c37e050f0b.png",
+            "title": "I would recommend Coma POD",
+            "content": "<p>Good quality and print for the training shirts I use at my martial arts school. I've ordered these several times and have always been pleased with the results. They're still going strong.<\/p>",
+            "name": "BrandonJr",
+            "city": "New York, USA"
+          }
+        },
+        "testimonial_item_fzkgqw": {
+          "type": "testimonial_item",
+          "settings": {
+            "color_scheme_item": "scheme-40ec7a9a-7096-4ed4-b20e-45698e7a9a31",
+            "image": "shopify:\/\/shop_images\/Image-60_6d1f5f00-e11f-4a35-9688-31c37e050f0b.png",
+            "title": "Perfect in every way",
+            "content": "<p>Good quality and print for the training shirts I use at my martial arts school. I've ordered these several times and have always been pleased with the results. They're still going strong.<\/p>",
+            "name": "BrandonJr",
+            "city": "Austin, TX"
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_item_KHab4y",
+        "testimonial_item_7bpHgV",
+        "testimonial_item_MEm84P",
+        "testimonial_item_fzkgqw"
+      ],
+      "settings": {
+        "show_heading_header": true,
+        "heading": "What Clients Say?",
+        "description": "",
+        "container": "container",
+        "color_scheme": "scheme-30767b86-79e0-4702-9cdb-67d30dc9214d",
+        "show_background_grid": false,
+        "layout": "layout_2",
+        "image_ratio": "original",
+        "custom_ratio": "21:9",
+        "show_image": true,
+        "limit_products": 8,
+        "sliders_perview": "3",
+        "autoplay": false,
+        "loop": false,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "padding_top_tb": 50,
+        "padding_bottom_tb": 50,
+        "padding_top_mb": 0,
+        "padding_bottom_mb": 0,
+        "reset_spacing": false
+      }
+    }
+  },
+  "order": [
+    "2950b078-9262-4773-882c-d4dab45a39d4",
+    "collection_list_JmMRgC",
+    "banner_image_Uecqnm",
+    "product_tab_t76mW3",
+    "banner_with_text_LWwgPD",
+    "multicolumn_rdpEx7",
+    "banner_image_gp3YNa",
+    "banner_with_text_VdB8VA",
+    "testimonial_MxDn9R"
+  ]
+}

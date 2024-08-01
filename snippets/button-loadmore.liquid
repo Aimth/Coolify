@@ -1,0 +1,41 @@
+<div class="load-more_wrap text-center mt-40">
+  <div class="load-more-bar mb-24">
+    {%- liquid
+      assign paginate_size = paginate.parts.size | times: 1
+      assign cur_page = paginate.current_page | times: 1
+      assign number_products = sst.products_per_page
+      assign number_page = number_products | times: 1
+      if collection.results_count
+        assign count = collection.results_count
+      elsif collection.products_count == collection.all_products_count
+        assign count = collection.products_count
+      else
+        assign count = collection.all_products_count
+      endif
+
+      assign amount = number_page | times: cur_page
+      if cur_page == paginate_size or amount > count
+        assign amount = count
+      endif
+      assign percent = amount | times: 100 | divided_by: count | round
+    -%}
+    <span class="load-more-amount mb-12 block">
+      {{- 'collection.pagination.load_more_amount' | t: amount: amount, count: count -}}
+    </span>
+    <div class="load-more-bar">
+      <span class="load-more-percent" style="width: {{ percent }}%"> </span>
+    </div>
+  </div>
+  <button
+    id="loadmore-collection"
+    class="load-more_btn tp-btn tp-btn__primary cursor-pointer"
+    data-type="{{ type }}"
+  >
+    <span class="load-more-text pointer-events-none">
+      {{- 'button.load_more' | t -}}
+    </span>
+    <span class="tp-loading opacity-0 pointer-events-none" loader>
+      {% render 'icon', icon_name: 'icon-loading' %}
+    </span>
+  </button>
+</div>

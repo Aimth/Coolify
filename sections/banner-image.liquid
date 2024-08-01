@@ -1,0 +1,633 @@
+{{ 'banner-image.css' | asset_url | stylesheet_tag }}
+
+{% liquid
+  assign sst = section.settings
+  assign container = sst.container
+  assign text_align = sst.text_align
+
+  assign design_banner_position = ''
+  if sst.design_banner == 'text-overlay-image'
+    assign design_banner_position = 'h-full'
+  endif
+  assign bdRadiusImg = ''
+  if sst.border_radius_img
+    assign bdRadiusImg = 'bd-radius'
+  endif
+
+  if sst.design_banner == 'text-overlay-image'
+    assign design_banner_content = 'absolute right-0 left-0 px-12'
+    if sst.text_position == 'top'
+      assign text_position = ' top-0'
+    elsif sst.text_position == 'center'
+      assign text_position = ' top-1/2 -translate-y-1/2'
+    elsif sst.text_position == 'bottom'
+      assign text_position = ' bottom-0'
+    endif
+  endif
+  assign hvr_effect = ''
+  if sst.hover_effect == 'hvr_zoom'
+    assign hvr_effect = 'hvr__zoom'
+  elsif sst.hover_effect == 'translate_to_top'
+    assign hvr_effect = 'hvr__translate-top'
+  elsif sst.hover_effect == 'overlay_bg'
+    assign hvr_effect = 'hvr__overlay-bg'
+  endif
+%}
+{%- capture style -%}
+  --section-padding-top: {{ sst.padding_top }}px; 
+  --section-padding-bottom: {{ sst.padding_bottom }}px;
+  --fz-heading: {{ sst.font_size_heading }}px;
+  --fz-sub-heading: {{ sst.font_size_sub_heading }}px;
+  --fz-description: {{ sst.font_size_description }}px;
+  --fw-heading: {{ sst.font_weight_heading }};
+  --fw-sub-heading: {{ sst.font_weight_sub_heading }};
+  --fw-description: {{ sst.font_weight_description }};
+  --height-img: 'auto';
+  {% if sst.height_mobile == 'custom_height' %}
+    --height-img-desktop: {{ sst.height_image_desktop }}px;
+    --height-img-tablet: {{ sst.height_image_tablet }}px;
+    --height-img: {{ sst.height_img_mobile }}px;
+
+  {% endif %} 
+{%- endcapture -%}
+
+{% capture classGrid %}
+  tp-grid tp-grid--{{ sst.columns_mobile }}-col-mobile tp-grid--{{ sst.columns_tablets }}-col-tablets tp-grid--{{ sst.columns_desktop }}-col-desktop 
+{% endcapture %}
+
+<div class="tp-banner color-{{ sst.color_scheme }} gradient section-py {% if sst.reset_spacing == false %}section-mb{% endif %}" style="{{ style | strip | strip_newlines }}">
+  <div class="{{ container }} section-full">
+    {% render 'section-header'
+      , sst: sst %}
+    <div class="tp-banner__inner {{ classGrid | strip | strip_newlines }}">
+      {%- for block in section.blocks -%}
+        {% liquid
+          assign bst = block.settings
+          assign image_mobile = bst.image_mobile
+          assign parallax_height = bst.parallax_bg_height
+        %}
+        {% if bst.parallax_bg_attachment == true %}
+          {%- capture style_parallax -%}
+            background: url({{ bst.image | image_url: width: bst.image.width, height: bst.image.height }});
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center center;
+            height: {{ parallax_height }}px;
+            background-attachment: fixed;
+        {%- endcapture -%}
+        {% endif %}
+        <div class="tp-banner__item tp-banner__item-{{ sst.card_banner_style }} tp-grid__item">
+          <div class="tp-banner__item-wrapper relative overflow-hidden  color-{{ bst.color_scheme }} gradient {{ bdRadiusImg }} {{ design_banner_position }} {{ hvr_effect }}">
+            <div
+              class="tp-banner__item-media h-full overflow-hidden {% if bst.parallax_bg_attachment == true %}tp-banner__item-media-parallax{% endif %}"
+              {% if bst.parallax_bg_attachment == true %}
+              style="{{ style_parallax | strip | strip_newlines }}"
+              {% endif %}>
+              {% if bst.parallax_bg_attachment == false %}
+                <a
+                  aria-label="links"
+                  class="hover-effect"
+                  {% if bst.link == blank %}
+                  role="link"
+                  aria-disabled="true"
+                  {% else %}
+                  href="{{ bst.link }}"
+                  {% endif %}
+                  {%- if bst.open_link == '_blank' -%}
+                  target="_blank"
+                  {%- else -%}
+                  target="_self"
+                  {%- endif -%}>
+                  <div class="desktop {% if image_mobile != blank %}hidden md:block{% endif %}">
+                    {% render 'responsive-image'
+                      , image: bst.image
+                      , aspect_ratio: sst.image_ratio
+                      , custom_ratio: sst.custom_ratio
+                      , class: 'h-full'
+                      , w_default: 585
+                      , h_default: 390
+                    %}
+                  </div>
+                  {%- if image_mobile != blank -%}
+                    <div class="mobile block md:hidden">
+                      {%- render 'responsive-image' | image: bst.image_mobile | width: "100vw" | class: "h-full" -%}
+                    </div>
+                  {% endif %}
+                </a>
+              {% endif %}
+            </div>
+
+            <div class="tp-banner__item-content {{ design_banner_content }} {{ text_position }} {{ text_align }} {% if sst.card_banner_style == 'card' %}px-30 py-30{% endif %}">
+              <div class="content-wrap">
+                {%- if bst.subtext != blank -%}
+                  <h4 class="tp-subtext-content mb-0">
+                    {{ bst.subtext }}
+                  </h4>
+                {%- endif -%}
+                {%- if bst.title != blank -%}
+                  <h3 class="tp-heading-content mb-0">
+                    {% if sst.design_banner == 'text-below-image' and bst.btn_content == blank %}
+                      <a
+                        {% if bst.link == blank %}
+                        role="link"
+                        aria-disabled="true"
+                        {% else %}
+                        href="{{ bst.link }}"
+                        {% endif %}
+                        {%- if bst.open_link == '_blank' -%}
+                        target="_blank"
+                        {%- else -%}
+                        target="_self"
+                        {%- endif -%}>
+                    {% endif %}
+                    {{ bst.title }}
+                    {% if sst.design_banner == 'text-below-image' and bst.btn_content == blank %}
+                      </a>
+                    {% endif %}
+                  </h3>
+                {%- endif -%}
+                {%- if bst.content != blank -%}
+                  <div class="mb-0 tp-desc-content">{{ bst.content }}</div>
+                {%- endif -%}
+              </div>
+              {%- if bst.btn_content != blank -%}
+                <a
+                  {% if bst.link == blank %}
+                  role="link"
+                  aria-disabled="true"
+                  {% else %}
+                  href="{{ bst.link }}"
+                  {% endif %}
+                  {%- if bst.open_link == '_blank' -%}
+                  target="_blank"
+                  {%- else -%}
+                  target="_self"
+                  {%- endif -%}
+                  class="tp-btn tp-btn__primary n-hvr mt-24">
+                  {{ bst.btn_content | escape }}
+                </a>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Banner image",
+    "tag": "section",
+    "disabled_on": {
+      "groups": ["*"]
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": "Section header"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_heading_header",
+        "label": "Show \"Section header\"",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Title"
+      },
+      {
+        "type": "richtext",
+        "id": "description",
+        "label": "Description",
+        "default": "<p></p>"
+      }, {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "text-center",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          }, {
+            "value": "text-center",
+            "label": "Center"
+          }, {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ]
+      }, {
+        "type": "paragraph",
+        "content": "----------------------------------------"
+      }, {
+        "type": "header",
+        "content": "General"
+      }, {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      }, {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      }, {
+        "type": "range",
+        "id": "columns_desktop",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "default": 3,
+        "label": "Number of columns on desktop"
+      }, {
+        "type": "select",
+        "id": "card_banner_style",
+        "options": [
+          {
+            "value": "standard",
+            "label": "Standard"
+          }, {
+            "value": "card",
+            "label": "Card"
+          }
+        ],
+        "default": "standard",
+        "label": "Style banner item"
+      }, {
+        "type": "select",
+        "id": "image_ratio",
+        "default": "original",
+        "label": "Image ratio",
+        "options": [
+          {
+            "value": "original",
+            "label": "Original aspect ratio"
+          },
+          {
+            "value": "1/1",
+            "label": "1:1"
+          },
+          {
+            "value": "3/4",
+            "label": "3:4"
+          },
+          {
+            "value": "4/3",
+            "label": "4:3"
+          }, {
+            "value": "16/9",
+            "label": "16:9"
+          }, {
+            "value": "custom",
+            "label": "Custom ratio"
+          }
+        ]
+      }, {
+        "type": "text",
+        "id": "custom_ratio",
+        "label": "Custom ratio",
+        "default": "21:9"
+      }, {
+        "type": "checkbox",
+        "id": "border_radius_img",
+        "label": "Border radius image",
+        "default": true
+      }, {
+        "type": "select",
+        "id": "hover_effect",
+        "label": "Hover effect",
+        "options": [
+          {
+            "value": "hvr_none",
+            "label": "None"
+          }, {
+            "value": "hvr_zoom",
+            "label": "Zoom"
+          }, {
+            "value": "translate_to_top",
+            "label": "Translate to top"
+          }, {
+            "value": "overlay_bg",
+            "label": "Overlay background"
+          }
+        ],
+        "default": "hvr_zoom"
+      }, {
+        "type": "select",
+        "id": "design_banner",
+        "label": "Design",
+        "options": [
+          {
+            "value": "text-overlay-image",
+            "label": "Text overlay image"
+          }, {
+            "value": "text-below-image",
+            "label": "Text below image"
+          }
+        ]
+      }, {
+        "type": "select",
+        "id": "text_position",
+        "label": "Content position",
+        "options": [
+          {
+            "value": "top",
+            "label": "Top"
+          }, {
+            "value": "center",
+            "label": "Center"
+          }, {
+            "value": "bottom",
+            "label": "Bottom"
+          }
+        ],
+        "info": "Only active when choosing text overlay image"
+      }, {
+        "type": "select",
+        "id": "height_mobile",
+        "label": "Height mobile",
+        "options": [
+          {
+            "value": "default",
+            "label": "Default"
+          }, {
+            "value": "custom_height",
+            "label": "Custom height"
+          }
+        ],
+        "default": "default"
+      }, {
+        "type": "text",
+        "id": "height_image_desktop",
+        "label": "Height image desktop",
+        "default": "500"
+      }, {
+        "type": "text",
+        "id": "height_image_tablet",
+        "label": "Height image tablet",
+        "default": "500"
+      }, {
+        "type": "text",
+        "id": "height_img_mobile",
+        "label": "Height image mobile",
+        "default": "350"
+      }, {
+        "type": "select",
+        "id": "text_align",
+        "label": "Content align",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Text left"
+          }, {
+            "value": "text-center",
+            "label": "Text center"
+          }, {
+            "value": "text-right",
+            "label": "Text right"
+          }
+        ]
+      }, {
+        "type": "header",
+        "content": "Typography"
+      }, {
+        "type": "paragraph",
+        "content": "----------Sub heading---------"
+      }, {
+        "type": "range",
+        "id": "font_size_sub_heading",
+        "label": "Font sub size",
+        "min": 16,
+        "step": 1,
+        "max": 36,
+        "default": 20,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "font_weight_sub_heading",
+        "label": "Font weight",
+        "min": 300,
+        "step": 100,
+        "max": 900,
+        "default": 500
+      }, {
+        "type": "paragraph",
+        "content": "----------Heading---------"
+      }, {
+        "type": "range",
+        "id": "font_size_heading",
+        "label": "Font size",
+        "min": 26,
+        "step": 1,
+        "max": 50,
+        "default": 36,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "font_weight_heading",
+        "label": "Font weight",
+        "min": 300,
+        "step": 100,
+        "max": 900,
+        "default": 500
+      }, {
+        "type": "paragraph",
+        "content": "----------Description---------"
+      }, {
+        "type": "range",
+        "id": "font_size_description",
+        "label": "Font description",
+        "min": 16,
+        "step": 1,
+        "max": 36,
+        "default": 16,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "font_weight_description",
+        "label": "Font weight",
+        "min": 300,
+        "step": 100,
+        "max": 900,
+        "default": 500
+      }, {
+        "type": "header",
+        "content": "Tablets and Mobile layout"
+      }, {
+        "type": "select",
+        "id": "columns_tablets",
+        "options": [
+          {
+            "value": "1",
+            "label": "1 Columns"
+          }, {
+            "value": "2",
+            "label": "2 Columns"
+          }, {
+            "value": "3",
+            "label": "3 Columns"
+          }
+        ],
+        "default": "2",
+        "label": "Number of columns on columns_tablets"
+      }, {
+        "type": "select",
+        "id": "columns_mobile",
+        "options": [
+          {
+            "value": "1",
+            "label": "1 Columns"
+          }, {
+            "value": "2",
+            "label": "2 Columns"
+          }
+        ],
+        "default": "1",
+        "label": "Number of columns on mobile"
+      }, {
+        "type": "paragraph",
+        "content": "----------------------------------------"
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }, {
+        "type": "checkbox",
+        "id": "reset_spacing",
+        "label": "Remove default space between sections",
+        "default": false
+      }
+    ],
+    "blocks": [
+      {
+        "type": "image_banner",
+        "name": "Banner item",
+        "limit": 6,
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Banner image",
+            "info": "915 x 500px recommended"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_mobile",
+            "label": "Banner image on mobile",
+            "info": "Leave blank to inherit from desktop (430 x 245px recommended)"
+          },
+          {
+            "type": "color_scheme",
+            "id": "color_scheme",
+            "label": "t:sections.all.colors.label",
+            "default": "background-1"
+          },
+          {
+            "type": "textarea",
+            "id": "subtext",
+            "label": "Subtext",
+            "default": "Subtext"
+          }, {
+            "type": "textarea",
+            "id": "title",
+            "label": "Heading",
+            "default": "Heading"
+          }, {
+            "type": "richtext",
+            "id": "content",
+            "label": "Content",
+            "default": "<p>Description</p>"
+          }, {
+            "type": "url",
+            "id": "link",
+            "label": "Link"
+          }, {
+            "type": "text",
+            "id": "btn_content",
+            "label": "Button label",
+            "default": "Shop now"
+          }, {
+            "type": "select",
+            "id": "open_link",
+            "options": [
+              {
+                "value": "_self",
+                "label": "Current tab"
+              }, {
+                "value": "_blank",
+                "label": "New tab"
+              }
+            ],
+            "label": "Button open link in",
+            "default": "_blank"
+          }, {
+            "type": "header",
+            "content": "Background parallax"
+          }, {
+            "type": "checkbox",
+            "id": "parallax_bg_attachment",
+            "label": "Enable parallax",
+            "default": false
+          }, {
+            "type": "range",
+            "id": "parallax_bg_height",
+            "min": 300,
+            "max": 1000,
+            "step": 10,
+            "unit": "px",
+            "label": "Height",
+            "default": 500
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Banner image",
+        "blocks": [
+          {
+            "type": "image_banner"
+          }, {
+            "type": "image_banner"
+          }, {
+            "type": "image_banner"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

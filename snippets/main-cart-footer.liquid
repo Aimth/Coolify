@@ -1,0 +1,201 @@
+{% liquid
+  assign gst = settings
+  assign cartNote = gst.show_note
+  assign discount = gst.show_coupon
+  assign estimateShipping = gst.show_estimate
+  assign freeShipping = gst.free_shipping_active
+%}
+{% comment %} <h3 class="tp-cart__right__title mb-24">{{ 'sections.cart.order_summary' | t }}</h3> {% endcomment %}
+<div class="cart__right">
+  {%- if estimateShipping -%}
+    {% render 'shipping-calculator'
+      , customer: customer
+      , show-title: true %}
+  {%- endif -%}
+  {%- if cartNote -%}
+    <cart-note class="cart__note field mb-24 block">
+      <h5 class="mb-12" for="Cart-note">{{ 'sections.cart.note' | t }}</h5>
+      <textarea
+        rows="3"
+        class="text-area field__input w-full"
+        name="note"
+        form="cart"
+        id="Cart-note"
+        placeholder="{{ 'sections.cart.note' | t }}">{{ cart.note }}</textarea>
+    </cart-note>
+  {%- endif -%}
+  {%- if discount -%}
+    <div class="cart__coupon mb-24">
+      <div class="tca_coupon tca_item">
+        <div class="tca-field mb-12 flex flex-col">
+          <h5 class="mb-12">{{ 'sections.cart.discount_code' | t }}</h5>
+          <input
+            type="text"
+            data-name="discount"
+            name="cartdiscountcode"
+            id="CartDiscountcode"
+            value=""
+            placeholder="Enter discount code"
+            class="text-area field__input">
+        </div>
+        <div class="cp-applied mb-12 hidden">
+          <div class="cp-applied__message inline-flex flex-row items-center justify-center">
+            <div class="cp-applied__text">
+              {{ 'sections.cart.discount_code_noti' | t }}
+            </div>
+            <div class="cp-applied__close">
+              {% render 'icon'
+                , icon_name: 'icon-close' %}
+            </div>
+          </div>
+        </div>
+        <div class="tca-field mb-12">
+          <button
+            type="button"
+            data-url="{{ routes.root_url }}"
+            class="ajc-discount__push tp-btn tp-btn__primary w-full"
+            id="cpcode-incart__apply">
+            <div class="load-more_spinner hidden w-16 h-16 ml-auto mr-auto border-2 border-solid border-black border-t-gray-200 rounded-full animate-spin"></div>
+            <div class="load-more_text">{{ 'sections.cart.discount_code_applied' | t }}</div>
+          </button>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+  {% if freeShipping %}
+    <div class="tca-footer__freeship">
+      {% liquid
+        assign amount = settings.free_shipping_amount
+        assign total = cart.original_total_price | money_without_currency
+      %}
+      <div class="process-bar process-bar-freeship">
+        <div class="text flex items-center gap-12 mb-8">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="16"
+            viewBox="0 0 22 16"
+            fill="none">
+            <path d="M18.0654 13.9649C18.0654 13.9039 18.0654 13.8428 18.0654 13.7817C18.0654 12.6621 17.1494 11.7461 16.0298 11.7461C14.9102 11.7461 13.9941 12.6621 13.9941 13.7817C13.9941 13.8428 13.9941 13.9039 13.9941 13.9649C13.9941 15.0845 14.9102 16.0005 16.0298 16.0005C17.1494 16.0005 18.0654 15.0845 18.0654 13.9649Z" fill="var(--heading-color)" />
+            <path d="M9.92476 13.9649C9.92476 13.9039 9.92476 13.8428 9.92476 13.7817C9.92476 12.6621 9.00873 11.7461 7.88914 11.7461C6.76955 11.7461 5.85352 12.6621 5.85352 13.7817C5.85352 13.8428 5.85352 13.9039 5.85352 13.9649C5.85352 15.0845 6.76955 16.0005 7.88914 16.0005C9.00873 16.0005 9.92476 15.0845 9.92476 13.9649Z" fill="var(--heading-color)" />
+            <path d="M2.29008 9.12977H0.763359C0.620865 9.12977 0.48855 9.17048 0.366412 9.24173C0.0101781 9.46565 -0.101781 9.93384 0.122137 10.2901C0.16285 10.3613 0.223919 10.4224 0.284987 10.4835C0.417303 10.5954 0.590331 10.6565 0.763359 10.6565H3.30789C3.72519 10.6565 4.07125 11.0025 4.07125 11.4198C4.07125 11.8371 3.72519 12.1832 3.30789 12.1832H2.29008C1.87277 12.1832 1.52672 12.5293 1.52672 12.9466C1.52672 13.3639 1.87277 13.7099 2.29008 13.7099H5.09924C5.13995 13.1908 5.33333 12.7023 5.64885 12.285C6.17812 11.5827 7.01272 11.1756 7.88804 11.1654C9.33333 11.1654 10.5547 12.2646 10.6768 13.7099H13.2417C13.374 12.173 14.7277 11.0229 16.2646 11.1552C17.6183 11.2672 18.6972 12.3461 18.8193 13.7099H20.2036C20.6921 13.7099 21.1196 13.374 21.2214 12.8957L21.8931 9.53689C21.8931 9.53689 21.8931 9.486 21.8931 9.46565C21.9033 9.37405 21.9033 9.29262 21.8931 9.20102L19.9796 3.56234C19.7659 2.95165 19.1857 2.53435 18.5343 2.54453H16.7023L16.8142 1.73028C16.916 0.885496 16.3257 0.122137 15.4809 0.0101781C15.4198 0.0101781 15.3588 0 15.2977 0H3.81679C3.39949 0 3.05343 0.346056 3.05343 0.763359C3.05343 1.18066 3.39949 1.52672 3.81679 1.52672H5.08906C5.50636 1.52672 5.85242 1.87277 5.85242 2.29008C5.85242 2.70738 5.50636 3.05343 5.08906 3.05343H0.763359C0.346056 3.06361 0 3.39949 0 3.81679C0 4.21374 0.315522 4.54962 0.712468 4.56997H3.30789C3.72519 4.56997 4.07125 4.91603 4.07125 5.33333C4.07125 5.75064 3.72519 6.09669 3.30789 6.09669H1.61832C1.27226 6.16794 1.01781 6.48346 1.01781 6.83969C1.01781 7.257 1.36387 7.60305 1.78117 7.60305H2.29008C2.70738 7.60305 3.05343 7.94911 3.05343 8.36641C3.05343 8.78372 2.70738 9.12977 2.29008 9.12977ZM16.5394 4.04071H18.3919C18.5038 4.04071 18.5954 4.11196 18.6361 4.21374L20.1018 8.62086H15.9288L16.5394 4.04071Z" fill="var(--heading-color)" />
+          </svg>
+          <div class="freeship__text"></div>
+        </div>
+        <div class="process-bar__item relative">
+          {% assign currency_symbol = cart.total_price | money | replace: '1', '' | replace: '2', '' | replace: '3', '' | replace: '4', '' | replace: '5', '' | replace: '6', '' | replace: '7', '' | replace: '8', '' | replace: '9', '' | replace: '0', '' | replace: '.', '' | strip | strip_newlines %}
+          <input
+            type="hidden"
+            class="process-bar__data"
+            data-amount="{{ amount }}"
+            data-total="{{ total }}"
+            data-not-reached=" {{ gst.free_shipping_not_reached }}"
+            data-success="{{ gst.free_shipping_success }}"
+            {% if settings.currency_code_enabled %}
+            data-currency=" {{ shop.currency }}"
+            {% endif %}
+            data-symbol="{{ currency_symbol }}">
+          <div class="process-bar__percent absolute"></div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="cart__footer cart-footer">
+    <div class="cart__blocks">
+      <div class="js-contents" {{ block.shopify_attributes }}>
+        <div class="totals flex items-center justify-between mb-12">
+          <h5 class="totals__subtotal mb-0">{{ 'sections.cart.subtotal' | t }}</h5>
+          <p class="totals__subtotal-value fw-secondary mb-0">
+
+            {% if settings.currency_code_enabled %}
+              {{ cart.total_price | money_with_currency }}
+            {% else %}
+              {{ cart.total_price | money }}
+            {% endif %}
+          </p>
+        </div>
+
+        <div>
+          {%- if cart.cart_level_discount_applications.size > 0 -%}
+            <ul
+              class="discounts list-none"
+              role="list"
+              aria-label="{{ 'customer.order.discount' | t }}">
+              {%- for discount in cart.cart_level_discount_applications -%}
+                <li class="discounts__discount discounts__discount--position">
+                  {%- render 'icon'
+                    , icon_name: 'icon-discount' -%}
+                  {{ discount.title }}
+                  (-{{ discount.total_allocated_amount | money }})
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+      </div>
+      <div class="cart__ctas mb-12" {{ block.shopify_attributes }}>
+        <noscript>
+          <button
+            type="submit"
+            class="cart__update-button button button--secondary"
+            form="cart">
+            {{ 'sections.cart.update' | t }}
+          </button>
+        </noscript>
+
+        <button
+          type="submit"
+          id="checkout"
+          class="cart__checkout-button tp-btn tp-btn__primary w-full"
+          name="checkout"
+          {% if cart == empty %}
+          disabled
+          {% endif %}
+          form="cart">
+          {{ 'sections.cart.checkout' | t }}
+        </button>
+      </div>
+      <p class="tax-note text-sm">
+        {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
+          {{ 'sections.cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
+        {%- elsif cart.taxes_included -%}
+          {{ 'sections.cart.taxes_included_but_shipping_at_checkout' | t }}
+        {%- elsif shop.shipping_policy.body != blank -%}
+          {{ 'sections.cart.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}
+        {%- else -%}
+          {{ 'sections.cart.taxes_and_shipping_at_checkout' | t }}
+        {%- endif -%}
+      </p>
+
+      {%- if additional_checkout_buttons -%}
+        <div class="cart__dynamic-checkout-buttons additional-checkout-buttons">
+          {{ content_for_additional_checkout_buttons }}
+        </div>
+      {%- endif -%}
+
+      <div id="cart-errors" class="hidden"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    function isIE() {
+      const ua = window.navigator.userAgent;
+      const msie = ua.indexOf('MSIE ');
+      const trident = ua.indexOf('Trident/');
+  
+      return msie > 0 || trident > 0;
+    }
+  
+    if (!isIE()) return;
+    const cartSubmitInput = document.createElement('input');
+    cartSubmitInput.setAttribute('name', 'checkout');
+    cartSubmitInput.setAttribute('type', 'hidden');
+    document.querySelector('#cart').appendChild(cartSubmitInput);
+    document.querySelector('#checkout').addEventListener('click', function (event) {
+      document.querySelector('#cart').submit();
+    });
+  });
+</script>

@@ -1,0 +1,186 @@
+{{ 'map.css' | asset_url | stylesheet_tag }}
+{% liquid
+  assign sst = section.settings
+  assign container = sst.container
+%}
+{%- capture style -%}
+    --section-padding-top: {{ sst.padding_top }}px; --section-padding-bottom: {{ sst.padding_bottom }}px; 
+  {%- endcapture -%}
+<div class="tp-map color-{{ sst.color_scheme }} gradient section-py {% if sst.reset_spacing == false %}section-mb{% endif %}" style="{{ style | strip | strip_newlines }}">
+  <div class="{{ container }} section-full">
+    <div class="tp-map__inner relative">
+      <div class="iframe-maps max-w-full overflow-hidden w-full">{{ sst.iframe_address }}</div>
+      <div class="tp-map__content">
+        {% if sst.heading != blank %}
+          <h3 class="mb-30">{{ sst.heading }}</h3>
+        {% endif %}
+        {%- if settings.open_time and sst.show_open_time -%}
+          <div class="flex gap-5 mb-16 items-baseline">
+            <p class="mb-0">
+              {{ 'sections.footer.open_time' | t }}: {{ settings.open_time }}
+            </p>
+          </div>
+        {%- endif -%}
+        {%- if settings.store_address and sst.show_address -%}
+          <div class="flex gap-5 mb-20 items-baseline">
+            <p class="mb-0">
+              {{ 'sections.footer.address' | t }}: {{ settings.store_address }}</p>
+          </div>
+
+        {%- endif -%}
+        {%- if settings.store_phone and sst.show_phone -%}
+          <div class="flex gap-5 mb-20 items-baseline">
+            <p class="mb-0">
+              <a href="tel:{{ settings.store_phone }}" class="">
+                {{ 'sections.footer.phone' | t }}:
+                <strong>{{ settings.store_phone }}</strong>
+              </a>
+            </p>
+          </div>
+        {%- endif -%}
+        {%- if settings.store_email and sst.show_email -%}
+          <div class="flex gap-5 mb-20 items-baseline">
+            <p class="mb-0">
+              <a href="mailto:{{ settings.store_email }}" class="">
+                {{ 'sections.footer.email' | t }}:
+                <strong>{{ settings.store_email }}</strong>
+              </a>
+            </p>
+          </div>
+        {%- endif -%}
+        {%- if sst.show_social -%}
+          <div class="flex gap-5 mb-20 items-baseline">
+            {%- render 'social-icons' -%}
+          </div>
+        {%- endif -%}
+        {% if sst.label_btn != blank %}
+          <div class="btn_contact mt-10">
+            <a class="tp-btn tp-btn__underline n-hvr" href="{{ sst.link_btn | default: '#' }}">
+              {{ sst.label_btn }}
+            </a>
+          </div>
+        {% endif %}
+
+      </div>
+
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Map",
+    "tag": "section",
+    "disabled_on": {
+      "groups": ["*"]
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": "General"
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "accent-1"
+      },
+      {
+        "type": "textarea",
+        "id": "iframe_address",
+        "label": "Contact Address Iframe"
+      }, {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Contact Us"
+      }, {
+        "type": "header",
+        "content": "Contact information",
+        "info": "Go to \"Theme settings > \" to update these information."
+      }, {
+        "type": "checkbox",
+        "id": "show_address",
+        "label": "Show address",
+        "default": false
+      }, {
+        "type": "checkbox",
+        "id": "show_phone",
+        "label": "Show phone number",
+        "default": false
+      }, {
+        "type": "checkbox",
+        "id": "show_email",
+        "label": "Show email",
+        "default": false
+      }, {
+        "type": "checkbox",
+        "id": "show_open_time",
+        "label": "Show open time",
+        "default": false
+      }, {
+        "type": "checkbox",
+        "id": "show_social",
+        "label": "Show social",
+        "default": false
+      }, {
+        "type": "text",
+        "id": "label_btn",
+        "label": "Label button",
+        "default": "Show on Google Map"
+      }, {
+        "type": "url",
+        "id": "link_btn",
+        "label": "Link button"
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }, {
+        "type": "checkbox",
+        "id": "reset_spacing",
+        "label": "Remove default space between sections",
+        "default": false
+      }
+    ],
+    "presets": [
+      {
+        "name": "Map"
+      }
+    ]
+  }
+{% endschema %}

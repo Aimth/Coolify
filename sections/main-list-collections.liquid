@@ -1,0 +1,279 @@
+{{ 'section-collection-list.css' | asset_url | stylesheet_tag }}
+{% liquid
+  assign sst = section.settings
+  assign container = sst.container
+  case sst.sort
+    when 'products_high', 'products_low'
+      assign collections = collections | sort: 'all_products_count'
+    when 'date', 'date_reversed'
+      assign collections = collections | sort: 'published_at'
+  endcase
+
+  if sst.sort == 'products_high' or sst.sort == 'date_reversed' or sst.sort == 'alphabetical_reversed'
+    assign collections = collections | reverse
+  endif
+
+  assign moduloResult = 12 | modulo: sst.columns_desktop
+  assign paginate_by = 14
+  if moduloResult == 0
+    assign paginate_by = 12
+  endif
+  assign design_collection = sst.design_collection
+  assign media_aspect_ratio = sst.image_ratio
+  assign custom_ratio = sst.custom_ratio
+  assign images_style = sst.images_style
+%}
+{%- capture style -%}
+  --section-padding-top: {{ sst.padding_top }}px; --section-padding-bottom: {{ sst.padding_bottom }}px;
+{%- endcapture -%}
+{% capture classGrid %}
+  tp-grid tp-grid--{{ sst.columns_mobile }}-col-mobile tp-grid--{{ sst.columns_tablets }}-col-tablets tp-grid--{{ sst.columns_desktop }}-col-desktop 
+{% endcapture %}
+
+<div class="tp-clclsit color-{{ sst.color_scheme }} gradient section-py section-mb" style="{{ style | strip | strip_newlines }}">
+  <div class="{{ container }}">
+    {%- paginate collections by paginate_by -%}
+      <div class="collection-list {{ classGrid }}" role="list">
+        {%- for collection in collections -%}
+          <div class="collection-list__item tp-grid__item">
+            {% render 'list-collection-item'
+              ,
+ collection_item: collection
+              ,
+ design_collection: design_collection
+              ,
+ media_aspect_ratio: media_aspect_ratio
+              ,
+ custom_ratio: custom_ratio
+              ,
+ sst: sst
+              ,
+ type: 'custom'
+              ,
+ images_style: images_style
+            %}
+          </div>
+        {%- endfor -%}
+      </div>
+      {% render 'pagination'
+        , paginate: paginate
+        , position_pagination: 'justify-center' %}
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "t:sections.main-list-collections.name",
+    "class": "section",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Discover Collections"
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "text-left",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          }, {
+            "value": "text-center",
+            "label": "Center"
+          }, {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      }, {
+        "type": "select",
+        "id": "sort",
+        "options": [
+          {
+            "value": "alphabetical",
+            "label": "t:sections.main-list-collections.settings.sort.options__1.label"
+          },
+          {
+            "value": "alphabetical_reversed",
+            "label": "t:sections.main-list-collections.settings.sort.options__2.label"
+          },
+          {
+            "value": "date_reversed",
+            "label": "t:sections.main-list-collections.settings.sort.options__3.label"
+          },
+          {
+            "value": "date",
+            "label": "t:sections.main-list-collections.settings.sort.options__4.label"
+          }, {
+            "value": "products_high",
+            "label": "t:sections.main-list-collections.settings.sort.options__5.label"
+          }, {
+            "value": "products_low",
+            "label": "t:sections.main-list-collections.settings.sort.options__6.label"
+          }
+        ],
+        "default": "alphabetical",
+        "label": "t:sections.main-list-collections.settings.sort.label"
+      }, {
+        "type": "select",
+        "id": "design_collection",
+        "label": "Design",
+        "options": [
+          {
+            "value": "design-1",
+            "label": "1"
+          }, {
+            "value": "design-2",
+            "label": "2"
+          }, {
+            "value": "design-3",
+            "label": "3"
+          }, {
+            "value": "design-4",
+            "label": "4"
+          }
+        ]
+      }, {
+        "type": "select",
+        "id": "images_style",
+        "label": "Images style",
+        "default": "square",
+        "options": [
+          {
+            "value": "square",
+            "label": "Square"
+          }, {
+            "value": "rounded-full",
+            "label": "Rounded"
+          }, {
+            "value": "bd-radius",
+            "label": "Radius"
+          }
+        ]
+      }, {
+        "type": "select",
+        "id": "image_ratio",
+        "default": "3/4",
+        "label": "Image ratio",
+        "options": [
+          {
+            "value": "original",
+            "label": "Original aspect ratio"
+          },
+          {
+            "value": "1/1",
+            "label": "1:1"
+          },
+          {
+            "value": "3/4",
+            "label": "3:4"
+          },
+          {
+            "value": "4/3",
+            "label": "4:3"
+          }, {
+            "value": "16/9",
+            "label": "16:9"
+          }, {
+            "value": "custom",
+            "label": "Custom ratio"
+          }
+        ]
+      }, {
+        "type": "text",
+        "id": "custom_ratio",
+        "label": "Custom ratio",
+        "default": "21:9"
+      }, {
+        "type": "range",
+        "id": "columns_desktop",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "default": 4,
+        "label": "Number of columns on desktop"
+      }, {
+        "type": "select",
+        "id": "columns_tablets",
+        "options": [
+          {
+            "value": "1",
+            "label": "1 Columns"
+          }, {
+            "value": "2",
+            "label": "2 Columns"
+          }, {
+            "value": "3",
+            "label": "3 Columns"
+          }
+        ],
+        "default": "3",
+        "label": "Number of columns on columns_tablets"
+      }, {
+        "type": "select",
+        "id": "columns_mobile",
+        "options": [
+          {
+            "value": "1",
+            "label": "1 Columns"
+          }, {
+            "value": "2",
+            "label": "2 Columns"
+          }
+        ],
+        "default": "2",
+        "label": "Number of columns on mobile"
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }
+    ]
+  }
+{% endschema %}

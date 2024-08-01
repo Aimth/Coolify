@@ -1,0 +1,54 @@
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {
+        "container": "container",
+        "color_scheme": "background-1",
+        "show_background_grid": false,
+        "text_alignment": "text-left",
+        "position_content": "row",
+        "padding_top": 40,
+        "padding_bottom": 50
+      }
+    },
+    "main": {
+      "type": "contact",
+      "blocks": {
+        "6c394acc-1279-44fb-abbe-55fa5373016e": {
+          "type": "contact-info",
+          "settings": {
+            "title_info": "Contact Information",
+            "number_phone": "<p>(424) 325 - 0686<\/p>",
+            "address": "<p>10250 Santa Monica Blvd. Los Angeles, CA 90067-6658<\/p>",
+            "email": "<p>comacontact@gmail.com<\/p>",
+            "show_social": true,
+            "title_form": "Get in touch",
+            "show_form": false
+          }
+        },
+        "c362e2c0-c6c7-4947-a423-94987290ea0d": {
+          "type": "contact-map",
+          "settings": {
+            "iframe_address": "<iframe src=\"https:\/\/www.google.com\/maps\/embed?pb=!1m18!1m12!1m3!1d79418.85559980253!2d-0.15684184155382053!3d51.53450840009873!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487604cddc57baf7%3A0x9f64466de05d81f1!2sSaatchi%20Gallery!5e0!3m2!1sen!2sus!4v1634176329492!5m2!1sen!2sus\" width=\"100%\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\"><\/iframe>"
+          }
+        }
+      },
+      "block_order": [
+        "6c394acc-1279-44fb-abbe-55fa5373016e",
+        "c362e2c0-c6c7-4947-a423-94987290ea0d"
+      ],
+      "settings": {
+        "container": "container",
+        "color_scheme": "",
+        "reset_spacing": false,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "main"
+  ]
+}

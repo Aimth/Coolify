@@ -1,0 +1,170 @@
+{{ 'top-bar.css' | asset_url | stylesheet_tag }}
+{% liquid
+  assign gst = settings
+  assign st = section.settings
+  assign container = st.container
+  assign grid_background = st.show_background_grid
+  assign text_message = st.message
+  assign show_language = st.show_language
+  assign show_currency = st.show_currency
+%}
+
+<div class="tp__top-bar hidden md:block {% if grid_background %}background-grid{% endif %} color-{{ section.settings.color_scheme }} gradient" {{ block.shopify_attributes }}>
+  <div class="{{ container }}">
+    <div class="tp__top-bar-inner flex items-center justify-center lg:justify-between gap-30">
+      <div class="col-left flex-wrap py-16 hidden lg:flex">
+        <div class=" flex items-center gap-24">
+          {% if st.menu_top_bar != blank %}
+            <ul class="list-none color-heading flex items-center gap-30">
+              {%- for link in st.menu_top_bar.links limit: 3 -%}
+                <li class="menu-item">
+                  <a href="{{ link.url }}">
+                    {{ link.title }}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {% endif %}
+          {% if st.show_social %}
+            <div class="social-label">{{ 'general.social.text_label' | t }}</div>
+            {%- render 'social-icons'
+              , flow: 'down' -%}
+          {% endif %}
+        </div>
+      </div>
+
+      {% if text_message != blank %}
+        <div class="col-center flex flex-1 items-center justify-center py-16">
+          <div class="topbar-message text-center rsmb-p">
+            {{ text_message }}
+          </div>
+        </div>
+      {% endif %}
+      {% if show_currency or show_language or gst.show_account == 'account_top_bar' %}
+        <div class="col-right hidden lg:block">
+          <div class="flex items-center flex-wrap">
+            {% if show_language %}
+              <div class="language">
+                <localization-form>
+                  {%- form 'localization'
+                    , id: 'FooterLanguageForm'
+                    , class: 'localization-form' -%}
+                    <div class="no-js-hidden">
+                      {%- render 'language-localization'
+                        , localPosition: 'FooterLanguage' -%}
+                    </div>
+                  {%- endform -%}
+                </localization-form>
+              </div>
+            {% endif %}
+            {% if show_currency %}
+              <div class="currency">
+                <localization-form>
+                  {%- form 'localization'
+                    , id: 'FooterCountryForm'
+                    , class: 'localization-form' -%}
+                    <div class="no-js-hidden">
+                      {%- render 'country-localization'
+                        , localPosition: 'FooterCountry' -%}
+                    </div>
+                  {%- endform -%}
+                </localization-form>
+              </div>
+            {% endif %}
+            {%- if shop.customer_accounts_enabled and gst.show_account == 'account_top_bar' -%}
+              <div class="tp_account ml-30">
+                {%- if customer -%}
+                  <a href="{{ routes.account_url }}">
+                    {{ 'customer.account.title' | t }}
+                  </a>
+                {%- else -%}
+                  <a href="{{ routes.account_login_url }}">
+                    {{ 'customer.account.login_register' | t }}
+                  </a>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Top bar",
+    "tag": "section",
+    "class": "tp__section mb-0",
+    "enabled_on": {
+      "groups": ["header"]
+    },
+    "settings": [
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_background_grid",
+        "label": "Show background grid",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_topbar",
+        "label": "Show top bar",
+        "default": true
+      }, {
+        "type": "checkbox",
+        "id": "show_social",
+        "label": "Show social",
+        "default": true
+      }, {
+        "type": "checkbox",
+        "id": "show_language",
+        "label": "Show language",
+        "default": true
+      }, {
+        "type": "checkbox",
+        "id": "show_currency",
+        "label": "Show currency",
+        "default": true
+      }, {
+        "type": "link_list",
+        "id": "menu_top_bar",
+        "label": "Menu",
+        "info": "Show only the 1st level menu, limit 3 item"
+      }, {
+        "type": "richtext",
+        "id": "message",
+        "label": "Message",
+        "default": "<p></p>"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Top bar"
+      }
+    ]
+  }
+{% endschema %}

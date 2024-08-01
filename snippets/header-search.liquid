@@ -1,0 +1,259 @@
+{% liquid
+  assign gst = settings
+  assign search_suggest = gst.search_suggest
+  assign input_id =  'Search-In-Modal-1'
+%}
+
+  {% if header_layout == 'h_layout1' or header_layout == 'h_layout3' %}
+    <div class="header__search">
+    <div>
+      <div
+        class="header__icon header__icon--search header__icon--summary link focus-inset modal__toggle"
+        aria-haspopup="dialog"
+        aria-label="{{ 'general.search.search' | t }}"
+      >
+        <span class="modal-search-toggle-open cursor-pointer">
+          {% render 'icon', icon_name: 'search', class: 'icon icon-search pointer-events-none block' %}
+        </span>
+      </div>
+      <div class="tp-overlay-search"></div>
+      <div
+        id="search-modal--wrapper"
+        class="search-modal search-modal--wrapper shadow hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-label="{{ 'general.search.search' | t }}"
+      >
+        <button class="modal-search-toggle-close flex items-center tp-icon-close absolute top-12 right-12">
+          {% render 'icon', icon_name: 'close', width: 15, height: 15 %}
+        </button>
+        <div
+          class="search-modal__content container py-32"
+          tabindex="-1"
+        >
+          <h2 class="text-center">{{ 'templates.search.title_predictive' | t }}</h2>
+          <predictive-search class="search-modal__form mb-12 block" data-loading-text="{{ 'accessibility.loading' | t }}">
+            <search-form class="search-modal__form">
+              <form action="{{ routes.search_url }}" method="get" role="search" class="search search-modal__form">
+                <div class="field flex items-stretch m-auto gap-10">
+                  <input
+                    class="search__input field__input w-full"
+                    id="{{ input_id }}"
+                    type="search"
+                    name="q"
+                    value="{{ search.terms | escape }}"
+                    placeholder="{{ 'general.search.search' | t }}"
+                    {%- if settings.predictive_search_enabled -%}
+                      role="combobox"
+                      aria-expanded="false"
+                      aria-owns="predictive-search-results"
+                      aria-controls="predictive-search-results"
+                      aria-haspopup="listbox"
+                      aria-autocomplete="list"
+                      autocorrect="off"
+                      autocomplete="off"
+                      autocapitalize="off"
+                      spellcheck="false"
+                    {%- endif -%}
+                  >
+                  <input type="hidden" name="options[prefix]" value="last">
+                  <button
+                    type="submit"
+                    class="search__button field__button"
+                    aria-label="{{ 'general.search.search' | t }}"
+                  >
+                    {% render 'icon', icon_name: 'search', width: 20, height: 20 %}
+                  </button>
+                </div>
+                {%- if gst.qs_show -%}
+                  <div class="search-modal__quicksearch m-auto mt-12">
+                    <div class="content flex flex-row items-center justify-center">
+                      {% assign qs_title = settings.qs_title %}
+                      {% if qs_title != blank %}
+                        <span class="mr-4 form__label">{{ qs_title }}</span>
+                      {% endif %}
+  
+                      {% assign qs_listtext = settings.qs_listtext | split: ',' %}
+                      {% if qs_listtext != blank %}
+                        <ul class="flex list-none gap-4">
+                          {% for listtext in qs_listtext %}
+                            <li class="color-grey">
+                              <a
+                                title="Search with keyword: Shirt"
+                                href="/search?type=product&q={{ listtext }}&options%5Bprefix%5D=last&form_type=product&utf8=✓"
+                              >
+                                {{- listtext -}}
+                                {%- unless forloop.last %},{% endunless -%}
+                              </a>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
+                    </div>
+                  </div>
+                {%- endif -%}
+                {%- if gst.predictive_search_enabled -%}
+                  <div class="predictive-search predictive-search--header mt-12" tabindex="-1" data-predictive-search>
+                    <div class="predictive-search__loading-state">
+                      <svg
+                        aria-hidden="true"
+                        focusable="false"
+                        class="spinner"
+                        viewBox="0 0 66 66"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                      </svg>
+                    </div>
+                  </div>
+                  <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
+                {%- endif -%}
+              </form>
+            </search-form>
+          </predictive-search>
+          <div class="tp-clc-search pb-16">
+            <div>
+              {%- if search_suggest != blank -%}
+                {%- assign collection = collections[search_suggest] -%}
+                {%- if collection.products.size > 0 -%}
+                  <div class="search-suggest">
+                    <h4>{{ 'templates.search.popular_products' | t }}</h4>
+                    <div class="tp-grid tp-grid--2-col-mobile tp-grid--3-col-tablets tp-grid--5-col-desktop">
+                      {%- for product in collection.products limit: 5 -%}
+                        <div class="tp-grid__item tp-grid__item-{{ forloop.index }}">
+                          {% render 'product-item-layout-1', card_product: product %}
+                        </div>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                {%- endif -%}
+              {%- endif -%}
+              <div class="search__loading-state mt-15">
+                <div class="loading-search"></div>
+              </div>
+            </div>
+            <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+   {% else %}
+   <div class="header__search relative">
+    <div class="search-modal__content"tabindex="-1">
+      <predictive-search class="search-modal__form block" data-loading-text="{{ 'accessibility.loading' | t }}">
+        <search-form class="search-modal__form">
+          <form action="{{ routes.search_url }}" method="get" role="search" class="search search-modal__form">
+            <div class="field flex items-stretch m-auto gap-8">
+              <input
+                class="search__input field__input w-[320px]"
+                id="{{ input_id }}"
+                type="search"
+                name="q"
+                value="{{ search.terms | escape }}"
+                placeholder="{{ 'general.search.search' | t }}"
+                {%- if settings.predictive_search_enabled -%}
+                  role="combobox"
+                  aria-expanded="false"
+                  aria-owns="predictive-search-results"
+                  aria-controls="predictive-search-results"
+                  aria-haspopup="listbox"
+                  aria-autocomplete="list"
+                  autocorrect="off"
+                  autocomplete="off"
+                  autocapitalize="off"
+                  spellcheck="false"
+                {%- endif -%}
+              >
+              <input type="hidden" name="options[prefix]" value="last">
+              {% if type_header == 'header-3' %}
+                {% render 'icon', icon_name: 'search', width: 20, height: 20 %}
+              {% else %} 
+              <button
+                type="submit"
+                class="search__button field__button"
+                aria-label="{{ 'general.search.search' | t }}"
+              >
+              {% render 'icon', icon_name: 'search', width: 20, height: 20 %}
+              </button>
+              {% endif %}
+              
+            </div>
+            {% if gst.qs_show %}
+              <div class="search-modal__quicksearch m-auto mt-12 hidden">
+                <div class="content flex flex-row items-center justify-center">
+                  {% assign qs_title = settings.qs_title %}
+                  {% if qs_title != blank %}
+                    <span class="mr-4 form__label">{{ qs_title }}</span>
+                  {% endif %}
+
+                  {% assign qs_listtext = settings.qs_listtext | split: ',' %}
+                  {% if qs_listtext != blank %}
+                    <ul class="flex list-none gap-4">
+                      {% for listtext in qs_listtext %}
+                        <li class="color-grey">
+                          <a
+                            title="Search with keyword: Shirt"
+                            href="/search?type=product&q={{ listtext }}&options%5Bprefix%5D=last&form_type=product&utf8=✓"
+                          >
+                            {{- listtext -}}
+                            {%- unless forloop.last %},{% endunless -%}
+                          </a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </div>
+              </div>
+            {% endif %}
+
+            {%- if gst.predictive_search_enabled -%}
+              <div class="predictive-search predictive-search--header mt-12 hidden shadow" tabindex="-1" data-predictive-search>
+                <div class="predictive-search__loading-state">
+                  <svg
+                    aria-hidden="true"
+                    focusable="false"
+                    class="spinner"
+                    viewBox="0 0 66 66"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                  </svg>
+                </div>
+              </div>
+
+              <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
+            {%- endif -%}
+          </form>
+        </search-form>
+      </predictive-search>
+      <div class="tp-clc-search pb-16 hidden">
+        <div>
+          {%- if search_suggest != blank -%}
+            {%- assign collection = collections[search_suggest] -%}
+            {%- if collection.products.size > 0 -%}
+              <div class="search-suggest">
+                <h4>{{ 'templates.search.popular_products' | t }}</h4>
+                <div class="tp-grid tp-grid--2-col-mobile tp-grid--3-col-tablets tp-grid--5-col-desktop">
+                  {%- for product in collection.products limit: 5 -%}
+                    <div class="tp-grid__item tp-grid__item-{{ forloop.index }}">
+                      {% render 'product-item-layout-1', card_product: product %}                      
+                    </div>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+          <div class="search__loading-state mt-15">
+            <div class="loading-search"></div>
+          </div>
+        </div>
+        <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
+      </div>
+    </div>
+  </div>
+  {% endif %}  
+ 
+
+
+

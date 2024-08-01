@@ -1,0 +1,320 @@
+{%- liquid
+  assign g_st = settings
+  assign show_quick_view = g_st.show_quick_view
+  assign show_add_to_cart = g_st.show_add_to_cart
+  assign show_wishlist = g_st.show_wishlist
+  assign show_variant = g_st.show_variant
+  assign enable_sale_label = g_st.enable_sale_label
+  assign compare_at_price = card_product.compare_at_price
+  assign price = card_product.price
+  assign sale = false
+  if compare_at_price > price and compare_at_price != blank
+    assign sale = true
+  endif
+
+  assign label = false
+  if sale == true
+    assign label = true
+  endif
+
+  assign radius_label = '--border-radius: 0'
+  if g_st.product_label_style == 'label-radius'
+    assign radius_label = '--border-radius: 16px'
+  endif
+
+  assign show_action = true
+  if show_add_to_cart != true and show_wishlist != true and show_quick_view != true
+    assign show_action = false
+  endif
+
+  assign text-align = 'text-left'
+  if g_st.card_text_alignment == 'center'
+    assign text-align = 'text-center'
+  elsif g_st.card_text_alignment == 'right'
+    assign text-align = 'text-right'
+  endif
+
+  assign text_transform = g_st.product_name_t_transfrom
+  assign product_name_line = g_st.product_name_line
+  assign img = card_product.media
+-%}
+{%- if card_product and card_product != empty -%}
+  <div class="tp-prd-item {{ text-align }} flex-1 al card-wrapper product-card-wrapper relative {% if price %}product--parent{% endif %}" style="--image-padding: {{ g_st.card_image_padding }}px">
+    <div class="
+        card card--{{ settings.card_style }}
+        {% if card_product.featured_media %} card--media{% else %} card--text{% endif %}
+        {% if settings.card_style == 'card' %} color-{{ settings.card_color_scheme }} gradient{% endif %}
+      ">
+      <div class="card__inner {% if settings.card_style == 'standard' %}color-{{ settings.card_color_scheme }} gradient{% endif %}">
+        {%- if card_product.featured_media -%}
+          <div class="card__media{% if image_shape and image_shape != 'default' %} shape--{{ image_shape }} color-{{ settings.card_color_scheme }} gradient{% endif %}">
+            <a class="tp__img-url{% if enable_hover_image %} tp__hover-image{% endif %}" href="{{ card_product.url | within: collection }}">
+              <div class="tp__product-main-img">
+                {%- if card_product.has_only_default_variant -%}
+                  {%- if img[0] != blank -%}
+                    {%- render 'responsive-image' | image: img[0] | type: 'product' | class: 'tp__product-grid tp__product-img-sw' -%}
+                  {%- else -%}
+                    {%- render 'responsive-image' | type: 'product' | class: 'tp__product-grid-plh' -%}
+                  {%- endif -%}
+                {%- else -%}
+                  {%- for variant in card_product.variants limit: 1 -%}
+                    {%- if variant.featured_image != blank -%}
+                      {%- render 'responsive-image' | image: variant.featured_image | type: 'product' | class: 'tp__product-grid tp__product-img-sw' -%}
+                    {%- else -%}
+                      {%- render 'responsive-image' | type: 'product' | class: 'tp__product-grid-plh' -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
+              </div>
+              {%- if enable_hover_image -%}
+                {%- if img[1] != blank -%}
+                  <div class="tp__product-hover-img opacity-0 absolute inset-0">
+                    {%- render 'responsive-image' | image: img[1] | type: 'product' | class: 'tp__product-grid' -%}
+                  </div>
+                {%- endif -%}
+              {%- endif -%}
+            </a>
+          </div>
+        {%- endif -%}
+        {%- if label -%}
+          <div class="tp-prd-item__label absolute left-12 top-12" style="{{ radius_label }}">
+            {%- if enable_sale_label and compare_at_price > price and compare_at_price != blank -%}
+              <div class="label-inner">
+                -
+                {{- compare_at_price
+ | minus: price
+ | times: 100.0
+ | divided_by: compare_at_price
+ | remove: '.0'
+ | round
+                -}}
+                %
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+        {%- if show_action -%}
+          <div class="tp-prd-item__actions absolute right-12 top-12">
+            {% if show_wishlist %}
+              <div
+                flow="left"
+                tooltip="{{ 'product_items.wishlist' | t }}"
+                class="mb-2">
+                {%- render 'button-wishlist'
+                  , product: card_product -%}
+              </div>
+            {% endif %}
+            {% if show_quick_view %}
+              <div
+                flow="left"
+                tooltip="{{ 'product_items.quick_view' | t }}"
+                class="mb-2">
+                {% render 'button-quick-view'
+                  , product: card_product %}
+              </div>
+            {% endif %}
+
+          </div>
+        {%- endif -%}
+        <div class="select-option">
+          <div class="select-option__btn tp-btn tp-btn__primary w-full !flex items-center justify-center gap-5 cursor-pointer custom-shadow-inner">
+            {% render 'icon'
+              , icon_name: 'arrow-right-2'
+              , width: 18
+              , height: 18 %}
+            {{ 'product_items.select_option' | t | default: 'Select Option' }}
+          </div>
+          <div class="select-option__content">
+            {% if show_variant %}
+              {%- assign product_form_id = 'product-form-' | append: section.id -%}
+              {% render 'product-variant-picker'
+                ,
+ product: card_product
+                ,
+ variant_type: g_st.variant_type
+                ,
+ form_label: false
+                ,
+ product_form_id: product_form_id
+                ,
+ option_label: false
+              %}
+            {% endif %}
+            <div class="content-wrapper flex items-center justify-center">
+              <div class="product-form__input product-form__quantity">
+                <quantity-input class="tp-item__quantity quantity">
+                  <button
+                    class="tp-item__qty_btn quantity__button no-js-hidden"
+                    name="minus"
+                    type="button">-</button>
+                  <input
+                    class="quantity__input tp-item__qty_input"
+                    type="number"
+                    name="quantity"
+                    id="Quantity-{{ section.id }}"
+                    data-cart-quantity="{{ cart_qty }}"
+                    data-min="{{ card_product.selected_or_first_available_variant.quantity_rule.min }}"
+                    min="{{ card_product.selected_or_first_available_variant.quantity_rule.min }}"
+                    {% if card_product.selected_or_first_available_variant.quantity_rule.max != null %}
+                    data-max="{{ card_product.selected_or_first_available_variant.quantity_rule.max }}"
+                    max="{{ card_product.selected_or_first_available_variant.quantity_rule.max }}"
+                    {% endif %}
+                    step="{{ card_product.selected_or_first_available_variant.quantity_rule.increment }}"
+                    value="{{ card_product.selected_or_first_available_variant.quantity_rule.min }}"
+                    form="{{ product_form_id }}">
+                  <button
+                    class="tp-item__qty_btn quantity__button no-js-hidden"
+                    name="plus"
+                    type="button">+</button>
+                </quantity-input>
+              </div>
+              {% if show_add_to_cart %}
+                <div class="select-option__atc quick-add">
+                  {%- if card_product != blank -%}
+                    <product-form class="product-form">
+                      <div
+                        class="product-form__error-message-wrapper h-full"
+                        role="alert"
+                        hidden>
+                        <span class="product-form__error-message"></span>
+                      </div>
+
+                      {%- form 'product'
+                        ,
+ card_product
+                        ,
+ id: product_form_id
+                        ,
+ class: 'form h-full'
+                        ,
+ novalidate: 'novalidate'
+                        ,
+ data-type: 'add-to-cart-form'
+                      -%}
+                        <input
+                          type="hidden"
+                          name="id"
+                          value="{{ card_product.selected_or_first_available_variant.id }}"
+                          disabled
+                          class="product-variant-id">
+                        <div class="product-form__buttons h-full">
+                          {%- liquid
+                            assign check_against_inventory = true
+                            if card_product.selected_or_first_available_variant.inventory_management != 'shopify' or card_product.selected_or_first_available_variant.inventory_policy == 'continue'
+                              assign check_against_inventory = false
+                            endif
+                            if card_product.selected_or_first_available_variant.quantity_rule.min > card_product.selected_or_first_available_variant.inventory_quantity and check_against_inventory
+                              assign quantity_rule_soldout = true
+                            endif
+                          -%}
+                          <button
+                            id="ProductSubmitButton-{{ section_id }}"
+                            type="submit"
+                            name="add"
+                            class="product-form__submit w-full flex items-center justify-center gap-5 h-full"
+
+                            {% if card_product.selected_or_first_available_variant.available == false or quantity_rule_soldout %}
+                            disabled
+                            {% endif %}>
+                            {% render 'icon'
+                              , icon_name: 'cart'
+                              , width: 20
+                              , height: 20 %}
+                            <span>
+                              {%- if card_product.selected_or_first_available_variant.available == false
+ or quantity_rule_soldout
+                              -%}
+                                {{ 'products.product.sold_out' | t }}
+                              {%- else -%}
+                                {{ 'products.product.add_to_cart' | t }}
+                              {%- endif -%}
+                            </span>
+                          </button>
+                        </div>
+                      {%- endform -%}
+                    </product-form>
+                  {%- else -%}
+                    <div class="product-form">
+                      <div class="product-form__buttons form">
+                        <button
+                          type="submit"
+                          name="add"
+                          class="product-form__submit button button--full-width button--primary"
+                          disabled>
+                          {{ 'products.product.sold_out' | t }}
+                        </button>
+                      </div>
+                    </div>
+                  {%- endif -%}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card__content">
+        <div class="card__information">
+          <h3
+            class="card__heading {{ text_transform }} mb-8{% if card_product.featured_media or settings.card_style == 'standard' %} h5{% endif %}"
+            {% if card_product.featured_media or settings.card_style == 'card' %}
+            id="title-{{ section_id }}-{{ card_product.id }}"
+            {% endif %}>
+            <a
+              href="{{ card_product.url }}"
+              id="CardLink-{{ section_id }}-{{ card_product.id }}"
+              class="  limited-line"
+              aria-labelledby="CardLink-{{ section_id }}-{{ card_product.id }} Badge-{{ section_id }}-{{ card_product.id }}"
+              style="--line-clamp: {{ product_name_line }}">
+              {{ card_product.title | escape }}
+            </a>
+          </h3>
+          <div class="card-information">
+            <div
+              class="no-js-hidden"
+              id="price-{{ section.id }}-{{ card_product.id }}"
+              role="status"
+              {{ block.shopify_attributes }}>
+              {% render 'price'
+                , product: card_product
+                , use_variant: true
+                , %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{%- else -%}
+  <div class="tp-prd-item {{ text-align }} flex-1 card-wrapper product-card-wrapper relative {% if price %}product--parent{% endif %}" style="--image-padding: {{ gst.card_image_padding }}px">
+    <div class="
+        card card--{{ settings.card_style }}
+        {% if card_product.featured_media %} card--media{% else %} card--text{% endif %}
+        {% if settings.card_style == 'card' %} color-{{ settings.card_color_scheme }} gradient{% endif %}
+      ">
+      <div class="{% if settings.card_style == 'standard' %}color-{{ settings.card_color_scheme }} gradient{% endif %}">
+        <div class="">
+          {%- if placeholder_image != blank -%}
+            {{ placeholder_image | placeholder_svg_tag: 'placeholder-svg w-full h-[300px]' }}
+          {%- else -%}
+            {{ 'product-apparel-2' | placeholder_svg_tag: 'placeholder-svg w-full h-[300px]' }}
+          {%- endif -%}
+        </div>
+      </div>
+      <div class="card__content">
+        <div class="card__information">
+          <h3 class="card__heading {% if settings.card_style == 'standard' %} h5{% endif %}">
+            <a
+              role="link"
+              aria-disabled="true"
+              class=" ">
+              {{ 'onboarding.product_title' | t }}
+            </a>
+          </h3>
+          <div class="card-information">
+            {% render 'price' %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}

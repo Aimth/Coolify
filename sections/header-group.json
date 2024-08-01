@@ -1,0 +1,195 @@
+/*
+* ------------------------------------------------------------
+* IMPORTANT: The contents of this file are auto-generated.
+*
+* This file may be updated by the Shopify admin theme editor
+* or related systems. Please exercise caution as any changes
+* made to this file may be overwritten.
+* ------------------------------------------------------------
+*/
+{
+  "name": "Header Group",
+  "type": "header",
+  "sections": {
+    "header_AndXfn": {
+      "type": "header",
+      "blocks": {
+        "banner_parent_rTWPBx": {
+          "type": "banner_parent",
+          "settings": {
+            "title": "Home",
+            "col": "w-1\/4",
+            "button_label": "",
+            "button_link": "",
+            "button_type": "tp-btn__primary"
+          }
+        },
+        "banner_child_nardPM": {
+          "type": "banner_child",
+          "settings": {
+            "title": "Home Fashion 2",
+            "image": "shopify:\/\/shop_images\/Mask_group_6.jpg",
+            "label": "label2",
+            "banner_link": "#",
+            "open_link": true
+          }
+        },
+        "banner_child_88g89m": {
+          "type": "banner_child",
+          "settings": {
+            "title": "Home Fashion",
+            "image": "shopify:\/\/shop_images\/Mask_group.jpg",
+            "label": "label2",
+            "banner_link": "#",
+            "open_link": true
+          }
+        },
+        "banner_child_DbnVC7": {
+          "type": "banner_child",
+          "settings": {
+            "title": "Home Fashion 3",
+            "image": "shopify:\/\/shop_images\/fashion-3.jpg",
+            "label": "label2",
+            "banner_link": "#",
+            "open_link": true
+          }
+        },
+        "banner_child_YBECBU": {
+          "type": "banner_child",
+          "settings": {
+            "title": "Home Minimalist",
+            "image": "shopify:\/\/shop_images\/Mask_group_1.jpg",
+            "label": "none",
+            "banner_link": "#",
+            "open_link": true
+          }
+        },
+        "banner_child_kfKrAQ": {
+          "type": "banner_child",
+          "settings": {
+            "title": "Home Baby",
+            "image": "shopify:\/\/shop_images\/Mask_group_4.jpg",
+            "label": "none",
+            "banner_link": "#",
+            "open_link": true
+          }
+        },
+        "banner_child_F8NTXa": {
+          "type": "banner_child",
+          "settings": {
+            "title": "Home Jewelry",
+            "image": "shopify:\/\/shop_images\/Mask_group_5.jpg",
+            "label": "none",
+            "banner_link": "#",
+            "open_link": true
+          }
+        },
+        "banner_child_CQzyjX": {
+          "type": "banner_child",
+          "settings": {
+            "title": "Home Organic",
+            "image": "shopify:\/\/shop_images\/Mask_group_2.jpg",
+            "label": "label2",
+            "banner_link": "#",
+            "open_link": true
+          }
+        },
+        "banner_child_ddHD8b": {
+          "type": "banner_child",
+          "settings": {
+            "title": "Home POD",
+            "image": "shopify:\/\/shop_images\/Mask_group_3.jpg",
+            "label": "none",
+            "banner_link": "#",
+            "open_link": true
+          }
+        },
+        "multi_column_FpztCM": {
+          "type": "multi_column",
+          "settings": {
+            "title": "Categories",
+            "menu_multi_col": "categories-menu",
+            "col": "w-1\/3",
+            "collection_list": [
+              "accessories",
+              "best-selling",
+              "men",
+              "new-arrivals",
+              "bags",
+              "collections"
+            ],
+            "product_list": [
+              "100-cotton-hawaiian-print-shirt",
+              "anti-contactless-card-holder-wallet",
+              "anti-contactless-leather-effect-card-holder"
+            ]
+          }
+        },
+        "multi_column_nAJDtM": {
+          "type": "multi_column",
+          "settings": {
+            "title": "Pages",
+            "menu_multi_col": "pages-menu",
+            "col": "w-1\/5",
+            "collection_list": [
+
+            ],
+            "product_list": [
+
+            ]
+          }
+        },
+        "menu_normal_QXLVHB": {
+          "type": "menu_normal",
+          "settings": {
+            "title": "Blog",
+            "url": "shopify:\/\/blogs\/news",
+            "menu": "blog",
+            "open_link": false,
+            "label": ""
+          }
+        },
+        "single_link_yXdMzC": {
+          "type": "single_link",
+          "settings": {
+            "title": "Contact",
+            "url": "shopify:\/\/pages\/contact",
+            "open_link": false
+          }
+        },
+        "single_link_EFBMJr": {
+          "type": "single_link",
+          "disabled": true,
+          "settings": {
+            "title": "<span class=\"color-primary\"> Download Now<\/span>",
+            "url": "https:\/\/github.com\/Aimth\/Coolify",
+            "open_link": true
+          }
+        }
+      },
+      "block_order": [
+        "banner_parent_rTWPBx",
+        "banner_child_nardPM",
+        "banner_child_88g89m",
+        "banner_child_DbnVC7",
+        "banner_child_YBECBU",
+        "banner_child_kfKrAQ",
+        "banner_child_F8NTXa",
+        "banner_child_CQzyjX",
+        "banner_child_ddHD8b",
+        "multi_column_FpztCM",
+        "multi_column_nAJDtM",
+        "menu_normal_QXLVHB",
+        "single_link_yXdMzC",
+        "single_link_EFBMJr"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "type_header": "header_boxed"
+      }
+    }
+  },
+  "order": [
+    "header_AndXfn"
+  ]
+}

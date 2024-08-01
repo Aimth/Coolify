@@ -1,0 +1,431 @@
+{{ 'component-article-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'section-main-blog.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign sst = section.settings
+  assign container = sst.container
+  assign colTable = '1'
+  if sst.columns == '2' or sst.columns == '3'
+    assign colTable = '2'
+  endif
+-%}
+{% capture classGrid %}
+  tp-grid tp-grid--1-col-mobile tp-grid--{{ colTable }}-col-tablets tp-grid--{{ sst.columns }}-col-desktop
+{% endcapture %}
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ sst.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ sst.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ sst.padding_top }}px;
+      padding-bottom: {{ sst.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- paginate blog.articles by sst.post_per_page -%}
+  <div class="main-blog color-{{ sst.color_scheme }} gradient page-width section-{{ section.id }}-padding">
+    <div class="{{ container }}">
+      {%- liquid
+        assign layout = sst.position_sidebar
+        if layout == "none"
+          assign layout_class = "w-full"
+        elsif layout == "sidebar_left"
+          assign layout_class = "md:w-3/4 w-full md:pl-30 mb-30 md:mb-0"
+        elsif layout == "sidebar_right"
+          assign layout_class = "md:w-3/4 w-full md:pr-30 mb-30 md:mb-0"
+        endif
+      -%}
+      <div class="flex flex-col-reverse {% if layout == "sidebar_right" %}md:flex-row-reverse{% else %}md:flex-row{% endif %}">
+        {% if layout != "none" %}
+          <div class="main-blog__left">
+            {%- for block in section.blocks -%}
+              {%- case block.type -%}
+                {% when 'categories' %}
+
+                  {% if block.settings.menu.links != blank %}
+                    <div class="slider-categories mb-30">
+                      <details
+                        id="sidebar-categories"
+                        class=""
+                        data-index="1"
+                        style=""
+                        open="">
+                        {% if block.settings.title != blank and block.settings.menu.links != blank %}
+                          <summary
+                            class="facets__summary mb-0 pb-24 caption-large focus-offset"
+                            role="button"
+                            aria-expanded="false"
+                            aria-controls="sb-cat-drop">
+                            <div class="summary-heading flex items-center justify-between">
+                              <h4 class="mb-0">
+                                {{ block.settings.title }}
+                              </h4>
+                              <span class="icon-toggle relative"></span>
+                            </div>
+                          </summary>
+                        {% endif %}
+                        <div id="sb-cat-drop" class="parent-display content-animation facets__display-vertical">
+                          <ul class="list-none">
+                            {%- for link in block.settings.menu.links -%}
+                              <li class="list-categories__item mb-6">
+                                <a
+                                  href="{{ link.url }}"
+                                  class="categories__item"
+                                  title="{{ link.title }}">
+                                  {{ link.title }}
+                                </a>
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+                        </div>
+                      </details>
+                    </div>
+                  {% endif %}
+
+                {% when 'recent_post' %}
+
+                  <div class="recent-post mb-30">
+
+                    <details
+                      id="sidebar-recent"
+                      class=""
+                      data-index="1"
+                      style=""
+                      open="">
+                      <summary
+                        class="facets__summary mb-0 pb-24 caption-large focus-offset"
+                        role="button"
+                        aria-expanded="false"
+                        aria-controls="sb-rec-drop">
+                        <div class="summary-heading flex items-center justify-between">
+                          {% if block.settings.title != blank %}
+                            <h4 class="mb-0">{{ block.settings.title }}</h4>
+                          {% endif %}
+                          <span class="icon-toggle relative"></span>
+                        </div>
+                      </summary>
+                      <div id="sb-rec-drop" class="parent-display content-animation facets__display-vertical">
+
+                        {% if blog.articles.size > 0 %}
+                          {%- paginate blog.articles by 5 -%}
+                            {%- for article in blog.articles -%}
+                              <div class="blog-item mb-10">
+                                <a
+                                  class="color-heading"
+                                  href="{{ article.url }}"
+                                  title="{{ article.title }}">
+                                  {{ article.title | strip_html | truncatewords: 10 }}
+                                </a>
+                                <p class="mb-0 text-sm color-other">{{ article.published_at | date: " %b %d, %Y" }}</p>
+                              </div>
+                            {%- endfor -%}
+                          {%- endpaginate -%}
+                        {% endif %}
+
+                      </div>
+                    </details>
+
+                  </div>
+
+                {% when 'sidebar_tags' %}
+                  {% if blog.all_tags != blank and blog.all_tags.size > 0 %}
+                    <div class="tags mb-30">
+
+                      <details
+                        id="sidebar-tags"
+                        class=""
+                        data-index="1"
+                        style=""
+                        open="">
+                        <summary
+                          class="facets__summary mb-0 pb-24 caption-large focus-offset"
+                          role="button"
+                          aria-expanded="false"
+                          aria-controls="sb-tag-drop">
+                          <div class="summary-heading flex items-center justify-between">
+                            {% if block.settings.title != blank and blog.all_tags != blank %}
+                              <h4 class="mb-0">{{ block.settings.title }}</h4>
+                            {% endif %}
+                            <span class="icon-toggle relative"></span>
+                          </div>
+                        </summary>
+                        <div id="sb-tag-drop" class="parent-display content-animation facets__display-vertical tags-list">
+
+                          {%- for tag in blog.all_tags -%}
+                            <div class="tags-item inline-block mb-10 mr-10">{{ tag | link_to_tag: tag }}</div>
+                          {%- endfor -%}
+
+                        </div>
+                      </details>
+                    </div>
+                  {% endif %}
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+        {% endif %}
+        <div class="main-blog__right {{ layout_class }} pl-0">
+          {% comment %} <h2 class="text-center title--primary mb-40{% if sst.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+                        {{ "blogs.section.heading" | t }}
+                    </h2> {% endcomment %}
+          <div class="blog-articles {{ classGrid }} {% if sst.columns == '1' %}blog-type-list{% endif %}">
+            {%- for article in blog.articles -%}
+              <div
+                class="blog-articles__article article tp-grid__item w-full"
+                {% if sst.animations_reveal_on_scroll %}
+                data-cascade
+                style="--animation-order: {{ forloop.index }};"
+                {% endif %}>
+                {%- render 'article-card'
+                  , article: article
+                  , media_height: sst.image_height
+                  , media_aspect_ratio: article.image.aspect_ratio
+                  , show_image: sst.show_image
+                  , show_date: sst.show_date
+                  , show_author: sst.show_author
+                  , show_excerpt: true
+                -%}
+              </div>
+            {%- endfor -%}
+          </div>
+          {% assign paginateType = sst.show_loadmore_paginate %}
+          {% if paginateType == 'paginate' %}
+            {%- if paginate.pages > 1 -%}
+              {%- render 'pagination'
+                , paginate: paginate
+                , position_pagination: 'justify-center' -%}
+            {%- endif -%}
+          {% else %}
+            {% if paginate.next %}
+              <script src="{{ 'blog-loadmore.js' | asset_url }}" defer="defer"></script>
+              <div class="load-more_wrap text-center mt-50">
+                <input
+                  type="hidden"
+                  value="{{ paginate.next.url }}"
+                  data-next-link
+                  id="next-link">
+                <input
+                  type="hidden"
+                  value="{{ paginate.pages }}"
+                  data-all-pages
+                  id="all-pages">
+                <input
+                  type="hidden"
+                  value="{{ paginate.current_page }}"
+                  data-this-page
+                  id="this-page">
+                <input
+                  type="hidden"
+                  value="{{ collection.url }}"
+                  data-coll-url
+                  id="coll-url">
+                <button class="btn js-load-more relative">
+                  <span class="load-more-text tp-btn tp-btn__primary font-medium" load-more-text>
+                    {{- 'button.load_more' | t -}}
+                  </span>
+                  <span class="hide icon loading tp-loading" loader>
+                    <svg
+                      class="icon-loading"
+                      width="30"
+                      height="30"
+                      preserveAspectRatio="xMidYMid"
+                      style="shape-rendering: auto;"
+                      viewBox="0 0 100 100"
+                      xmlns:xlink="http://www.w3.org/1999/xlink"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <circle
+                        cx="50"
+                        cy="50"
+                        fill="none"
+                        r="35"
+                        stroke-dasharray="164.93361431346415 56.97787143782138"
+                        stroke-width="10"
+                        stroke="#4d36ab">
+                        <animateTransform
+                          attributeName="transform"
+                          dur="1s"
+                          keyTimes="0;1"
+                          repeatCount="indefinite"
+                          type="rotate"
+                          values="0 50 50;360 50 50"></animateTransform>
+                      </circle>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+  {
+    "name": "t:sections.main-blog.name",
+    "tag": "section",
+    "class": "section",
+    "settings": [
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      },
+      {
+        "type": "select",
+        "id": "position_sidebar",
+        "label": "Position sidebar",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          }, {
+            "value": "sidebar_left",
+            "label": "Left"
+          }, {
+            "value": "sidebar_right",
+            "label": "Right"
+          }
+        ],
+        "default": "sidebar_left"
+      },
+      {
+        "type": "range",
+        "id": "post_per_page",
+        "min": 1,
+        "max": 24,
+        "step": 1,
+        "unit": "px",
+        "label": "Maximum articles to show",
+        "default": 6
+      }, {
+        "type": "select",
+        "id": "columns",
+        "label": "Display column",
+        "options": [
+          {
+            "value": "1",
+            "label": "List"
+          }, {
+            "value": "2",
+            "label": "2"
+          }, {
+            "value": "3",
+            "label": "3"
+          }
+        ],
+        "default": "1"
+      }, {
+        "type": "select",
+        "id": "show_loadmore_paginate",
+        "label": "Type paginate",
+        "default": "paginate",
+        "options": [
+          {
+            "label": "Paginate",
+            "value": "paginate"
+          }, {
+            "label": "Show loadmore",
+            "value": "loadmore"
+          }
+        ]
+      }, {
+        "type": "paragraph",
+        "content": "t:sections.main-blog.settings.paragraph.content"
+      }, {
+        "type": "header",
+        "content": "t:sections.all.padding.section_padding_heading"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_top",
+        "default": 36
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_bottom",
+        "default": 36
+      }
+    ],
+    "blocks": [
+      {
+        "type": "@app"
+      }, {
+        "type": "categories",
+        "name": "Categories (for sidebar)",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Categories"
+          }, {
+            "type": "link_list",
+            "id": "menu",
+            "label": "Select categories menu"
+          }
+        ]
+      }, {
+        "type": "recent_post",
+        "name": "Recent Post (for sidebar)",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Recent Post"
+          }, {
+            "type": "blog",
+            "id": "sidebar_recent_blog_name",
+            "label": "Blog Name"
+          }
+        ]
+      }, {
+        "type": "sidebar_tags",
+        "name": "Tags (for sidebar)",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Tags"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

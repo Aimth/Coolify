@@ -1,0 +1,509 @@
+{%- liquid
+  assign gst = settings
+  assign sst = section.settings
+  assign container = gst.container
+  assign top_search = gst.show_top_search
+  assign wishlist = gst.show_wishlist_icon
+  assign minicart = gst.show_minicart
+  assign enable_sticky = gst.enable_sticky_header
+  assign header_boxed_class = ''
+  assign img_logo = gst.logo
+ 
+  if request.page_type == 'index'
+    assign check_index = true
+  endif
+-%}
+
+{{ 'header.css' | asset_url | stylesheet_tag }}
+<link
+  rel="stylesheet"
+  href="{{ 'component-list-menu.css' | asset_url }}"
+  media="print"
+  onload="this.media='all'">
+<link
+  rel="stylesheet"
+  href="{{ 'component-search.css' | asset_url }}"
+  media="print"
+  onload="this.media='all'">
+<link
+  rel="stylesheet"
+  href="{{ 'component-cart-notification.css' | asset_url }}"
+  media="print"
+  onload="this.media='all'">
+{%- if settings.predictive_search_enabled -%}
+  <link
+    rel="stylesheet"
+    href="{{ 'component-price.css' | asset_url }}"
+    media="print"
+    onload="this.media='all'">
+  <link
+    rel="stylesheet"
+    href="{{ 'component-loading-overlay.css' | asset_url }}"
+    media="print"
+    onload="this.media='all'">
+{%- endif -%}
+{%- if section.settings.menu_type_desktop == 'mega' -%}
+  <link
+    rel="stylesheet"
+    href="{{ 'component-mega-menu.css' | asset_url }}"
+    media="print"
+    onload="this.media='all'">
+  <noscript>{{ 'component-mega-menu.css' | asset_url | stylesheet_tag }}</noscript>
+{%- endif -%}
+
+
+{%- if settings.cart_type == "drawer" -%}
+  {{ 'component-cart-drawer.css' | asset_url | stylesheet_tag }}
+  {{ 'component-cart.css' | asset_url | stylesheet_tag }}
+  {{ 'component-price.css' | asset_url | stylesheet_tag }}
+  {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
+  {{ 'component-loading-overlay.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+<noscript>{{ 'component-list-menu.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-search.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-cart-notification.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-cart-items.css' | asset_url | stylesheet_tag }}</noscript>
+
+
+<script src="{{ 'details-disclosure.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'header.js' | asset_url }}" defer="defer"></script>
+
+<{% if enable_sticky %}sticky-header data-sticky-type="always"{% else %}div{% endif %} class="header-wrapper  {% if gst.show_line_separator %} header-wrapper--border-bottom{% endif %}">
+  <header class="header tp-header header-mobile py-16 lg:py-0 relative color-{{ section.settings.color_scheme }} gradient">
+    <div class="{{ container }}">
+      <div class="header-layout3">
+        <div class="header-top flex items-center justify-between lg:pt-30">
+          <div class="toggle-nav">
+            {% render 'icon'
+              , icon_name: 'menu-mobile' %}
+          </div>
+          <div class="header-top__social hidden lg:block">
+            {%- render 'social-icons'
+              , flow: 'down' -%}
+          </div>
+          <div class="col-header-left flex items-center gap-10">
+            {%- render 'logo'
+              , img_logo: img_logo
+              , check_index: check_index -%}
+          </div>
+          <div class="col-header-right flex items-center gap-15 mr-0 md:mr-10">
+            {%- liquid
+              if gst.show_account == 'account_header'
+                render 'my-account'
+              endif
+              if top_search
+                render 'header-search',  header_layout: 'h_layout3'
+              endif
+              if wishlist
+                render 'wishlist'
+              endif
+              if minicart
+                render 'minicart', cart: cart
+              endif
+            -%}
+          </div>
+        </div>
+        <div class="col-header-center">
+          <div class="contnet-center">
+            {% render 'horizontal-menu'
+              , block: block
+              , container: container %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+</{% if enable_sticky %}sticky-header{% else %}div{% endif %}>
+
+{%- if settings.cart_type == "notification" -%}
+  {%- render 'cart-notification'
+    , color_scheme: section.settings.color_scheme
+    , desktop_menu_type: section.settings.menu_type_desktop -%}
+{%- endif -%}
+
+<script type="application/ld+json">
+  {
+      "@context": "http://schema.org",
+      "@type": "Organization",
+      "name": {{ shop.name | json }},
+      {% if settings.logo %}
+      "logo": {{ settings.logo | image_url: width: 500 | prepend: "https:" | json }},
+      {% endif %}
+      "sameAs": [
+        {{ settings.social_twitter_link | json }},
+        {{ settings.social_facebook_link | json }},
+        {{ settings.social_pinterest_link | json }},
+        {{ settings.social_instagram_link | json }},
+        {{ settings.social_tiktok_link | json }},
+        {{ settings.social_tumblr_link | json }},
+        {{ settings.social_snapchat_link | json }},
+        {{ settings.social_youtube_link | json }},
+        {{ settings.social_vimeo_link | json }}
+      ],
+      "url": {{ request.origin | append: page.url | json }}
+    }
+</script>
+
+{%- if request.page_type == 'index' -%}
+  {% assign potential_action_target = request.origin | append: routes.search_url | append: "?q={search_term_string}" %}
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "name": {{ shop.name | json }},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {{ potential_action_target | json }},
+        "query-input": "required name=search_term_string"
+      },
+      "url": {{ request.origin | append: page.url | json }}
+    }
+  </script>
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "Header 3",
+    "class": "section-header",
+    "enabled_on": {
+      "groups": ["header"]
+    },
+    "settings": [
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "@app"
+      },
+      {
+        "type": "single_link",
+        "name": "Single link",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Single link"
+          }, {
+            "type": "url",
+            "id": "url",
+            "label": "Link"
+          }, {
+            "type": "checkbox",
+            "id": "open_link",
+            "label": "Open link in new window",
+            "default": false
+          }
+        ]
+      },
+      {
+        "type": "menu_normal",
+        "name": "Menu normal",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Dropdown"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "Link"
+          },
+          {
+            "type": "link_list",
+            "id": "menu",
+            "label": "Select menu",
+            "default": "main-menu"
+          },
+          {
+            "type": "checkbox",
+            "id": "open_link",
+            "label": "Open link in new window",
+            "default": false
+          }, {
+            "type": "select",
+            "id": "label",
+            "options": [
+              {
+                "value": "",
+                "label": "Select"
+              }, {
+                "value": "label1",
+                "label": "Hot"
+              }, {
+                "value": "label2",
+                "label": "New"
+              }
+            ],
+            "label": "Select label"
+          }
+        ]
+      },
+      {
+        "type": "banner_parent",
+        "name": "Banner parent",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Home"
+          },
+          {
+            "type": "select",
+            "id": "col",
+            "default": "w-1/5",
+            "options": [
+              {
+                "value": "w-full",
+                "label": "Width full"
+              },
+              {
+                "value": "w-1/2",
+                "label": "2 collumns"
+              },
+              {
+                "value": "w-1/3",
+                "label": "3 collumns"
+              },
+              {
+                "value": "w-1/4",
+                "label": "4 collumns"
+              }, {
+                "value": "w-1/5",
+                "label": "5 collumns"
+              }, {
+                "value": "w-1/6",
+                "label": "6 colummns"
+              }, {
+                "value": "w-1/7",
+                "label": "7 colummns"
+              }
+            ],
+            "label": "Width col:"
+          },
+          {
+            "type": "text",
+            "id": "button_label",
+            "default": "Explore All Demos (45+)",
+            "label": "Button label"
+          },
+          {
+            "type": "url",
+            "id": "button_link",
+            "label": "Link"
+          }, {
+            "type": "select",
+            "id": "button_type",
+            "options": [
+              {
+                "value": "tp-btn__primary",
+                "label": "Button primary"
+              }, {
+                "value": "tp-btn__secondary",
+                "label": "Button secondary"
+              }, {
+                "value": "tp-btn__underline",
+                "label": "Button underline"
+              }
+            ],
+            "label": "Button type",
+            "default": "tp-btn__primary"
+          }
+        ]
+      }, {
+        "type": "banner_child",
+        "name": "Banner(Multi-col child)",
+        "settings": [
+          {
+            "type": "paragraph",
+            "content": "This block is only used for Banner parent."
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Heading"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image item"
+          },
+          {
+            "type": "select",
+            "id": "label",
+            "options": [
+              {
+                "value": "none",
+                "label": "None"
+              }, {
+                "value": "label1",
+                "label": "Hot"
+              }, {
+                "value": "label2",
+                "label": "New"
+              }
+            ],
+            "label": "Select label"
+          }, {
+            "type": "url",
+            "id": "banner_link",
+            "label": "Banner link"
+          }, {
+            "type": "checkbox",
+            "id": "open_link",
+            "label": "Open link in new window",
+            "default": false
+          }
+        ]
+      }, {
+        "type": "multi_column",
+        "name": "Multi Column",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Product"
+          },
+          {
+            "type": "header",
+            "content": "Config menu"
+          },
+          {
+            "type": "link_list",
+            "id": "menu_multi_col",
+            "label": "Add menu"
+          },
+          {
+            "type": "select",
+            "id": "col",
+            "default": "w-1/5",
+            "options": [
+              {
+                "value": "w-full",
+                "label": "Width full"
+              },
+              {
+                "value": "w-1/2",
+                "label": "2 collumns"
+              },
+              {
+                "value": "w-1/3",
+                "label": "3 collumns"
+              },
+              {
+                "value": "w-1/4",
+                "label": "4 collumns"
+              }, {
+                "value": "w-1/5",
+                "label": "5 collumns"
+              }, {
+                "value": "w-1/6",
+                "label": "6 colummns"
+              }
+            ],
+            "label": "Width col:"
+          }, {
+            "type": "header",
+            "content": "Config collection"
+          }, {
+            "type": "collection_list",
+            "id": "collection_list",
+            "label": "Collection list"
+          }, {
+            "type": "header",
+            "content": "Config product"
+          }, {
+            "type": "product_list",
+            "id": "product_list",
+            "limit": 5,
+            "label": "Product list"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Header 3",
+        "blocks": [
+          {
+            "type": "single_link",
+            "settings": {
+              "title": "Home",
+              "url": "\/",
+              "open_link": false
+            }
+          },
+          {
+            "type": "single_link",
+            "settings": {
+              "title": "Shop",
+              "url": "shopify:\/\/collections",
+              "open_link": false
+            }
+          }, {
+            "type": "single_link",
+            "settings": {
+              "title": "Collection",
+              "url": "shopify:\/\/collections",
+              "open_link": false
+            }
+          }, {
+            "type": "single_link",
+            "settings": {
+              "title": "Clothings",
+              "url": "shopify:\/\/collections\/new-arrivals",
+              "open_link": false
+            }
+          }, {
+            "type": "single_link",
+            "settings": {
+              "title": "Accessories",
+              "url": "shopify:\/\/collections\/accessories",
+              "open_link": false
+            }
+          }, {
+            "type": "single_link",
+            "settings": {
+              "title": "Sale",
+              "url": "shopify:\/\/collections\/sale",
+              "open_link": false
+            }
+          }, {
+            "type": "single_link",
+            "settings": {
+              "title": "Lookbook",
+              "url": "shopify:\/\/collections\/best-selling",
+              "open_link": false
+            }
+          }, {
+            "type": "single_link",
+            "settings": {
+              "title": "Blog",
+              "url": "shopify:\/\/blogs\/news",
+              "open_link": false
+            }
+          }, {
+            "type": "single_link",
+            "settings": {
+              "title": "Contact",
+              "url": "shopify:\/\/pages\/contact",
+              "open_link": false
+            }
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

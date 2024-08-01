@@ -1,0 +1,51 @@
+{% unless settings.shipping_calculator == 'Disabled' %}
+  <script src="{{ 'shipping-calculator.js' | asset_url }}" defer="defer"></script>
+  <div class="tp__addon tp-shipping-calculator mb-24" id="tp__shipping">
+    {% if show-title %}
+      <h5 class="mb-12">{{ settings.shipping_calculator_heading | default: 'Get shipping estimates' }}</h5>
+    {% endif %}
+    <div class="mb-5 tp-shipping-calculator__form-field">
+      <div class="field-top relative mb-12">
+        <select
+          id="address_country"
+          class="form-control field__input w-full"
+          name="address[country]"
+          data-default="{{ settings.default_country_estimate_shipping | default: 'United States' }}">
+          {{ country_option_tags }}
+        </select>
+        {% render 'icon'
+          , icon_name: 'dropdown' %}
+      </div>
+      <div class="field-bottom flex items-center justify-start gap-12 mb-12">
+        <div class="field flex-1 relative" id="address_province_container">
+          <select
+            id="address_province"
+            class="form-control field__input w-full"
+            name="address[province]"
+            data-default="{{ form.province }}"></select>
+          {% render 'icon'
+            , icon_name: 'dropdown' %}
+        </div>
+        <div class="field flex-1">
+          <input
+            type="text"
+            class="form-control field__input w-full"
+            id="AddressZip"
+            name="address[zip]"
+            value="{{ form.zip }}"
+            placeholder="Zip code"
+            autocapitalize="characters">
+        </div>
+      </div>
+    </div>
+    <div class="tp__addon-actions">
+      <button
+        type="button"
+        class="btn-save tp-btn tp-btn__primary w-full"
+        data-action="shipping">
+        {{ settings.shipping_calculator_submit_button_label | default: 'Calculate shipping' }}
+      </button>
+    </div>
+    <div class="tp__addon-message"></div>
+  </div>
+{% endunless %}

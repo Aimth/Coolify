@@ -1,0 +1,325 @@
+<script src="{{ 'product-grid.js' | asset_url }}" defer="defer"></script>
+{{ 'product-grid.css' | asset_url | stylesheet_tag }}
+{% liquid
+  assign sst = section.settings
+  assign container = sst.container
+  assign collection = collections[sst.collection]
+  assign load_more_button_enable = sst.load_more_button_enable
+  assign button_label = sst.button_label
+  assign button_type = sst.button_type
+  assign button_action = sst.button_action
+%}
+{%- capture style -%}
+  --section-padding-top: {{ sst.padding_top }}px; 
+  --section-padding-bottom: {{ sst.padding_bottom }}px;
+  {% if sst.gap_item != blank %}
+    --grid-desktop-horizontal-spacing: {{ sst.gap_item }}px;
+    --grid-mobile-horizontal-spacing: {{ sst.gap_item }}px;
+    {% if sst.gap_item >= 10 %}
+      --grid-mobile-horizontal-spacing: {{ sst.gap_item | divided_by: 2 }}px;
+    {% endif %}
+  {% endif %}
+{%- endcapture -%}
+{% capture classGrid %}
+  tp-grid tp-grid--{{ sst.columns_mobile }}-col-mobile tp-grid--{{ sst.columns_tablets }}-col-tablets tp-grid--{{ sst.columns_desktop }}-col-desktop 
+{% endcapture %}
+<div class="tp-fcl-grid color-{{ sst.color_scheme }} gradient section-py {% if sst.reset_spacing == false %}section-mb{% endif %}" style="{{ style | strip | strip_newlines }}">
+  <div class="{{ container }}">
+    {% render 'section-header'
+      , sst: sst
+      , linkBtn: sst.collection.url %}
+    {%- paginate collection.products by sst.item_before %}
+      <div class="tp-fcl-grid__content">
+        <div class="{{ classGrid }}">
+          {%- for product in collection.products limit: sst.limit_products -%}
+            <div class="tp-grid__item">
+              {% render 'product-item-layout-1'
+                , card_product: product %}
+            </div>
+          {%- else -%}
+            {%- for i in (1..sst.item_before) -%}
+              <div class="tp-grid__item">
+                {% liquid
+                  assign diff = 4 | minus: 1
+                  assign randomNumber = 'now' | date: '%N' | modulo: diff | plus: 1
+                  assign placeholder_image = 'product-apparel-' | append: randomNumber
+                  render 'product-item-layout-1', placeholder_image: placeholder_image
+                %}
+              </div>
+            {%- endfor -%}
+          {%- endfor -%}
+        </div>
+        {%- if load_more_button_enable -%}
+          {%- if button_action == 'redirect' -%}
+            <div class="fcl-load-more text-center mt-40">
+              <a class="tp-btn tp-btn__{{ button_type }} n-hvr" href="{{ sst.collection.url | default: '#' }}">
+                {{ button_label }}
+              </a>
+            </div>
+          {% else %}
+            {% if paginate.next %}
+              <input
+                type="hidden"
+                value="{{ paginate.next.url }}"
+                data-next-link
+                id="next-link">
+              <input
+                type="hidden"
+                value="{{ paginate.pages }}"
+                data-all-pages
+                id="all-pages">
+              <input
+                type="hidden"
+                value="{{ paginate.current_page }}"
+                data-this-page
+                id="this-page">
+              <input
+                type="hidden"
+                value="{{ sst.collection.url }}"
+                data-coll-url
+                id="coll-url">
+              <div class="load-more_wrap text-center mt-40">
+                <button class="js-load-more tp-btn tp-btn__{{ button_type }}">
+                  <span class="load-more-text" load-more-text>
+                    {{ button_label }}
+                  </span>
+                  <span class="tp-loading opacity-0" loader>
+                    {% render 'icon'
+                      , icon_name: 'icon-loading' %}
+                  </span>
+                </button>
+              </div>
+            {% endif %}
+          {% endif %}
+        {%- endif -%}
+      </div>
+    {% endpaginate %}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Product normal",
+    "tag": "section",
+    "disabled_on": {
+      "groups": ["*"]
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": "Section header"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_heading_header",
+        "label": "Show \"Section header\"",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Title"
+      },
+      {
+        "type": "richtext",
+        "id": "description",
+        "label": "Description",
+        "default": "<p></p>"
+      }, {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "text-left",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          }, {
+            "value": "text-center",
+            "label": "Center"
+          }, {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ]
+      }, {
+        "type": "checkbox",
+        "id": "show_button",
+        "label": "Show button",
+        "default": true
+      }, {
+        "type": "text",
+        "id": "text_btn",
+        "label": "Text button",
+        "default": "See more"
+      }, {
+        "type": "paragraph",
+        "content": "----------------------------------------"
+      }, {
+        "type": "header",
+        "content": "General"
+      }, {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      }, {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      }, {
+        "type": "collection",
+        "id": "collection",
+        "label": "Collection"
+      }, {
+        "type": "range",
+        "id": "limit_products",
+        "label": "Products to show",
+        "min": 1,
+        "max": 30,
+        "step": 1,
+        "default": 8
+      }, {
+        "type": "range",
+        "id": "columns_desktop",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "default": 4,
+        "label": "Number of columns on desktop"
+      }, {
+        "type": "select",
+        "id": "columns_tablets",
+        "options": [
+          {
+            "value": "1",
+            "label": "1 Columns"
+          }, {
+            "value": "2",
+            "label": "2 Columns"
+          }, {
+            "value": "3",
+            "label": "3 Columns"
+          }
+        ],
+        "default": "3",
+        "label": "Number of columns on columns_tablets"
+      }, {
+        "type": "select",
+        "id": "columns_mobile",
+        "options": [
+          {
+            "value": "1",
+            "label": "1 Columns"
+          }, {
+            "value": "2",
+            "label": "2 Columns"
+          }
+        ],
+        "default": "2",
+        "label": "Number of columns on mobile"
+      }, {
+        "type": "number",
+        "id": "gap_item",
+        "label": "Gap item",
+        "placeholder": "30",
+        "info": "If left blank, Horizontal space theme settings will be used"
+      }, {
+        "type": "checkbox",
+        "id": "load_more_button_enable",
+        "label": "Show \"Load more\"",
+        "default": false
+      }, {
+        "type": "select",
+        "id": "button_action",
+        "label": "Button action",
+        "default": "load",
+        "options": [
+          {
+            "value": "load",
+            "label": "Load more products"
+          }, {
+            "value": "redirect",
+            "label": "Redirect to collection page"
+          }
+        ]
+      }, {
+        "type": "range",
+        "id": "item_before",
+        "label": "Items before",
+        "min": 1,
+        "max": 12,
+        "step": 1,
+        "default": 8,
+        "info": "Only active when choosing Load more products"
+      }, {
+        "type": "text",
+        "id": "button_label",
+        "label": "Button label",
+        "default": "Load more"
+      }, {
+        "type": "select",
+        "id": "button_type",
+        "label": "Button type",
+        "default": "primary",
+        "options": [
+          {
+            "value": "primary",
+            "label": "Primary"
+          }, {
+            "value": "secondary",
+            "label": "Secondary"
+          }, {
+            "value": "tertiary",
+            "label": "Tertiary"
+          }
+        ]
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }, {
+        "type": "checkbox",
+        "id": "reset_spacing",
+        "label": "Remove default space between sections",
+        "default": false
+      }
+    ],
+    "presets": [
+      {
+        "name": "Product Grid"
+      }
+    ]
+  }
+{% endschema %}

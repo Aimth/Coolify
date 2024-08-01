@@ -1,0 +1,175 @@
+{% liquid
+  assign classPositonContentitems = 'items-start'
+  assign classPositonContentjustify = 'justify-start'
+  if sst.text_alignment == 'text-center'
+    assign classPositonContentitems = 'items-center'
+    assign classPositonContentjustify = 'justify-center'
+  elsif sst.text_alignment == 'text-right'
+    assign classPositonContentitems = 'items-end'
+    assign classPositonContentjustify = 'justify-end'
+  endif
+  assign flexDirection = 'flex-col md:flex-row gap-0 md:gap-50 pt-16 md:pt-0'
+  if template == 'product' or template == 'search'
+    assign flexDirection = 'flex-row gap-0 md:gap-50'
+  endif
+  if sst.position_content == 'column'
+    assign flexDirection = 'flex-col'
+  endif
+%}
+{%- capture breadcrumb_lv1 -%}
+        <a itemprop="item" href="{{ routes.root_url }}">
+            <span itemprop="name">{{ 'theme.info.home' | t }}</span></a>
+        <meta itemprop="position" content="1" />
+    {%- endcapture -%}
+
+{% comment %}Define breadcrumb variable{% endcomment %}
+
+{% liquid
+  assign tn = template | split: '.' | first
+  assign pos_lv2 = '2'
+  assign link_lv2 = '#'
+  assign pos_lv3 = '3'
+
+  case tn
+    when 'product'
+      assign bt_lv2 = 'sections.breadcrumbs.content.collections' | t
+      assign show_lv2 = false
+      assign link_lv2 = '/collections'
+      assign bt_lv3 = product.title
+      assign show_lv3 = true
+
+    when 'collection' and collection.handle
+      assign show_lv2 = true
+      assign bt_lv2 = 'sections.breadcrumbs.content.collections' | t
+      assign link_lv2 = '/collections'
+      assign bt_lv3 = collection.title
+      assign show_lv3 = true
+    when 'list-collections'
+      assign show_lv2 = true
+      assign bt_lv2 = 'sections.breadcrumbs.content.collections' | t
+      assign link_lv2 = '/collections'
+      assign bt_lv3 = 'sections.breadcrumbs.content.collections' | t
+      assign show_lv3 = false
+    when 'search'
+      assign show_lv2 = true
+      assign bt_lv2 = 'sections.breadcrumbs.content.search' | t
+      assign link_lv2 = '#'
+      assign show_lv3 = false
+    when 'blog'
+      assign show_lv2 = false
+      assign bt_lv3 = blog.title
+      assign show_lv3 = true
+
+    when 'article'
+
+    when 'page'
+      assign show_lv2 = false
+      assign show_lv3 = true
+      assign bt_lv3 = page.title
+      assign pos_lv3 = '2'
+
+    when 'customers/login'
+      assign show_lv2 = true
+      assign bt_lv2 = 'sections.breadcrumbs.content.account' | t
+      assign link_lv2 = '/account'
+      assign show_lv3 = true
+      assign bt_lv3 = 'sections.breadcrumbs.content.login' | t
+      assign pos_lv3 = '2'
+
+    when 'customers/register'
+      assign show_lv2 = true
+      assign bt_lv2 = 'sections.breadcrumbs.content.account' | t
+      assign link_lv2 = '/account'
+      assign show_lv3 = true
+      assign bt_lv3 = 'sections.breadcrumbs.content.register' | t
+      assign pos_lv3 = '2'
+
+    when 'customers/activate_account'
+      assign show_lv2 = true
+      assign bt_lv2 = 'sections.breadcrumbs.content.account' | t
+      assign link_lv2 = '/account'
+      assign show_lv3 = true
+      assign bt_lv3 = 'customer.activate_account.title' | t
+      assign pos_lv3 = '2'
+
+    when 'customers/addresses'
+      assign show_lv2 = true
+      assign bt_lv2 = 'sections.breadcrumbs.content.account' | t
+      assign link_lv2 = '/account'
+      assign show_lv3 = true
+      assign bt_lv3 = 'customer.addresses.title' | t
+      assign pos_lv3 = '2'
+
+    when 'customers/account'
+      assign show_lv2 = true
+      assign bt_lv2 = 'sections.breadcrumbs.content.account' | t
+      assign link_lv2 = '/account'
+      assign show_lv3 = false
+      assign bt_lv3 = 'customer.activate_account.title' | t
+      assign pos_lv3 = '2'
+    when 'article'
+      assign show_lv2 = true
+      assign bt_lv2 = blog.title
+      assign link_lv2 = blog.url
+      assign show_lv3 = true
+      assign bt_lv3 = article.title
+      assign pos_lv3 = '3'
+    else
+      when 'cart'
+        assign show_lv2 = false
+        assign show_lv3 = true
+        assign bt_lv3 = 'Cart'
+        assign pos_lv3 = '2'
+    endcase
+  %}
+
+  <div class="flex {{ classPositonContentitems }} {{ flexDirection }} {{ classPositonContentjustify }}">
+    {% unless tn == 'product' or tn == 'article' or tn == 'search' %}
+      <h1 class="h2 mb-0">{{ bt_lv3 }}</h1>
+    {% endunless %}
+    <div class="breadcrumb">
+      <ol
+        class="flex flex-row color-base {{ classPositonContent }} items-center py-16 md:py-22 list-none"
+        itemscope
+        itemtype="https://schema.org/BreadcrumbList">
+        <li
+          class="ml-0 mr-10 line-clamp-1"
+          itemprop="itemListElement"
+          itemscope
+          itemtype="https://schema.org/ListItem">
+          {{ breadcrumb_lv1 }}
+        </li>
+
+        {% if show_lv2 %}
+          ›
+          <li
+            class="mx-10 line-clamp-1"
+            itemprop="itemListElement"
+            itemscope
+            itemtype="https://schema.org/ListItem">
+            <a
+              itemscope
+              itemtype="https://schema.org/WebPage"
+              itemprop="item"
+              itemid="{{ link_lv2 }}"
+              href="{{ link_lv2 }}">
+              <span itemprop="name">{{ bt_lv2 }}</span>
+            </a>
+            <meta itemprop="position" content="{{ pos_lv2 }}">
+          </li>
+        {% endif %}
+
+        {% if show_lv3 %}
+          ›
+          <li
+            class="ml-10 mr-0 line-clamp-1 color-other"
+            itemprop="itemListElement"
+            itemscope
+            itemtype="https://schema.org/ListItem">
+            <span itemprop="name">{{ bt_lv3 }}</span>
+            <meta itemprop="position" content="{{ pos_lv3 }}">
+          </li>
+        {% endif %}
+      </ol>
+    </div>
+  </div>

@@ -1,0 +1,556 @@
+{{ 'section-multicolumn.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign sst = section.settings
+  assign container = sst.container
+  assign column_align = sst.column_alignment
+  assign bg_img = sst.background_section
+  assign hvr_effect = ''
+  if sst.hover_effect == 'hvr_zoom'
+    assign hvr_effect = 'hvr__zoom'
+  elsif sst.hover_effect == 'translate_to_top'
+    assign hvr_effect = 'hvr__translate-top'
+  elsif sst.hover_effect == 'overlay_bg'
+    assign hvr_effect = 'hvr__overlay-bg'
+  endif
+  assign bdRadiusImg = ''
+  if sst.border_radius_img
+    assign bdRadiusImg = 'bd-radius'
+  endif
+-%}
+{%- capture style -%}
+  --section-padding-top: {{ sst.padding_top }}px; 
+  --section-padding-bottom: {{ sst.padding_bottom }}px;
+{%- endcapture -%}
+<div class="tp-multicolumn color-{{ sst.color_scheme }} gradient section-py {% if sst.reset_spacing == false %}section-mb{% endif %}" style="
+    {{ style | strip | strip_newlines }};
+    {% if bg_img != blank %}
+      background: url({{ bg_img | image_url: width: bg_img.width, height: bg_img.height }});
+      background-size: cover;
+      background-repeat: no-repeat!important;
+      background-position: center center!important;
+    {% endif %}
+  ">
+  <div class="{{ container }} section-full">
+    {% render 'section-header'
+      , sst: sst %}
+    {% if section.blocks.size > 0 %}
+      <div class="{%- if sst.button_label != blank -%} mb-40{% endif %} tp-multicolumn__content">
+        <div class="tp-multicolumn__inner flex flex-wrap tp-grid">
+          {%- for block in section.blocks -%}
+            {% liquid
+              assign bst = block.settings
+              assign col_width_desktop = bst.col_width_desktop
+              assign col_width_tablets = bst.col_width_tablets
+              assign col_width_mobile = bst.col_width_mobile
+            %}
+            <div class="tp-multicolumn__item {{ hvr_effect }} overflow-hidden {{ col_width_mobile }} {{ col_width_tablets }} {{ col_width_desktop }} {{ column_align }} {% if sst.show_border_separate %}border-separate{% endif %}{% if bst.custom_width == 'custom' %}custom-width{% endif %}" style="--width-custom: {{ bst.width_custom }}px">
+              {%- if bst.show_image -%}
+                <div class="tp-multicolumn__item-img {{ bdRadiusImg }} relative {% if bst.image == blank %}no-image{% endif %}">
+                  {% if bst.link != blank %}
+                    <a
+                      {% if bst.link == blank %}
+                      role="link"
+                      aria-disabled="true"
+                      {% else %}
+                      href="{{ bst.link }}"
+                      {% endif %}
+                      {%- if bst.open_link == '_blank' -%}
+                      target="_blank"
+                      {%- else -%}
+                      target="_self"
+                      {%- endif -%}
+                      class="link-absolute absolute top-0 right-0 left-0 bottom-0 z-20 cursor-pointer"></a>
+                  {% endif %}
+                  {% render 'responsive-image'
+                    , image: bst.image
+                    , aspect_ratio: sst.image_ratio
+                    , custom_ratio: sst.custom_ratio
+                    , class: 'h-full'
+                    , w_default: 280
+                    , h_default: 495
+                  %}
+                </div>
+              {%- endif -%}
+              {%- if bst.title != blank or bst.description != blank or bst.btn_content != blank -%}
+                <div class="tp-multicolumn__item-info {% if bst.show_image %}mt-24{% endif %}">
+                  {%- if bst.title != blank -%}
+                    <h3 class="mb-12">{{ bst.title }}</h3>
+                  {%- endif -%}
+                  {%- if bst.description != blank -%}
+                    <div class="mb-15 rsmb-p">{{ bst.description }}</div>
+                  {%- endif -%}
+                  {%- if bst.btn_content != blank -%}
+                    <div>
+                      <a
+                        {% if bst.link == blank %}
+                        role="link"
+                        aria-disabled="true"
+                        {% else %}
+                        href="{{ bst.link }}"
+                        {% endif %}
+                        {%- if bst.open_link == '_blank' -%}
+                        target="_blank"
+                        {%- else -%}
+                        target="_self"
+                        {%- endif -%}
+                        class="tp-btn tp-btn__{{ bst.type_button }} n-hvr">
+                        {{ bst.btn_content | escape }}
+                      </a>
+                    </div>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    {% endif %}
+    {%- if sst.button_label != blank -%}
+      <div class="text-center">
+        <a
+          class="tp-btn {{ sst.button_type }} n-hvr"
+          {% if sst.button_link == blank %}
+          role="link"
+          aria-disabled="true"
+          {% else %}
+          href="{{ sst.button_link }}"
+          {% endif %}>
+          {{ sst.button_label | escape }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "t:sections.multicolumn.name",
+    "tag": "section",
+    "disabled_on": {
+      "groups": ["*"]
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": "Section header"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_heading_header",
+        "label": "Show \"Section header\"",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Title"
+      },
+      {
+        "type": "richtext",
+        "id": "description",
+        "label": "Description",
+        "default": "<p></p>"
+      }, {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "text-center",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          }, {
+            "value": "text-center",
+            "label": "Center"
+          }, {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ]
+      }, {
+        "type": "checkbox",
+        "id": "show_button",
+        "label": "Show button",
+        "default": true
+      }, {
+        "type": "text",
+        "id": "text_btn",
+        "label": "Text button",
+        "default": "See more"
+      }, {
+        "type": "paragraph",
+        "content": "----------------------------------------"
+      }, {
+        "type": "header",
+        "content": "General"
+      }, {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      }, {
+        "type": "select",
+        "id": "hover_effect",
+        "label": "Hover effect",
+        "options": [
+          {
+            "value": "hvr_none",
+            "label": "None"
+          }, {
+            "value": "hvr_zoom",
+            "label": "Zoom"
+          }, {
+            "value": "translate_to_top",
+            "label": "Translate to top"
+          }, {
+            "value": "overlay_bg",
+            "label": "Overlay background"
+          }
+        ],
+        "default": "hvr_zoom"
+      }, {
+        "type": "image_picker",
+        "id": "background_section",
+        "label": "Background section"
+      }, {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      }, {
+        "type": "select",
+        "id": "image_ratio",
+        "default": "original",
+        "label": "Image ratio",
+        "options": [
+          {
+            "value": "original",
+            "label": "Original aspect ratio"
+          },
+          {
+            "value": "1/1",
+            "label": "1:1"
+          },
+          {
+            "value": "3/4",
+            "label": "3:4"
+          },
+          {
+            "value": "4/3",
+            "label": "4:3"
+          }, {
+            "value": "16/9",
+            "label": "16:9"
+          }, {
+            "value": "custom",
+            "label": "Custom ratio"
+          }
+        ]
+      }, {
+        "type": "text",
+        "id": "custom_ratio",
+        "label": "Custom ratio",
+        "default": "21:9"
+      }, {
+        "type": "checkbox",
+        "id": "border_radius_img",
+        "label": "Border radius image",
+        "default": true
+      }, {
+        "type": "select",
+        "id": "column_alignment",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "t:sections.multicolumn.settings.column_alignment.options__1.label"
+          }, {
+            "value": "text-center",
+            "label": "t:sections.multicolumn.settings.column_alignment.options__2.label"
+          }, {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ],
+        "default": "text-left",
+        "label": "Column alignment"
+      }, {
+        "type": "checkbox",
+        "id": "show_border_separate",
+        "label": "Show border separate",
+        "default": false
+      }, {
+        "type": "text",
+        "id": "button_label",
+        "default": "Button label",
+        "label": "t:sections.multicolumn.settings.button_label.label"
+      }, {
+        "type": "url",
+        "id": "button_link",
+        "label": "t:sections.multicolumn.settings.button_link.label"
+      }, {
+        "type": "select",
+        "id": "button_type",
+        "options": [
+          {
+            "value": "tp-btn__primary",
+            "label": "Button primary"
+          }, {
+            "value": "tp-btn__secondary",
+            "label": "Button secondary"
+          }, {
+            "value": "tp-btn__underline",
+            "label": "Button underline"
+          }
+        ],
+        "label": "Button type",
+        "default": "tp-btn__primary"
+      }, {
+        "type": "header",
+        "content": "t:sections.multicolumn.settings.header_mobile.content"
+      }, {
+        "type": "checkbox",
+        "id": "reset_spacing",
+        "label": "Remove default space between sections",
+        "default": false
+      }, {
+        "type": "header",
+        "content": "t:sections.all.padding.section_padding_heading"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_top",
+        "default": 36
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_bottom",
+        "default": 36
+      }
+    ],
+    "blocks": [
+      {
+        "type": "column",
+        "name": "t:sections.multicolumn.blocks.column.name",
+        "settings": [
+          {
+            "type": "select",
+            "id": "col_width_desktop",
+            "label": "Banner width desktop",
+            "default": "lg:w-1/3",
+            "options": [
+              {
+                "value": "lg:w-1/5",
+                "label": "20%"
+              },
+              {
+                "value": "lg:w-1/4",
+                "label": "25%"
+              },
+              {
+                "value": "lg:w-1/3",
+                "label": "33%"
+              },
+              {
+                "value": "lg:w-1/2",
+                "label": "50%"
+              }, {
+                "value": "lg:w-4/6",
+                "label": "66%"
+              }, {
+                "value": "w-3/4",
+                "label": "75%"
+              }, {
+                "value": "lg:w-full",
+                "label": "100%"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "col_width_tablets",
+            "label": "Banner width tablets",
+            "default": "md:w-1/3",
+            "options": [
+              {
+                "value": "md:w-1/5",
+                "label": "20%"
+              },
+              {
+                "value": "md:w-1/4",
+                "label": "25%"
+              },
+              {
+                "value": "md:w-1/3",
+                "label": "33%"
+              },
+              {
+                "value": "md:w-1/2",
+                "label": "50%"
+              }, {
+                "value": "md:w-4/6",
+                "label": "66%"
+              }, {
+                "value": "md:w-3/4",
+                "label": "75%"
+              }, {
+                "value": "md:w-full",
+                "label": "100%"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "col_width_mobile",
+            "label": "Banner width mobile",
+            "default": "w-1/3",
+            "options": [
+              {
+                "value": "w-1/5",
+                "label": "20%"
+              },
+              {
+                "value": "w-1/4",
+                "label": "25%"
+              },
+              {
+                "value": "w-1/3",
+                "label": "33%"
+              },
+              {
+                "value": "w-1/2",
+                "label": "50%"
+              }, {
+                "value": "w-4/6",
+                "label": "66%"
+              }, {
+                "value": "w-3/4",
+                "label": "75%"
+              }, {
+                "value": "w-full",
+                "label": "100%"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "custom_width",
+            "label": "Custom width",
+            "options": [
+              {
+                "label": "Default",
+                "value": "default"
+              }, {
+                "label": "Custom width",
+                "value": "custom"
+              }
+            ],
+            "default": "default"
+          }, {
+            "type": "number",
+            "id": "width_custom",
+            "label": "Max width",
+            "info": "Only active when choosing custom width",
+            "default": 585
+          }, {
+            "type": "image_picker",
+            "id": "image",
+            "label": "t:sections.multicolumn.blocks.column.settings.image.label"
+          }, {
+            "type": "checkbox",
+            "id": "show_image",
+            "label": "Show image",
+            "default": false
+          }, {
+            "type": "inline_richtext",
+            "id": "title",
+            "default": "Column",
+            "label": "t:sections.multicolumn.blocks.column.settings.title.label"
+          }, {
+            "type": "richtext",
+            "id": "description",
+            "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "label": "t:sections.multicolumn.blocks.column.settings.text.label"
+          }, {
+            "type": "text",
+            "id": "btn_content",
+            "label": "Button label"
+          }, {
+            "type": "select",
+            "id": "open_link",
+            "options": [
+              {
+                "value": "_self",
+                "label": "Current tab"
+              }, {
+                "value": "_blank",
+                "label": "New tab"
+              }
+            ],
+            "label": "Button open link in",
+            "default": "_blank"
+          }, {
+            "type": "url",
+            "id": "link",
+            "label": "t:sections.multicolumn.blocks.column.settings.link.label"
+          }, {
+            "type": "select",
+            "id": "type_button",
+            "label": "Type button",
+            "default": "primary",
+            "options": [
+              {
+                "value": "primary",
+                "label": "Primary"
+              }, {
+                "value": "secondary",
+                "label": "Secondary"
+              }, {
+                "value": "tertiary",
+                "label": "Tertiary"
+              }, {
+                "value": "underline",
+                "label": "Underline"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "t:sections.multicolumn.presets.name",
+        "blocks": [
+          {
+            "type": "column"
+          }, {
+            "type": "column"
+          }, {
+            "type": "column"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

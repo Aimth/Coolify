@@ -1,0 +1,182 @@
+{%- if article and article != empty -%}
+  {% liquid
+    assign gst = settings
+    assign border = gst.border_item_article
+    assign hvr_effect = ''
+    if gst.hover_effect == 'hvr_zoom'
+      assign hvr_effect = 'hvr__zoom'
+    elsif gst.hover_effect == 'translate_to_top'
+      assign hvr_effect = 'hvr__translate-top'
+    elsif gst.hover_effect == 'overlay_bg'
+      assign hvr_effect = 'hvr__overlay-bg'
+    endif
+    assign classLine-clamp = 'line-clamp-none'
+    if gst.article_name_line == '1'
+      assign classLine-clamp = 'line-clamp-1'
+    elsif gst.article_name_line == '2'
+      assign classLine-clamp = 'line-clamp-2'
+    elsif gst.article_name_line == '3'
+      assign classLine-clamp = 'line-clamp-3'
+    endif
+    assign boderRadius = ''
+    if gst.border_radius_article
+      assign boderRadius = 'bd-radius'
+    endif
+
+    if gst.article_text_alignment == "left"
+      assign text_align_class = "justify-start"
+    elsif gst.article_text_alignment == "center"
+      assign text_align_class = "justify-center"
+    else
+      assign text_align_class = "justify-end"
+    endif
+  %}
+  <div class="article-card-wrapper {{ gst.article_layout }} {% if border %}prd-item-border{% endif %}">
+    {% comment %} <article aria-labelledby="Article-{{ article.id }}"> {% endcomment %}
+    <div class="article article-card article-{{ gst.article_style }} {% if gst.article_style == 'card' %}  {{ boderRadius }} color-{{ gst.article_color_scheme }} gradient{% endif %}">
+      <div class="article__inner relative">
+        {%- if gst.post_show_image == true -%}
+          <div class="article-card__image-wrapper {{ hvr_effect }}">
+            <div class="card__inner-image {{ boderRadius }}">
+              <a href="{{ article.url }}" title="{{ article.title }}">
+                {%- if article.image != blank -%}
+                  {% render 'responsive-image'
+                    , image: article.image
+                    , aspect_ratio: gst.article_aspect_ratio
+                    , custom_ratio: gst.article_aspect_ratio_custom
+                    , class: 'h-full'
+                  %}
+                {%- else -%}
+                  {%- render 'responsive-image'
+                    , class: "h-full" -%}
+                {%- endif -%}
+              </a>
+            </div>
+          </div>
+        {%- endif -%}
+        <div class="article__content pt-20 text-{{ gst.article_text_alignment }}{% if gst.article_style == 'card' %} px-20 pb-20{% endif %}">
+          <div class="article__content-information">
+            {%- if gst.post_show_category -%}
+              {% assign blog_name = article.handle | split: '/' | first %}
+              {% if blog_name != blank %}
+                <div class="tp__blog-posts-category text-sm uppercase mb-10">
+                  <a href="/blogs/{{ blog_name }}">
+                    <span>{{ blog_name | capitalize }}</span>
+                  </a>
+                </div>
+              {% endif %}
+            {%- endif -%}
+
+            {% if gst.article_layout == 'layout_1' and gst.post_show_author or gst.post_show_date %}
+              <div class="3 info-container mb-15 flex-row flex flex-wrap items-center {{ text_align_class }} text-sm color-other">
+                {%- if gst.post_show_author -%}
+                  <div class="info-text pr-10">
+                    {{ 'blogs.article.by' | t }}
+                    <span class="info-text__author">
+                      {{- article.author -}}
+                    </span>
+                  </div>
+                {% endif %}
+
+                {%- if gst.post_show_date -%}
+                  <div class="update">
+                    <span class="mr-5">Updated:</span>
+                    {{- article.updated_at | time_tag: format: 'date' -}}
+                  </div>
+                {% endif %}
+              </div>
+            {% endif %}
+
+            <h4 class="article__heading mb-15">
+              <a href="{{ article.url }}" class="{{ classLine-clamp }} {{ gst.font_style_title }}">
+                {{ article.title | escape }}
+              </a>
+            </h4>
+            {%- if gst.post_show_excerpt -%}
+              {%- if article.excerpt.size > 0 or article.content.size > 0 -%}
+                <p class="article-card__excerpt mb-10">
+                  {%- if article.excerpt.size > 0 -%}
+                    {{ article.excerpt | strip_html | truncate: 90 }}
+                  {%- else -%}
+                    {{ article.content | strip_html | truncate: 90 }}
+                  {%- endif -%}
+                </p>
+              {%- endif -%}
+            {%- endif -%}
+            {% if gst.article_layout == 'layout_2' and gst.post_show_author or gst.post_show_date %}
+              <div class="1 info-container mb-15 flex-row flex items-center {{ text_align_class }} text-sm color-other flex-wrap">
+                {%- if gst.post_show_author -%}
+                  <div class="info-text px-12">
+                    {{ 'blogs.article.by' | t }}
+                    <span class="info-text__author">
+                      {{- article.author -}}
+                    </span>
+                  </div>
+                  <span class="opacity-8">|</span>
+                {% endif %}
+
+                {%- if gst.post_show_date -%}
+                  <div class="update px-12">
+                    {{- article.updated_at | time_tag: format: 'date' -}}
+                  </div>
+                {% endif %}
+              </div>
+            {% endif %}
+            {%- if gst.post_show_button -%}
+              <a href="{{ article.url }}" class="tp-btn tp-btn__underline n-hvr">
+                {{ 'blogs.article.read_more_btn' | t }}
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% else %}
+  {% liquid
+    if gst.article_text_alignment == "left"
+      assign text_align_class = "justify-start"
+    elsif gst.article_text_alignment == "center"
+      assign text_align_class = "justify-center"
+    else
+      assign text_align_class = "justify-end"
+    endif
+  %}
+  <div class="article-card-wrapper">
+    <div class="article article-card article-{{ gst.article_style }} {% if gst.article_style == 'card' %} color-{{ gst.article_color_scheme }} gradient{% endif %}">
+      <div class="article__inner relative">
+        <div class="article-card__image-wrapper">
+          <div class="card__inner-image">
+            {%- if placeholder_image != blank -%}
+              {{ placeholder_image | placeholder_svg_tag: 'placeholder-svg w-full h-[300px]' }}
+            {%- else -%}
+              {{ 'product-apparel-2' | placeholder_svg_tag: 'placeholder-svg w-full h-[300px]' }}
+            {%- endif -%}
+          </div>
+        </div>
+
+        <div class="article__content pt-20 text-{{ gst.article_text_alignment }} px-20 pb-20">
+          <div class="article__content-information">
+            <div class="2 info-container mb-15 flex-row flex flex-wrap items-center {{ text_align_class }} text-sm color-other">
+              <div class="info-text pr-10">
+                By
+                <span class="info-text__author">Jon Mr</span>
+              </div>
+
+              <div class="update">
+                <span class="mr-5">Updated:</span>
+                <time datetime="2024-01-26T08:45:58Z">January 26, 2024</time>
+              </div>
+
+            </div>
+            <h4 class="article__heading mb-15">
+              <a href="#" class="line-clamp-2">
+                {{ 'onboarding.article_title' | t }}
+              </a>
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}

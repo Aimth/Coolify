@@ -1,0 +1,346 @@
+{{ 'collection-packery.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign sst = section.settings
+  assign container = sst.container
+  assign media_aspect_ratio = sst.image_ratio
+  assign images_style = sst.images_style
+  assign custom_ratio = sst.custom_ratio
+  assign design_collection = sst.design_collection
+  assign hvr_effect = ''
+  if sst.hover_effect == 'hvr_zoom'
+    assign hvr_effect = 'hvr__zoom'
+  elsif sst.hover_effect == 'translate_to_top'
+    assign hvr_effect = 'hvr__translate-top'
+  elsif sst.hover_effect == 'overlay_bg'
+    assign hvr_effect = 'hvr__overlay-bg'
+  endif
+-%}
+{%- capture style -%}
+  --section-padding-top: {{ sst.padding_top }}px; 
+  --section-padding-bottom: {{ sst.padding_bottom }}px; 
+  {% if sst.gap_item != blank %}
+    --grid-desktop-horizontal-spacing: {{ sst.gap_item }}px;
+
+    --grid-mobile-horizontal-spacing: {{ sst.gap_item }}px;
+    {% if sst.gap_item >= 10 %}
+      --grid-mobile-horizontal-spacing: {{ sst.gap_item | divided_by: 2 }}px;
+    {% endif %}
+  {% endif %} 
+{%- endcapture -%}
+
+<div
+  class="tp-clcpkr color-{{ sst.color_scheme }} gradient section-py {% if sst.reset_spacing == false %}section-mb{% endif %}"
+  style="{{ style | strip | strip_newlines }}"
+  id="{{ section.id }}"
+  data-id="{{ section.id }}">
+  <div class="{{ container }} tp-clcpkr__inner section-full">
+    {% render 'section-header'
+      , sst: sst
+      , linkBtn: sst.link_btn %}
+    <div class="tp-clcpkr__content">
+      <div class="tp-clcpkr__grid grid-{{ section.blocks.size }}">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign collection = collections[block.settings.collection]
+          -%}
+          <div class="tp-clcpkr__items {{ hvr_effect }}">
+            {% render 'list-collection-item'
+              , collection_item: collection
+              , media_aspect_ratio: media_aspect_ratio
+              , custom_ratio: custom_ratio
+              , design_collection: design_collection
+              , sst: sst
+              , type: 'custom'
+              , images_style: images_style
+              , block: block
+              , hvr_effect: hvr_effect
+              , index: forloop.index0
+            %}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Collection packery",
+    "tag": "section",
+    "disabled_on": {
+      "groups": ["*"]
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": "Section header"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_heading_header",
+        "label": "Show \"Section header\"",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Title"
+      },
+      {
+        "type": "richtext",
+        "id": "description",
+        "label": "Description",
+        "default": "<p></p>"
+      }, {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "text-center",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          }, {
+            "value": "text-center",
+            "label": "Center"
+          }, {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ]
+      }, {
+        "type": "checkbox",
+        "id": "show_button",
+        "label": "Show button",
+        "default": true
+      }, {
+        "type": "text",
+        "id": "text_btn",
+        "label": "Text button",
+        "default": "View all collections"
+      }, {
+        "type": "url",
+        "id": "link_btn",
+        "label": "Link button"
+      }, {
+        "type": "paragraph",
+        "content": "----------------------------------------"
+      }, {
+        "type": "header",
+        "content": "General"
+      }, {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      }, {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "accent-1"
+      }, {
+        "type": "number",
+        "id": "gap_item",
+        "label": "Gap item",
+        "placeholder": "30",
+        "info": "If left blank, Horizontal space theme settings will be used"
+      }, {
+        "type": "header",
+        "content": "Collection settings"
+      }, {
+        "type": "select",
+        "id": "design_collection",
+        "label": "Design",
+        "default": "design-2",
+        "options": [
+          {
+            "value": "design-1",
+            "label": "1"
+          },
+          {
+            "value": "design-2",
+            "label": "2"
+          },
+          {
+            "value": "design-3",
+            "label": "3"
+          },
+          {
+            "value": "design-4",
+            "label": "4"
+          }, {
+            "value": "design-5",
+            "label": "5"
+          }, {
+            "value": "design-6",
+            "label": "6"
+          }
+        ]
+      }, {
+        "type": "select",
+        "id": "hover_effect",
+        "label": "Hover effect",
+        "options": [
+          {
+            "value": "hvr_none",
+            "label": "None"
+          }, {
+            "value": "hvr_zoom",
+            "label": "Zoom"
+          }, {
+            "value": "translate_to_top",
+            "label": "Translate to top"
+          }, {
+            "value": "overlay_bg",
+            "label": "Overlay background"
+          }
+        ],
+        "default": "hvr_zoom"
+      }, {
+        "type": "select",
+        "id": "images_style",
+        "label": "Images style",
+        "default": "square",
+        "options": [
+          {
+            "value": "square",
+            "label": "Square"
+          }, {
+            "value": "rounded-full",
+            "label": "Rounded"
+          }, {
+            "value": "bd-radius",
+            "label": "Radius"
+          }
+        ]
+      }, {
+        "type": "select",
+        "id": "image_ratio",
+        "default": "original",
+        "label": "Image ratio",
+        "options": [
+          {
+            "value": "original",
+            "label": "Original aspect ratio"
+          },
+          {
+            "value": "1/1",
+            "label": "1:1"
+          },
+          {
+            "value": "3/4",
+            "label": "3:4"
+          },
+          {
+            "value": "4/3",
+            "label": "4:3"
+          }, {
+            "value": "16/9",
+            "label": "16:9"
+          }, {
+            "value": "custom",
+            "label": "Custom ratio"
+          }
+        ]
+      }, {
+        "type": "text",
+        "id": "custom_ratio",
+        "label": "Custom ratio",
+        "default": "21:9"
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }, {
+        "type": "checkbox",
+        "id": "reset_spacing",
+        "label": "Remove default space between sections",
+        "default": false
+      }
+    ],
+    "blocks": [
+      {
+        "type": "collection_item",
+        "name": "Collection item",
+        "settings": [
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Collection heading"
+          }, {
+            "type": "range",
+            "id": "font_size_heading",
+            "label": "Font size",
+            "min": 16,
+            "step": 1,
+            "max": 50,
+            "default": 36,
+            "unit": "px"
+          }, {
+            "type": "collection",
+            "id": "collection",
+            "label": "Select collection"
+          }, {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Select image"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Collection packery",
+        "blocks": [
+          {
+            "type": "collection_item"
+          },
+          {
+            "type": "collection_item"
+          },
+          {
+            "type": "collection_item"
+          },
+          {
+            "type": "collection_item"
+          }, {
+            "type": "collection_item"
+          }, {
+            "type": "collection_item"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

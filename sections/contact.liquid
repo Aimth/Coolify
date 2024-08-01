@@ -1,0 +1,292 @@
+{{ 'contact.css' | asset_url | stylesheet_tag }}
+{% liquid
+  assign sst = section.settings
+  assign container = sst.container
+%}
+{%- capture style -%}
+  --section-padding-top: {{ sst.padding_top }}px;
+  --section-padding-bottom: {{ sst.padding_bottom }}px;
+{%- endcapture -%}
+<div class="tp-contact-2 color-{{ sst.color_scheme }} gradient section-py {% if sst.reset_spacing == false %}section-mb{% endif %}" style="{{ style | strip | strip_newlines }}">
+  <div class="{{ container }}">
+    <div class="tp-grid tp-grid--2-col-desktop tp-grid--2-col-tablets tp-grid--1-col-mobile">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'contact-info' -%}
+            <div class="tp-contact__left flex items-stretch flex-col tp-grid__item">
+              <div class="tp-contact__info flex flex-col mb-50">
+                {% if block.settings.title_info != blank %}
+                  <h2 class="h3 contact-title">{{ block.settings.title_info }}</h2>
+                {% endif %}
+
+                {% if block.settings.address != blank %}
+                  <div class="contact-address flex items-start justify-start mb-12 gap-12">
+                    {% render 'icon'
+                      , icon_name: 'address' %}
+                    <div class="font-medium text-black">Address:
+                    </div>
+                    <span>{{ block.settings.address }}</span>
+                  </div>
+                {% endif %}
+
+                {% if block.settings.number_phone != blank %}
+                  <div class="contact-phone flex items-start justify-start mb-12 gap-12">
+                    {% render 'icon'
+                      , icon_name: 'phone' %}
+                    <div class="font-medium text-black">Hotline:
+                    </div>
+                    <span>{{ block.settings.number_phone }}</span>
+                  </div>
+                {% endif %}
+                {% if block.settings.email != blank %}
+                  <div class="contact-email flex items-start justify-start mb-12 gap-12">
+                    {% render 'icon'
+                      , icon_name: 'email' %}
+                    <div class="font-medium text-black">Email:
+                    </div>
+                    <span>{{ block.settings.email }}</span>
+                  </div>
+                {% endif %}
+
+                {% if block.settings.show_social != blank %}
+                  {%- render 'social-icons' -%}
+                {% endif %}
+              </div>
+
+              <div class="tp-contact__form mb-50 md:mb-0">
+                {% if block.settings.title_form != blank %}
+                  <h2 class="h3 contact-title">{{ block.settings.title_form }}</h2>
+                {% endif %}
+                {%- form 'contact'
+                  , id: 'ContactForm'
+                  , class: 'isolate' -%}
+                  {%- if form.posted_successfully? -%}
+                    <div
+                      autofocus
+                      class="form-status form-status-list form__message"
+                      tabindex="-1">
+                      {% render 'icon'
+                        , icon_name: 'icon-success' %}
+                      {{ 'templates.contact.form.post_success' | t }}
+                    </div>
+                  {%- elsif form.errors -%}
+                    <div class="tp-form-message--error">
+                      <div class="form__message">
+                        <ul class="form-status-list caption-large" role="list">
+                          <li>
+                            <a class="link" href="#ContactForm-email">
+                              {{ form.errors.translated_fields.email | capitalize }}
+                              {{ form.errors.messages.email }}
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  {%- endif -%}
+                  <div class="contact__fields mb-16">
+                    <div class="field field--with-error">
+                      <input
+                        autocomplete="email"
+                        type="email"
+                        id="ContactForm-email"
+                        class="field__input"
+                        name="contact[email]"
+                        spellcheck="false"
+                        autocapitalize="off"
+                        value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                        aria-required="true"
+                        {% if form.errors contains 'email' %}
+                        aria-invalid="true"
+                        aria-describedby="ContactForm-email-error"
+                        {% endif %}
+                        placeholder="{{ 'templates.contact.form.email' | t }}">
+                    </div>
+                  </div>
+                  <div class="field mb-16">
+                    <textarea
+                      rows="3"
+                      id="ContactForm-body"
+                      class="text-area field__input"
+                      name="contact[{{ 'templates.contact.form.comment' | t }}]"
+                      placeholder="{{ 'templates.contact.form.comment' | t }}">
+                      {{- form.body -}}
+                    </textarea>
+                  </div>
+                  <div class="contact__button">
+                    <button class="tp-btn tp-btn__primary min-w-[150px]" type="submit">
+                      {{ 'templates.contact.form.send' | t }}
+                    </button>
+                  </div>
+                {%- endform -%}
+              </div>
+
+              {% liquid
+                assign ImageContact = block.settings.image_contact
+              %}
+
+              {% if ImageContact != blank %}
+                <div class="tp-contact__image">
+                  {% render 'responsive-image'
+                    , image: ImageContact
+                    , aspect_ratio: sst.image_ratio
+                    , custom_ratio: sst.custom_ratio
+                    , class: 'h-full'
+                    , w_default: 585
+                    , h_default: 390
+                  %}
+                </div>
+              {% endif %}
+
+            </div>
+          {%- when 'contact-map' -%}
+            <div class="tp-contact-2__map tp-grid__item">
+              <div class="iframe-maps max-w-full overflow-hidden w-full">{{ block.settings.iframe_address }}</div>
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Contact",
+    "tag": "section",
+    "disabled_on": {
+      "groups": ["*"]
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": "General"
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      },
+      {
+        "type": "checkbox",
+        "id": "reset_spacing",
+        "label": "Remove default space between sections",
+        "default": false
+      }, {
+        "type": "paragraph",
+        "content": "----------------------------------------"
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 60,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "contact-info",
+        "name": "Contact info",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title_info",
+            "label": "Title info",
+            "default": "Contact Information "
+          },
+          {
+            "type": "richtext",
+            "id": "number_phone",
+            "label": "Number phone",
+            "default": "<p>+88 541 66 38</p>"
+          },
+          {
+            "type": "richtext",
+            "id": "address",
+            "label": "Address",
+            "default": "<p>10250 Santa Monica Blvd. Los Angeles, CA 90067-6658</p>"
+          },
+          {
+            "type": "richtext",
+            "id": "email",
+            "label": "Email",
+            "default": "<p>comacontact@gmail.com</p>"
+          }, {
+            "type": "checkbox",
+            "id": "show_social",
+            "default": false,
+            "label": "Show social media icons"
+          }, {
+            "type": "image_picker",
+            "id": "image_contact",
+            "label": "Image contact"
+          }, {
+            "type": "text",
+            "id": "title_form",
+            "label": "Title form",
+            "default": "Get in touch"
+          }, {
+            "type": "checkbox",
+            "id": "show_form",
+            "default": false,
+            "label": "Show Get in touch form"
+          }
+        ]
+      }, {
+        "name": "Contact map",
+        "type": "contact-map",
+        "settings": [
+          {
+            "type": "textarea",
+            "id": "iframe_address",
+            "label": "Contact Address Iframe"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Contact",
+        "blocks": [
+          {
+            "type": "contact-info"
+          }, {
+            "type": "contact-map"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

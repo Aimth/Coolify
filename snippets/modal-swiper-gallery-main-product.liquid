@@ -1,0 +1,81 @@
+<div class="tp-modal-prd">
+  <div class="tp-modal-prd__inner">
+    <span class="tp-icon-close tp-icon-close-prd absolute right-0 top-0 p-12 cursor-pointer">
+      {% render 'icon', icon_name: 'close', width: 15, height: 15 %}
+    </span>
+    <div class="wrapper-gallery">
+      <div class="swiper js-tp-modal-prd hover__show-nav">
+        <div class="swiper-wrapper">
+          {% for media in listItemGallery %}
+            <div
+              class="swiper-slide"
+              {% if media.media_type == 'model' %}
+                style="height: auto;"
+              {% endif %}
+            >
+              {% case media.media_type %}
+                {% when 'image' %}
+                  {% if media.preview_image.alt contains 'vimeo' %}
+                    {%- liquid
+                      assign video_url = media.preview_image.alt | escape
+                      assign video_id = video_url | replace: 'https://vimeo.com/', ''
+                    -%}
+                    <iframe
+                      src="https://player.vimeo.com/video/{{ video_id }}?controls=0background=1&autoplay=1&muted=1&loop=1"
+                      frameborder="0"
+                      allowfullscreen
+                    ></iframe>
+                  {% elsif media.preview_image.alt contains 'youtube' %}
+                    {%- liquid
+                      assign video_url = media.preview_image.alt | escape
+                      assign video_id = video_url | replace: 'https://www.youtube.com/watch?v=', ''
+                    -%}
+                    <iframe
+                      src="https://www.youtube.com/embed/{{ video_id }}?enablejsapi=1"
+                      class="js-youtube"
+                      allow="autoplay; encrypted-media"
+                      allowfullscreen
+                    ></iframe>
+                  {% else %}
+                    <img
+                      src="{{ media.preview_image | image_url: width: media.preview_image.width , height: media.preview_image.height }}"
+                      loading="lazy"
+                      width="{{ media.preview_image.width }}"
+                      height="{{ media.preview_image.height }}"
+                      alt="{{ media.preview_image.alt | escape }}"
+                    >
+                  {% endif %}
+
+                {% when 'external_video' %}
+                  {% assign video_class = 'js-' | append: media.host %}
+                  {% if media.host == 'youtube' %}
+                    {{
+                      media
+                      | external_video_url: autoplay: false, loop: false, playlist: media.external_id
+                      | external_video_tag: class: 'video_class', loading: 'lazy'
+                    }}
+                  {% else %}
+                    {{
+                      media
+                      | external_video_url: autoplay: false, loop: false
+                      | external_video_tag: class: 'video_class', loading: 'lazy'
+                    }}
+                  {% endif %}
+                {% when 'video' %}
+                  {{
+                    media
+                    | media_tag: image_size: '2048x', autoplay: false, loop: false, controls: true, preload: 'none'
+                  }}
+                {% when 'model' %}
+                  {{ media | media_tag: image_size: '2048x', toggleable: true }}
+                {% else %}
+
+              {% endcase %}
+            </div>
+          {% endfor %}
+        </div>
+        {% render 'swiper-control', class: 'tp-modal-prd', show_bullet: false, show_arrow: true %}
+      </div>
+    </div>
+  </div>
+</div>

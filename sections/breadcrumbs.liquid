@@ -1,0 +1,131 @@
+{% liquid
+  assign sst = section.settings
+  assign container = sst.container
+  assign grid_background = sst.show_background_grid
+%}
+{%- capture style -%}
+  --section-padding-top: {{ sst.padding_top }}px; 
+  --section-padding-bottom: {{ sst.padding_bottom }}px; 
+{%- endcapture -%}
+<div class="tp-breadcrumns">
+  {% if sst.image != blank %}
+    <div class="tp-breadcrumns__image max-h-[400px] overflow-hidden">
+      {% render 'responsive-image'
+        , image: sst.image
+        , aspect_ratio: sst.image_ratio
+        , custom_ratio: false
+        , class: 'h-full'
+        , w_default: 1920
+        , h_default: 400
+      %}
+    </div>
+  {% endif %}
+  <div class="{% if grid_background %}background-grid{% endif %} color-{{ sst.color_scheme }} gradient section-py" style="{{ style | strip | strip_newlines }}">
+    <div class="{{ container }}">
+      {% render 'breadcrumbs'
+        , sst: sst %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Breadcrumbs",
+    "tag": "section",
+    "disabled_on": {
+      "groups": ["*"]
+    },
+    "settings": [
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_background_grid",
+        "label": "Show background grid",
+        "default": false
+      }, {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "text-center",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          }, {
+            "value": "text-center",
+            "label": "Center"
+          }, {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ]
+      }, {
+        "type": "select",
+        "id": "position_content",
+        "label": "Layout content",
+        "default": "row",
+        "options": [
+          {
+            "value": "row",
+            "label": "Row"
+          }, {
+            "value": "column",
+            "label": "Column"
+          }
+        ]
+      }, {
+        "type": "paragraph",
+        "content": "----------------------------------------"
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }
+    ]
+  }
+{% endschema %}

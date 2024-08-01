@@ -1,0 +1,133 @@
+{%- liquid
+  assign st = section.settings
+  assign enable_mobile_stickybar = st.enable_mobile_stickybar
+  assign show_home = st.show_home
+  assign show_cart = st.show_cart
+  assign show_products_all = st.show_products_all
+  assign show_account = st.show_account
+-%}
+{%- if enable_mobile_stickybar -%}
+  {{ 'mobile-stickybar.css' | asset_url | stylesheet_tag }}
+  <div class="tp-mobile-stickybar hidden md:hidden">
+    <div class="link-on-bottom">
+      <ul class="mobile-bottom-link flex items-center justify-around py-16 list-none">
+        {%- if show_home -%}
+          <li>
+            <a href="{{ routes.root_url }}">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="25"
+                height="24"
+                viewBox="0 0 25 24"
+                fill="none">
+                <path d="M17.4028 22H6.61899C4.06737 22 2 19.9233 2 17.3717V10.4712C2 9.20463 2.78225 7.6122 3.788 6.82995L8.80742 2.91871C10.316 1.74534 12.728 1.68946 14.2925 2.78833L20.0476 6.82063C21.1558 7.59357 22.0218 9.25119 22.0218 10.6015V17.381C22.0218 19.9233 19.9545 22 17.4028 22ZM9.66417 4.01758L4.64474 7.92882C3.98356 8.45032 3.39687 9.633 3.39687 10.4712V17.3717C3.39687 19.1504 4.84031 20.6031 6.61899 20.6031H17.4028C19.1815 20.6031 20.625 19.1597 20.625 17.381V10.6015C20.625 9.7075 19.9824 8.46894 19.2467 7.96607L13.4916 3.93377C12.43 3.18877 10.6792 3.22602 9.66417 4.01758Z" fill="#111111" />
+                <path d="M12.0108 18.2756C11.629 18.2756 11.3123 17.959 11.3123 17.5771V14.7834C11.3123 14.4016 11.629 14.085 12.0108 14.085C12.3926 14.085 12.7092 14.4016 12.7092 14.7834V17.5771C12.7092 17.959 12.3926 18.2756 12.0108 18.2756Z" fill="#111111" />
+              </svg>
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if show_products_all -%}
+          <li>
+            <div class="tp-mobile-stickybar__clc">
+              <a href="/collections/all">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="25"
+                  height="24"
+                  viewBox="0 0 25 24"
+                  fill="none">
+                  <path
+                    d="M9.31302 22.4512H15.313C20.313 22.4512 22.313 20.4512 22.313 15.4512V9.45117C22.313 4.45117 20.313 2.45117 15.313 2.45117H9.31302C4.31302 2.45117 2.31302 4.45117 2.31302 9.45117V15.4512C2.31302 20.4512 4.31302 22.4512 9.31302 22.4512Z"
+                    stroke="#292D32"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round" />
+                  <path
+                    d="M12.313 2.45117V22.4512"
+                    stroke="#292D32"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round" />
+                  <path
+                    d="M2.31302 12.4512H22.313"
+                    stroke="#292D32"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </a>
+            </div>
+          </li>
+        {%- endif -%}
+        {%- if show_cart and template != 'cart' -%}
+          <li class="">
+            <div class="tp-mobile-stickybar__cart">
+              {% render 'minicart'
+                , cart: cart %}
+            </div>
+          </li>
+        {%- endif -%}
+        {%- if show_account -%}
+          <li>
+            <div class="tp-mobile-stickybar__account">
+              {% render 'my-account' %}
+            </div>
+          </li>
+        {%- endif -%}
+      </ul>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "Mobile stickybar",
+    "class": "section",
+    "limit": 1,
+    "enabled_on": {
+      "groups": ["custom.system"]
+    },
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_mobile_stickybar",
+        "label": "Enable mobile stickybar",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Addons"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_home",
+        "label": "Show Home icon",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cart",
+        "label": "Show cart icon",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_products_all",
+        "label": "Show products all",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_account",
+        "label": "Show account icon",
+        "default": true,
+        "info": "You need to enable the account page in the Store settings \/ Customer accounts"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Mobile stickybar"
+      }
+    ]
+  }
+{% endschema %}

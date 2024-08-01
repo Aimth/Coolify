@@ -1,0 +1,344 @@
+{{ 'store-location.css' | asset_url | stylesheet_tag }}
+{% comment %}include file css section {% endcomment %}
+
+{% liquid
+  assign sst = section.settings
+  assign container = sst.container
+%}
+{%- capture style -%}
+  --section-padding-top: {{ sst.padding_top }}px; 
+  --section-padding-bottom: {{ sst.padding_bottom }}px; 
+{%- endcapture -%}
+{% capture classGrid %}
+  tp-grid tp-grid--{{ sst.columns_mobile }}-col-mobile tp-grid--{{ sst.columns_tablets }}-col-tablets tp-grid--{{ sst.columns_desktop }}-col-desktop 
+{% endcapture %}
+<div class="tp-st-location color-{{ sst.color_scheme }} gradient section-py {% if sst.reset_spacing == false %}section-mb{% endif %}" style="{{ style | strip | strip_newlines }}">
+  <div class="{{ container }} section-full">
+    {% render 'section-header'
+      , sst: sst %}
+    <div class="tp-st-location__inner {{ classGrid | strip | strip_newlines }}">
+      {%- for block in section.blocks -%}
+        {% liquid
+          assign bst = block.settings
+        %}
+        <div class="tp-st-location__item tp-grid__item">
+          {%- if bst.image != blank -%}
+            <div class="relative mb-20">
+              {% render 'responsive-image'
+                ,
+ image: bst.image
+                ,
+ aspect_ratio: sst.image_ratio
+                ,
+ custom_ratio: sst.custom_ratio
+                ,
+ class: 'h-full'
+                ,
+ w_default: 280
+                ,
+ h_default: 495
+              %}
+            </div>
+          {%- endif -%}
+          <div class="tp-st-location__item-info">
+            <div class="info__header flex flex-row items-center justify-between mb-15">
+              {%- if bst.title != blank -%}
+                <h3 class="font-semibold mb-0">{{ bst.title }}</h3>
+              {%- endif -%}
+              {%- if bst.btn_content != blank -%}
+                <div>
+                  <a
+                    {% if bst.link == blank %}
+                    role="link"
+                    aria-disabled="true"
+                    {% else %}
+                    href="{{ bst.link }}"
+                    {% endif %}
+                    {%- if bst.open_link == '_blank' -%}
+                    target="_blank"
+                    {%- else -%}
+                    target="_self"
+                    {%- endif -%}
+                    class="tp-btn tp-btn__underline n-hvr">
+                    {{ bst.btn_content | escape }}
+                  </a>
+                </div>
+              {%- endif -%}
+            </div>
+            <div class="info-address flex items-start gap-5 mb-10">
+              <b>{{ 'store-location.address' | t }}</b>
+              <p class="mb-0">
+                {{ bst.st_address }}</p>
+            </div>
+            <div class="info-address flex items-start gap-5 mb-10">
+              <b>{{ 'store-location.email' | t }}</b>
+              <p class="mb-0">{{ bst.email }}</p>
+            </div>
+            <div class="info-address flex items-start gap-5 mb-10">
+              <b>{{ 'store-location.phone' | t }}</b>
+              <p class="mb-0">{{ bst.phone }}</p>
+            </div>
+            <div class="info-address flex items-start gap-5 mb-0">
+              <b>{{ 'store-location.time' | t }}</b>
+              <p class="mb-0">{{ bst.open_time }}</p>
+            </div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Store Location",
+    "tag": "section",
+    "disabled_on": {
+      "groups": ["*"]
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": "Section header"
+      },
+
+      {
+        "type": "checkbox",
+        "id": "show_heading_header",
+        "label": "Show \"Section header\"",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Title"
+      },
+      {
+        "type": "richtext",
+        "id": "description",
+        "label": "Description",
+        "default": "<p></p>"
+      }, {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "text-center",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          }, {
+            "value": "text-center",
+            "label": "Center"
+          }, {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ]
+      }, {
+        "type": "paragraph",
+        "content": "----------------------------------------"
+      }, {
+        "type": "header",
+        "content": "General"
+      }, {
+        "type": "select",
+        "id": "container",
+        "label": "Layout",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      }, {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      }, {
+        "type": "range",
+        "id": "columns_desktop",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "default": 3,
+        "label": "Number of columns on desktop"
+      }, {
+        "type": "select",
+        "id": "image_ratio",
+        "default": "original",
+        "label": "Image ratio",
+        "options": [
+          {
+            "value": "original",
+            "label": "Original aspect ratio"
+          },
+          {
+            "value": "1/1",
+            "label": "1:1"
+          },
+          {
+            "value": "3/4",
+            "label": "3:4"
+          },
+          {
+            "value": "4/3",
+            "label": "4:3"
+          }, {
+            "value": "16/9",
+            "label": "16:9"
+          }, {
+            "value": "custom",
+            "label": "Custom ratio"
+          }
+        ]
+      }, {
+        "type": "text",
+        "id": "custom_ratio",
+        "label": "Custom ratio",
+        "default": "21:9"
+      }, {
+        "type": "header",
+        "content": "Tablets and Mobile layout"
+      }, {
+        "type": "select",
+        "id": "columns_tablets",
+        "options": [
+          {
+            "value": "1",
+            "label": "1 Columns"
+          }, {
+            "value": "2",
+            "label": "2 Columns"
+          }, {
+            "value": "3",
+            "label": "3 Columns"
+          }
+        ],
+        "default": "2",
+        "label": "Number of columns on columns_tablets"
+      }, {
+        "type": "select",
+        "id": "columns_mobile",
+        "options": [
+          {
+            "value": "1",
+            "label": "1 Columns"
+          }, {
+            "value": "2",
+            "label": "2 Columns"
+          }
+        ],
+        "default": "1",
+        "label": "Number of columns on mobile"
+      }, {
+        "type": "checkbox",
+        "id": "reset_spacing",
+        "label": "Remove default space between sections",
+        "default": false
+      }, {
+        "type": "paragraph",
+        "content": "----------------------------------------"
+      }, {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Location Item",
+        "type": "location-item",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "default": "Store on Boston",
+            "label": "Title"
+          },
+          {
+            "type": "text",
+            "id": "st_address",
+            "default": "898 Joanne Lane Street, Boston, USA",
+            "label": "Address"
+          },
+          {
+            "type": "text",
+            "id": "email",
+            "default": "storepify.contact@gmail.com",
+            "label": "Email"
+          }, {
+            "type": "text",
+            "id": "phone",
+            "default": "(+1) 388 383 8888",
+            "label": "Phone"
+          }, {
+            "type": "text",
+            "id": "open_time",
+            "default": "Mon-Fri: 9:00am - 8:00pm </br> Sat-Sun: 10:00am - 10:00pm",
+            "label": "Open Time"
+          }, {
+            "type": "text",
+            "id": "btn_content",
+            "label": "Button label",
+            "default": "Get direction"
+          }, {
+            "type": "url",
+            "id": "link",
+            "label": "Link"
+          }, {
+            "type": "select",
+            "id": "open_link",
+            "options": [
+              {
+                "value": "_self",
+                "label": "Current tab"
+              }, {
+                "value": "_blank",
+                "label": "New tab"
+              }
+            ],
+            "label": "Button open link in",
+            "default": "_blank"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Store Location"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,111 @@
+{%- liquid
+  assign gst = settings
+  assign compare_at_price = card_product.compare_at_price
+  assign price = card_product.price
+  assign product_name_line = gst.product_name_line
+  assign img = card_product.media
+-%}
+
+<div
+  class="tp-prd-upsell upsell-checked flex-1 card-wrapper product-card-wrapper relative product--parent"
+  data-price-prd="{{ card_product.price }}"
+  data-prd-upsell="{{ card_product.id }}">
+  <div class="tp-prd-upsell__inner bd-radius">
+    {%- if card_product.featured_media -%}
+      <div class="card__media relative">
+        <a class="tp__img-url" href="{{ card_product.url | within: collection }}">
+          <div class="tp__product-main-img">
+            {%- if card_product.has_only_default_variant -%}
+              {%- if img[0] != blank -%}
+                {%- render 'responsive-image' | image: img[0] | type: 'product' | class: 'tp__product-grid tp__product-img-sw' -%}
+              {%- else -%}
+                {%- render 'responsive-image' | type: 'product' | class: 'tp__product-grid-plh' -%}
+              {%- endif -%}
+            {%- else -%}
+              {%- for variant in card_product.variants limit: 1 -%}
+                {%- if variant.featured_image != blank -%}
+                  {%- render 'responsive-image' | image: variant.featured_image | type: 'product' | class: 'tp__product-grid tp__product-img-sw' -%}
+                {%- else -%}
+                  {%- render 'responsive-image' | type: 'product' | class: 'tp__product-grid-plh' -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+        </a>
+        <div class="checkbox-wrapper absolute right-12 top-12">
+          <div class="form-group">
+            <input
+              type="checkbox"
+              class="upsellcheckbox opacity-40"
+              checked>
+            <span class="block cursor-pointer"></span>
+          </div>
+
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+  <div class="tp-prd-upsell__content p-16">
+    <div class="tp-prd-upsell__info">
+      <h3
+        class="card__heading !mb-8{% if card_product.featured_media or settings.card_style == 'standard' %} h5{% endif %}"
+        {% if card_product.featured_media or settings.card_style == 'card' %}
+        id="title-{{ section_id }}-{{ card_product.id }}"
+        {% endif %}>
+        <a
+          href="{{ card_product.url }}"
+          id="CardLink-{{ section_id }}-{{ card_product.id }}"
+          class="limited-line"
+          aria-labelledby="CardLink-{{ section_id }}-{{ card_product.id }} Badge-{{ section_id }}-{{ card_product.id }}"
+          style="--line-clamp: {{ product_name_line }}">
+          {{ card_product.title | escape }}
+        </a>
+      </h3>
+      <div class="card-information">
+        <div
+          class="no-js-hidden mb-8"
+          id="price-{{ section.id }}-{{ card_product.id }}"
+          role="status"
+          {{ block.shopify_attributes }}>
+          {% render 'price'
+            , product: card_product
+            , use_variant: true
+            , %}
+        </div>
+        <div class="tp-prd-upsell__variants {% if card_product.has_only_default_variant %} opacity-0 pointer-events-none default-title{% endif %}">
+          <variant-select-upsell
+            class="no-js-hidden"
+            data-section="{{ section.id }}"
+            data-url="{{ card_product.url }}"
+            {{ block.shopify_attributes }}>
+            <div class="select">
+              <select
+                id=""
+                class="select__select cursor-pointer field__select w-full"
+                name="options[{{ option.name | escape }}]"
+                data-section="{{ section.id }}"
+                data-product="{{ card_product.id }}"
+                form="product-form-{{ section.id }}">
+                {%- for variant in card_product.variants -%}
+                  <option
+                    value="{{ variant.id }}"
+                    data-price="{{ variant.price }}"
+                    data-price-compare="{{ variant.compare_at_price }}"
+                    data-src="{{ variant | image_url: width: variant.width, height: variant.height }}">
+                    {{ variant.title }}
+                  </option>
+                {%- endfor -%}
+              </select>
+              {% render 'icon'
+                , icon_name: 'dropdown' %}
+            </div>
+
+            <script type="application/json">
+              {{ card_product.variants | json }}
+            </script>
+          </variant-select-upsell>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

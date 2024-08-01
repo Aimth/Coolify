@@ -1,0 +1,39 @@
+{%- if check_index -%}
+  <h1 class="header__heading">
+{%- endif -%}
+<a href="{{ routes.root_url }}" class="header__heading-link">
+  {%- if img_logo != blank -%}
+    <div class="header__heading-logo-wrapper">
+      {%- assign logo_alt = img_logo.alt | default: shop.name | escape -%}
+      {%- assign logo_height = settings.logo_width | divided_by: img_logo.aspect_ratio -%}
+      {% capture sizes %}(min-width: 750px) {{ settings.logo_width }}px, 50vw{% endcapture %}
+      {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
+      {{ img_logo
+ | image_url: width: 600
+ | image_tag:
+ class: 'header__heading-logo',
+ widths: widths,
+ height: logo_height,
+ width: settings.logo_width,
+ alt: logo_alt,
+ sizes: sizes,
+ preload: true
+      }}
+      <style>
+        .header__heading-logo-wrapper img {
+          width: {{ settings.logo_width }}px !important;
+        }
+        @media (max-width: 767px) {
+          .header__heading-logo-wrapper img {
+            width: {{ settings.logo_width_mobile }}px !important;
+          }
+        }
+      </style>
+    </div>
+  {%- else -%}
+    <span class="h2">Logo store</span>
+  {%- endif -%}
+</a>
+{%- if check_index -%}
+  </h1>
+{%- endif -%}

@@ -1,0 +1,190 @@
+{%- comment -%}
+  vertical_offset_for_trigger: Reduce below value if you need the back to the top button to appear higher up on the page. That value is in pixels.
+{%- endcomment -%}
+
+{%- liquid
+  assign vertical_offset_for_trigger = 100
+-%}
+{% style %}
+  @media (prefers-reduced-motion: no-preference){
+    :root {
+      scroll-behavior: smooth;
+    }
+  }
+  .tp-back-to-top {
+    --border-radius: 9999px;
+    right: 40px;
+    bottom: 8.5rem;
+    cursor: pointer;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: .25s;
+    position: fixed;
+    z-index: 100;
+    transition: 0.4s ease 0s;
+    width: 40px; 
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    font-size: 35px;
+    border-radius: var(--backtop-radius);
+    background: #fff;
+    color: rgb(var(--primary-color)/0.5);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    transition: opacity .4s ease, visibility .4s ease, margin-right 0s,border-color .25s ease-in,color .25s ease-in;
+    box-shadow: 0 0 3px 0 rgb(var(--primary-color)/0.2);
+    --backtop-radius:var(--border-radius);
+  }
+  :is(.tp-modal-opened,.is--opend-drawer) .tp-back-to-top {
+    margin-right: var(--scroll-w);
+  }
+  .tp-back-to-top.is--show {
+    opacity: 1;
+    visibility: visible;
+    z-index: 999;
+  }
+  .tp-back-to-top svg {
+    width: 12px;
+  }
+  .tp-back-to-top .tp-circle-css {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--backtop-radius);
+  }
+ 
+  .tp-back-to-top.tp-progress_bar_true,
+  .tp-back-to-top.tp-progress_bar_true:hover {
+    border: none;
+    box-shadow:none;
+    color: var(--cricle-active);
+  }
+  .tpp-hover .tp-back-to-top.tp-progress_bar_true:hover svg {    
+    -webkit-animation: move_on_top .5s ease-in-out forwards;
+    animation: move_on_top .5s ease-in-out forwards;
+  }
+  @keyframes move_on_top {
+  0% {
+    transform: translateY(0%);
+  }
+
+  25% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  50% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  75% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+  }
+  @media(max-width: 1024px) {
+    .tp-back-to-top {
+      right: 15px;
+    }
+    .tp-back-to-top span {
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      line-height: 40px;
+    }
+  }
+  .tp-circle-css {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    --border-minus: calc(var(--border-w, 1px) * 2);
+    --tp-light-color: #fff;
+  }
+ 
+  .tp-circle--bg {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    border-radius:var(--backtop-radius);
+    background: conic-gradient(var(--cricle-active, #000) var(--cricle-degrees),var(--cricle-normal, #eee) var(--cricle-degrees));
+    mask: radial-gradient(circle,transparent 62%,white calc(62% + 1px));
+    -webkit-mask: radial-gradient(circle,transparent 62%,white calc(62% + 1px));
+    will-change: background;
+    transition: background .15s ease-in-out 0s;
+  }
+  @media (max-width: 767px){
+    .tp-back-to-top{
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+{% endstyle %}
+<back-to-top config='{"hiddenMobile": {{ section.settings.enable_hidden_mobile }},"scrollTop": {{ vertical_offset_for_trigger }} }' class="tp-back-to-top tp-back-to-top__design{{ section.settings.backtop_des }} tp-pf tp-progress_bar_{{ section.settings.enable_progress_bar }} tp-op-0" rel="nofollow" href="#" aria-label="{{ 'general.aria.back_to_top' | t }}" style="--border-w:1px;--cricle-normal:{{ section.settings.border_cl }};--cricle-active:{{ section.settings.border_cl_active }};">
+  {%- if section.settings.enable_progress_bar -%}
+    <div class="tp-circle-css" style="--border-w:2px;">
+      <div class="tp-circle--inner">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="9.98 12.06 12.05 6.79" width="14" height="14"><path d="M16.767 12.809l-0.754-0.754-6.035 6.035 0.754 0.754 5.281-5.281 5.256 5.256 0.754-0.754-3.013-3.013z" fill="currentColor"></path></svg>
+      </div>
+      <div class="tp-circle--bg"></div>
+    </div>
+  {%- else -%}
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="9.98 12.06 12.05 6.79" width="14" height="14"><path d="M16.767 12.809l-0.754-0.754-6.035 6.035 0.754 0.754 5.281-5.281 5.256 5.256 0.754-0.754-3.013-3.013z" fill="currentColor"></path></svg>
+  {%- endif -%}
+</back-to-top>
+
+{%- schema -%}
+{
+  "name": "Back to top",
+  "class": "tp-section-admn2-fixed",
+  "limit": 1,
+  "enabled_on": {
+      "groups": ["custom.system"]
+  },
+  "presets": [
+    {
+      "name": "Back to top"
+    }
+  ],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_hidden_mobile",
+      "label": "Enable hidden mobile",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Progress bar options"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_progress_bar",
+      "label": "Enable progress bar",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "border_cl",
+      "label": "Progress bar color",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "border_cl_active",
+      "label": "Progress bar color",
+      "default": "#000000"
+    }
+  ]
+}
+{% endschema %}

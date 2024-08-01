@@ -1,0 +1,657 @@
+<script src="{{ 'slide.js' | asset_url }}" defer="defer"></script>
+{{ 'slide.css' | asset_url | stylesheet_tag }}
+{{ 'menu-slider.css' | asset_url | stylesheet_tag }}
+
+{% liquid
+  assign st = section.settings
+  assign container = st.container
+  assign aptime = st.autoplay_time | times: 1000
+  assign positionPagination = st.position_pagination
+%}
+{%- capture style -%}
+  --section-padding-top: {{ st.padding_top }}px; --section-padding-bottom: {{ st.padding_bottom }}px;
+{%- endcapture -%}
+{%- capture style_height -%}
+  --height-desktop: {{ st.height_dk }}px; 
+  --height-tablets: {{ st.height_tb }}px; 
+  --height-mobile: {{ st.height_mb }}px; 
+{%- endcapture -%}
+
+<div class="menu-slider  color-{{ st.color_scheme }} gradient  section-full section-py {% if st.reset_spacing == false %}section-mb{% endif %}" style="{{ style | strip | strip_newlines }}">
+  <div class="{{ container }}">
+    <div class="flex items-start gap-30 overflow-hidden">
+      <div class="mn-cate color-{{ st.color_scheme_menu }} gradient">
+        <div class="mn-cate__sub relative">
+          {% if section.blocks.size > 0 %}
+            <div class="mn-cate__sub-inner shadow">
+              <ul class="list-none">
+                {% for block in section.blocks %}
+                  {% case block.type %}
+                    {% when 'vertical_menu' %}
+                      {% liquid
+                        assign bst = block.settings
+                      %}
+                      <li class="mn-cate-lv1 px-6 py-8 mb-4 list-none cursor-pointer" data-category-name="{{ block.settings.heading }}">
+                        {% if block.settings.menu != blank %}
+                          <div class="cate-title flex justify-between items-center">
+                            <div class="menu-categories__content--title flex items-center gap-8">
+                              {% if block.settings.icon_image != blank %}
+                                <img
+                                  src="{{ block.settings.icon_image | image_url: width: block.settings.icon_image.width , height: block.settings.icon_image.height }}"
+                                  alt="icon-{{ block.settings.heading }}"
+                                  width="{{ block.settings.icon_image.width }}"
+                                  height="{{ block.settings.icon_image.height }}"
+                                  loading="lazy">
+                              {% endif %}
+                              <span class="menu-categories__content--title">
+                                {{ block.settings.heading }}</span>
+                            </div>
+                            {% render 'icon'
+                              , icon_name: 'arrow-right' %}
+                          </div>
+                        {% else %}
+                          {% assign urlTarget = block.settings.link_title | default: '#' %}
+                          <div class="cate-title flex items-center gap-8">
+                            {% if block.settings.icon_image != blank %}
+                              <img
+                                src="{{ block.settings.icon_image | image_url: width: block.settings.icon_image.width , height: block.settings.icon_image.height }}"
+                                alt="icon-{{ block.settings.heading }}"
+                                width="{{ block.settings.icon_image.width }}"
+                                height="{{ block.settings.icon_image.height }}"
+                                loading="lazy">
+                            {% endif %}
+                            <a class="menu-categories__content--title" href="{{ urlTarget }}">
+                              {{- block.settings.heading -}}
+                            </a>
+                          </div>
+                        {% endif %}
+
+                        {% if block.settings.menu != blank %}
+                          <div class="sub-menu-category flex items-start gap-30 shadow" style="--sub-width:{{ bst.sub_width }}px">
+                            <div class="list-mn-category  flex-1 tp-grid tp-grid--{{ bst.columns_desktop }}-col-desktop">
+                              {%- for link in block.settings.menu.links -%}
+                                <ul class="list-none tp-grid__item">
+                                  {% if link.links.size > 0 %}
+                                    <li class="mb-12">
+                                      <a
+                                        href="{{ link.url }}"
+                                        title="{{ link.title | escape }}"
+                                        class="sub-cate-lv1 h5"
+                                        data-level="{{ link.levels }}">
+                                        {{ link.title | escape }}
+                                      </a>
+                                    </li>
+                                    <ul class="list-none">
+                                      {% for child_link in link.links %}
+                                        <li class="mb-6">
+                                          <a
+                                            href="{{ child_link.url }}"
+                                            title="{{ child_link.title | escape }}"
+                                            class=""
+                                            data-level="{{ child_link.levels }}">
+                                            {{ child_link.title | escape }}
+                                          </a>
+                                        </li>
+                                      {% endfor %}
+                                    </ul>
+                                  {% else %}
+                                    <li class="sub-cate-lv2">
+                                      <a
+                                        href="{{ link.url }}"
+                                        title="{{ link.title | escape }}"
+                                        class=""
+                                        data-level="{{ link.levels }}">
+                                        {{ link.title | escape }}
+                                      </a>
+                                    </li>
+                                  {% endif %}
+                                </ul>
+                              {% endfor %}
+                            </div>
+                            {% if bst.image_banner_1 != blank or bst.image_banner_2 != blank %}
+                              <div class="w-[260px]">
+                                {% if bst.image_banner_1 != blank %}
+                                  <div class="cate-banner-1">
+                                    <a href="{{ bst.link_banner_1 | default: "#" }}">
+                                      <img
+                                        src="{{ bst.image_banner_1 | image_url: width: bst.image_banner_1.width, height: bst.image_banner_1.height }}"
+                                        width="{{ bst.image_banner_1.width }}"
+                                        height="{{ bst.image_banner_1.height }}"
+                                        loading="lazy"
+                                        alt="{{ bst.image_banner_1.alt }}">
+                                    </a>
+                                  </div>
+                                {% endif %}
+                                {% if bst.image_banner_2 != blank %}
+                                  <div class="cate-banner-2 mt-30">
+                                    <a href="{{ bst.link_banner_2 | default: "#" }}">
+                                      <img
+                                        src="{{ bst.image_banner_2 | image_url: width: bst.image_banner_2.width, height: bst.image_banner_2.height }}"
+                                        width="{{ bst.image_banner_2.width }}"
+                                        height="{{ bst.image_banner_2.height }}"
+                                        loading="lazy"
+                                        alt="{{ bst.image_banner_2.alt }}">
+                                    </a>
+                                  </div>
+                                {% endif %}
+                              </div>
+                            {% endif %}
+                          </div>
+                        {% endif %}
+                      </li>
+                  {% endcase %}
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="tp-slide color-{{ st.color_scheme_slider }} gradient  relative" style="{{ style_height | strip | strip_newlines }}">
+        <div
+          class="swiper tp-slide__main js-slide-main hover__show-nav"
+          data-section-id="{{ section.id }}"
+          data-loop="{{ st.loop }}"
+          data-autoplay="{{ st.autoplay }}">
+          <div class="swiper-wrapper">
+            {% for block in section.blocks %}
+              {% liquid
+                assign bst = block.settings
+                assign textContent = 'text-left'
+                if bst.text_align_content == 'text_center'
+                  assign textContent = 'text-center'
+                elsif bst.text_align_content == 'text_right'
+                  assign textContent = 'text-right'
+                endif
+
+                assign positionContent = 'left-0 right-auto'
+                if bst.position_content == 'center'
+                  assign positionContent = 'center-content'
+                elsif bst.position_content == 'right'
+                  assign positionContent = 'right-content'
+                endif
+              %}
+
+              {% case block.type %}
+                {% when 'slide_item' %}
+                  <div class="swiper-slide tp-slide__item tp-slide__item-{{ forloop.index }}" data-swiper-autoplay="{{ aptime }}">
+                    <div class="tp-slide__image absolute inset-0" style="--slider-opacity: {{ bst.overlay_slide }}">
+
+                      {%- liquid
+                        assign full_width = '100vw'
+                        assign widths = '375, 550, 750, 1100, 1920, 2000, 3000, 3840'
+                        assign stacked_sizes = '(min-width: 750px) 60vw, 120vw'
+                        assign half_width = '50vw'
+                        assign image_height = bst.image.width | divided_by: bst.image.aspect_ratio
+                        if bst.image != blank
+                          assign image_class = 'banner__media-image-half'
+                        endif
+                        if bst.image != blank
+                          assign sizes = stacked_sizes
+                        elsif bst.image != blank
+                          assign sizes = half_width
+                        else
+                          assign sizes = full_width
+                        endif
+                      -%}
+                      {% if bst.image != blank %}
+                        {{ bst.image
+ | image_url: width: 3840
+ | image_tag:
+ loading: 'lazy',
+ width: bst.image.width,
+ height: image_height,
+ class: image_class,
+ sizes: sizes,
+ widths: widths
+                        }}
+                      {% else %}
+                        {% render 'image-default'
+                          , type: 'image'
+                          , width: 1920
+                          , height: 670
+                          , class: '' %}
+                      {% endif %}
+
+                    </div>
+                    <div class="tp-slide__wrapper absolute top-1/2 -translate-y-1/2 left-0 right-0">
+                      <div class="{{ bst.content_box }} relative">
+                        <div class="tp-slide__content absolute top-1/2 -translate-y-1/2 {{ positionContent }} {{ textContent }}">
+                          {% if bst.sub_title != blank %}
+                            <div
+                              class="tp-content__subtitle mb-20 wow"
+                              data-animated-type="{{ bst.slider_effect }}"
+                              {% if bst.slider_effect != 'no-effect' %}
+                              data-wow-duration="0.6s"
+                              data-wow-delay="0.6s"
+                              {% endif %}
+                              style="visibility: hidden;">
+                              {{ bst.sub_title }}
+                            </div>
+                          {% endif %}
+                          {% if bst.title != blank %}
+                            <div
+                              class="tp-content__title wow h1"
+                              data-animated-type="{{ bst.slider_effect }}"
+                              {% if bst.slider_effect != 'no-effect' %}
+                              data-wow-duration="0.6s"
+                              data-wow-delay="0.8s"
+                              {% endif %}
+                              style="visibility: hidden;">
+                              {{ bst.title }}
+                            </div>
+                          {% endif %}
+                          {% if bst.description_1 != blank %}
+                            <div
+                              class="tp-content__description mb-32 wow"
+                              data-animated-type="{{ bst.slider_effect }}"
+                              {% if bst.slider_effect != 'no-effect' %}
+                              data-wow-duration="0.6s"
+                              data-wow-delay="0.8s"
+                              {% endif %}
+                              style="visibility: hidden;">
+                              {{ bst.description_1 }}
+                            </div>
+                          {% endif %}
+                          <div
+                            class="tp-slide__box inline-flex flex-wrap gap-5 align-items-center justify-content-start wow"
+                            data-animated-type="{{ bst.slider_effect }}"
+                            {% if bst.slider_effect != 'no-effect' %}
+                            data-wow-duration="0.6s"
+                            data-wow-delay="1s"
+                            {% endif %}
+                            style="visibility: hidden;">
+                            {% if bst.slide_url != blank %}
+                              <a class="tp-btn tp-btn__primary n-hvr " href="{% if bst.slide_url != blank %}{{ bst.slide_url }}{% else %}#{% endif %}">
+                                {{ bst.label_btn }}
+                              </a>
+                            {% endif %}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              {% endcase %}
+            {% endfor %}
+          </div>
+          {% if st.show_navigation %}
+            {% render 'swiper-control'
+              , class: 'slider'
+              , show_bullet: false
+              , show_arrow: true %}
+          {% endif %}
+        </div>
+        {% if st.show_pagination %}
+          <div class="pagination-wrap absolute bottom-10 left-0 right-0 z-10 {{ positionPagination }}">
+            <div class="swiper-pagination tp-swiper-pagination tp-swiper-pagination-{{ section.id }} container"></div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  #shopify-section-{{ section.id }} .pagination-wrap circle {
+    fill: transparent;
+    stroke: var(--base-color);
+    outline: 2px;
+    stroke-dasharray: 360;
+    stroke-dashoffset: 360;
+    animation: rotate{{ st.autoplay_time | times: 3 }}s linear infinite;
+  }
+  .pagination-wrap .swiper-pagination-bullet::before {
+    background: var(--base-color);
+  }
+</style>
+
+{% schema %}
+  {
+    "name": "Menu Slider",
+    "tag": "section",
+    "disabled_on": {
+      "groups": ["*"]
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": "General"
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "Container",
+        "default": "full-width",
+        "options": [
+          {
+            "value": "container",
+            "label": "Default"
+          }, {
+            "value": "container-fluid",
+            "label": "Fluid container"
+          }, {
+            "value": "full-width",
+            "label": "Full width"
+          }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "Color section",
+        "default": "background-1"
+      },
+      {
+        "type": "header",
+        "content": "Section padding"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "label": "Padding top",
+        "default": 30,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "label": "Padding bottom",
+        "default": 30,
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px"
+      }, {
+        "type": "checkbox",
+        "id": "reset_spacing",
+        "label": "Remove default space between sections",
+        "default": false
+      }, {
+        "type": "paragraph",
+        "content": "----------------------------------------"
+      }, {
+        "type": "header",
+        "content": "Settings Slider"
+      }, {
+        "type": "color_scheme",
+        "id": "color_scheme_slider",
+        "label": "Color slider",
+        "default": "background-1"
+      }, {
+        "id": "show_navigation",
+        "type": "checkbox",
+        "label": "t:sections.slide.settings.show_navigation.label",
+        "default": true
+      }, {
+        "id": "show_pagination",
+        "type": "checkbox",
+        "label": "t:sections.slide.settings.show_pagination.label",
+        "default": true
+      }, {
+        "id": "loop",
+        "type": "checkbox",
+        "label": "t:sections.slide.settings.loop.label",
+        "default": true
+      }, {
+        "id": "autoplay",
+        "type": "checkbox",
+        "label": "t:sections.slide.settings.autoplay.label",
+        "info": "t:sections.slide.settings.autoplay.info",
+        "default": true
+      }, {
+        "id": "autoplay_time",
+        "type": "range",
+        "label": "t:sections.slide.settings.autoplay_time.label",
+        "info": "t:sections.slide.settings.autoplay_time.info",
+        "min": 0,
+        "max": 20,
+        "step": 1,
+        "unit": "s",
+        "default": 5
+      }, {
+        "type": "number",
+        "id": "height_dk",
+        "label": "Section height (desktop)",
+        "default": 670
+      }, {
+        "type": "number",
+        "id": "height_tb",
+        "label": "Section height (tablet)",
+        "default": 600
+      }, {
+        "type": "number",
+        "id": "height_mb",
+        "label": "Section height (mobile)",
+        "default": 415
+      }, {
+        "type": "select",
+        "id": "position_pagination",
+        "options": [
+          {
+            "value": "left_bottom",
+            "label": "Left bottom"
+          }, {
+            "value": "center_bottom",
+            "label": "Center bottom"
+          }, {
+            "value": "right_bottom",
+            "label": "Right bottom"
+          }
+        ],
+        "label": "t:sections.slide.settings.position_pagination.label",
+        "default": "center_bottom"
+      }, {
+        "type": "paragraph",
+        "content": "----------------------------------------"
+      }, {
+        "type": "header",
+        "content": "Settings Menu"
+      }, {
+        "type": "color_scheme",
+        "id": "color_scheme_menu",
+        "label": "Color Menu",
+        "default": "background-1"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "vertical_menu",
+        "name": "Vertical Menu",
+        "settings": [
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Title",
+            "default": "Title"
+          },
+          {
+            "type": "url",
+            "id": "link_title",
+            "label": "Link"
+          },
+          {
+            "type": "image_picker",
+            "id": "icon_image",
+            "label": "Icon",
+            "info": "Upload image: png, jpg or gif file"
+          },
+          {
+            "type": "header",
+            "content": "Sub Menu"
+          }, {
+            "type": "range",
+            "id": "sub_width",
+            "label": "Submenu width",
+            "min": 200,
+            "max": 1200,
+            "default": 900,
+            "step": 50,
+            "unit": "px"
+          }, {
+            "type": "range",
+            "id": "columns_desktop",
+            "min": 1,
+            "max": 3,
+            "step": 1,
+            "default": 2,
+            "label": "Number of columns on desktop"
+          }, {
+            "type": "link_list",
+            "id": "menu",
+            "label": "Select menu",
+            "default": "main-menu"
+          }, {
+            "type": "header",
+            "content": "Banner"
+          }, {
+            "type": "image_picker",
+            "id": "image_banner_1",
+            "label": "Banner 1"
+          }, {
+            "type": "url",
+            "id": "link_banner_1",
+            "label": "Link banner 1"
+          }, {
+            "type": "image_picker",
+            "id": "image_banner_2",
+            "label": "Banner 2"
+          }, {
+            "type": "url",
+            "id": "link_banner_2",
+            "label": "Link banner 2"
+          }
+        ]
+      }, {
+        "type": "slide_item",
+        "name": "Slide item",
+        "settings": [
+          {
+            "type": "header",
+            "content": "IMAGE SETTINGS"
+          },
+          {
+            "id": "image",
+            "type": "image_picker",
+            "label": "t:sections.slide.blocks.settings.image"
+          },
+          {
+            "type": "range",
+            "id": "overlay_slide",
+            "min": 0,
+            "max": 1,
+            "step": 0.1,
+            "unit": "%",
+            "label": "Overlay slide",
+            "default": 0
+          },
+          {
+            "type": "header",
+            "content": "CONTENT"
+          }, {
+            "type": "select",
+            "id": "content_box",
+            "label": "Content box",
+            "default": "container",
+            "options": [
+              {
+                "value": "container",
+                "label": "Default"
+              }, {
+                "value": "container-fluid",
+                "label": "Fluid container"
+              }, {
+                "value": "full-width",
+                "label": "Full width"
+              }
+            ]
+          }, {
+            "type": "select",
+            "id": "slider_effect",
+            "options": [
+              {
+                "value": "no-effect",
+                "label": "hidden"
+              },
+              {
+                "value": "fadeInUp",
+                "label": "FadeInUp"
+              },
+              {
+                "value": "fadeInDown",
+                "label": "FadeInDown"
+              },
+              {
+                "value": "fadeInLeft",
+                "label": "FadeInLeft"
+              }, {
+                "value": "fadeInRight",
+                "label": "FadeInRight"
+              }
+            ],
+            "label": "Slider effect",
+            "default": "fadeInUp"
+          }, {
+            "type": "select",
+            "id": "position_content",
+            "options": [
+              {
+                "value": "left",
+                "label": "Left"
+              }, {
+                "value": "center",
+                "label": "Center"
+              }, {
+                "value": "right",
+                "label": "Right"
+              }
+            ],
+            "label": "t:sections.slide.settings.position_content.label",
+            "default": "left"
+          }, {
+            "type": "select",
+            "id": "text_align_content",
+            "label": "Text align content",
+            "options": [
+              {
+                "value": "text_left",
+                "label": "Text left"
+              }, {
+                "value": "text_center",
+                "label": "Text center"
+              }, {
+                "value": "text_right",
+                "label": "Text right"
+              }
+            ]
+          }, {
+            "type": "text",
+            "id": "sub_title",
+            "label": "Subheading"
+          }, {
+            "type": "textarea",
+            "id": "title",
+            "label": "Heading",
+            "default": "Spring Collection"
+          }, {
+            "type": "richtext",
+            "id": "description_1",
+            "label": "t:sections.slide.blocks.settings.description_1",
+            "default": "<p></p>"
+          }, {
+            "type": "header",
+            "content": "BUTTON"
+          }, {
+            "id": "slide_url",
+            "type": "url",
+            "label": "t:sections.slide.blocks.settings.url"
+          }, {
+            "type": "text",
+            "id": "label_btn",
+            "label": "Button label",
+            "default": "Shop Now"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
